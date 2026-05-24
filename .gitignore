@@ -1,0 +1,2 @@
+# Ignore large trained model checkpoint files (joblib)
+*.joblib
