@@ -1,8 +1,10 @@
+import os
 import pandas as pd
 import json
 import joblib
 
-dataset_path = r'c:\Users\HP\Documents\GitHub\ML-dating-app-behaviour\dating_app_behavior_dataset_extended1.csv'
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+dataset_path = os.path.join(base_dir, 'data', 'dating_app_behavior_dataset_extended1.csv')
 df = pd.read_csv(dataset_path)
 
 stats = {}
@@ -41,15 +43,18 @@ stats['total_rows'] = len(df)
 stats['total_columns'] = len(df.columns)
 
 # Write to JSON
-with open('eda_stats.json', 'w') as f:
+eda_path = os.path.join(base_dir, 'models', 'eda_stats.json')
+with open(eda_path, 'w') as f:
     json.dump(stats, f, indent=4)
 
-print("EDA stats successfully saved to eda_stats.json")
+print(f"EDA stats successfully saved to {eda_path}")
 
 # Also try to extract from joblib
 try:
-    cv_results = joblib.load('cv_results.joblib')
-    with open('cv_stats.json', 'w') as f:
+    cv_results_path = os.path.join(base_dir, 'models', 'cv_results.joblib')
+    cv_stats_path = os.path.join(base_dir, 'models', 'cv_stats.json')
+    cv_results = joblib.load(cv_results_path)
+    with open(cv_stats_path, 'w') as f:
         # Convert any numpy types to python native for JSON serialization if necessary
         # We'll just convert to string for simplicity to avoid TypeErrors
         def default_serializer(obj):

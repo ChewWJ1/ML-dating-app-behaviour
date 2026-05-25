@@ -1,9 +1,13 @@
+import os
 import joblib
 import json
 import numpy as np
 
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 try:
-    results = joblib.load('baseline_results.joblib')
+    results_path = os.path.join(base_dir, 'models', 'baseline_results.joblib')
+    results = joblib.load(results_path)
     # print the keys
     print("Keys in baseline_results:", results.keys())
     
@@ -27,7 +31,8 @@ try:
         if 'accuracy' in v:
             print(f"  Accuracy for {k}: {v['accuracy']}")
 
-    with open('feature_importances.json', 'w') as f:
+    fi_path = os.path.join(base_dir, 'models', 'feature_importances.json')
+    with open(fi_path, 'w') as f:
         json.dump(importances, f)
         
 except Exception as e:

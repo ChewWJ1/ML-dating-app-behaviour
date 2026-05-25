@@ -27,7 +27,8 @@ def run_notebook():
     from nbconvert.preprocessors import ExecutePreprocessor
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    notebook_file = os.path.join(script_dir, 'ML_dating_app_behaviour.ipynb')
+    base_dir = os.path.dirname(script_dir)
+    notebook_file = os.path.join(base_dir, 'notebooks', 'ML_dating_app_behaviour.ipynb')
     print(f"\n🔄 Loading {notebook_file}...")
     
     with open(notebook_file, 'r', encoding='utf-8') as f:
