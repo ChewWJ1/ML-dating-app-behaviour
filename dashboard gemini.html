@@ -510,7 +510,7 @@
         /* Confusion Matrix CSS Visualization */
         .matrix-table {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 8px;
             margin-top: 20px;
         }
@@ -852,6 +852,9 @@
             <button class="nav-link" onclick="switchTab('forecaster-tab')">
                 <span class="icon">🔮</span> Love Forecaster
             </button>
+            <button class="nav-link" onclick="switchTab('notebook-tab')">
+                <span class="icon">📓</span> Notebook Visuals
+            </button>
         </nav>
 
         <!-- UM Assignment Group Details -->
@@ -1046,26 +1049,10 @@
                         <h4
                             style="margin-top: 25px; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px;">
                             Confusion Matrix Highlight</h4>
-                        <div class="matrix-table" id="matrix-container">
-                            <div class="matrix-cell diagonal">924 <span class="cell-lbl">Match</span></div>
-                            <div class="matrix-cell">42 <span class="cell-lbl">Ghosted</span></div>
-                            <div class="matrix-cell">21 <span class="cell-lbl">Blocked</span></div>
-                            <div class="matrix-cell">13 <span class="cell-lbl">Catfish</span></div>
-
-                            <div class="matrix-cell">38 <span class="cell-lbl">Match</span></div>
-                            <div class="matrix-cell diagonal">886 <span class="cell-lbl">Ghosted</span></div>
-                            <div class="matrix-cell">56 <span class="cell-lbl">Blocked</span></div>
-                            <div class="matrix-cell">20 <span class="cell-lbl">Catfish</span></div>
-
-                            <div class="matrix-cell">15 <span class="cell-lbl">Match</span></div>
-                            <div class="matrix-cell">62 <span class="cell-lbl">Ghosted</span></div>
-                            <div class="matrix-cell diagonal">898 <span class="cell-lbl">Blocked</span></div>
-                            <div class="matrix-cell">25 <span class="cell-lbl">Catfish</span></div>
-
-                            <div class="matrix-cell">11 <span class="cell-lbl">Match</span></div>
-                            <div class="matrix-cell">18 <span class="cell-lbl">Ghosted</span></div>
-                            <div class="matrix-cell">34 <span class="cell-lbl">Blocked</span></div>
-                            <div class="matrix-cell diagonal">937 <span class="cell-lbl">Catfish</span></div>
+                            <div class="matrix-cell diagonal">TN <span class="cell-lbl">True Neg</span></div>
+                            <div class="matrix-cell">FP <span class="cell-lbl">False Pos</span></div>
+                            <div class="matrix-cell">FN <span class="cell-lbl">False Neg</span></div>
+                            <div class="matrix-cell diagonal">TP <span class="cell-lbl">True Pos</span></div>
                         </div>
                     </div>
 
@@ -1194,6 +1181,51 @@
                 </div>
             </div>
         </div>
+
+        <!-- ==================== TAB 4: NOTEBOOK VISUALS ==================== -->
+        <div id="notebook-tab" class="tab-content">
+            <div class="glass-card" style="margin-bottom: 25px;">
+                <h3 class="card-title">Jupyter Notebook Pipeline Results</h3>
+                <p class="card-subtitle">Actual static plots extracted directly from the ML training pipeline.</p>
+            </div>
+            
+            <div class="chart-grid-main">
+                <div class="glass-card">
+                    <h3 class="card-title" style="margin-bottom:15px;">Target Distribution</h3>
+                    <img src="assets/plots/target_distribution.png" alt="Target Distribution" style="width:100%; border-radius:8px;">
+                </div>
+                <div class="glass-card">
+                    <h3 class="card-title" style="margin-bottom:15px;">Correlation Heatmap</h3>
+                    <img src="assets/plots/correlation_heatmap.png" alt="Correlation Heatmap" style="width:100%; border-radius:8px;">
+                </div>
+            </div>
+
+            <div class="chart-grid-secondary">
+                <div class="glass-card">
+                    <h3 class="card-title" style="margin-bottom:15px;">ROC Curves</h3>
+                    <img src="assets/plots/roc_curves.png" alt="ROC Curves" style="width:100%; border-radius:8px;">
+                </div>
+                <div class="glass-card">
+                    <h3 class="card-title" style="margin-bottom:15px;">Feature Importance</h3>
+                    <img src="assets/plots/feature_importance.png" alt="Feature Importance" style="width:100%; border-radius:8px;">
+                </div>
+                <div class="glass-card">
+                    <h3 class="card-title" style="margin-bottom:15px;">Learning Curves</h3>
+                    <img src="assets/plots/learning_curves.png" alt="Learning Curves" style="width:100%; border-radius:8px;">
+                </div>
+            </div>
+            
+            <div class="chart-grid-main">
+                <div class="glass-card">
+                    <h3 class="card-title" style="margin-bottom:15px;">PCA Biplot</h3>
+                    <img src="assets/plots/pca_biplot.png" alt="PCA Biplot" style="width:100%; border-radius:8px;">
+                </div>
+                <div class="glass-card">
+                    <h3 class="card-title" style="margin-bottom:15px;">Baseline vs Tuned Comparison</h3>
+                    <img src="assets/plots/baseline_vs_tuned.png" alt="Tuning Comparison" style="width:100%; border-radius:8px;">
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Visual Dashboard Controls & JS Logic -->
@@ -1235,6 +1267,9 @@
             } else if (tabId === 'forecaster-tab') {
                 pageTitle.innerText = "Interactive Love Forecaster";
                 pageSubtitle.innerText = "Input profile statistics to test model weights and predict real-time dating app outcomes.";
+            } else if (tabId === 'notebook-tab') {
+                pageTitle.innerText = "Notebook Visuals";
+                pageSubtitle.innerText = "Raw statistical outputs and evaluation metrics extracted directly from the ML pipeline.";
             }
         }
 
@@ -1469,62 +1504,52 @@
         const modelData = {
             rf: {
                 title: "Random Forest Classifier",
-                desc: "An ensemble bootstrap bagging classifier consisting of 100 deep decision trees. Excellent robustness against noise and high-dimensional categorical features.",
-                acc: "87.4%",
-                f1: "87.1%",
+                desc: "An ensemble bootstrap bagging classifier consisting of 500 deep decision trees. Robust against noise, predicting with slight imbalance correction.",
+                acc: "59.9%",
+                f1: "4.6%",
                 matrix: [
-                    { val: 924, lbl: "Match" }, { val: 42, lbl: "Ghosted" }, { val: 21, lbl: "Blocked" }, { val: 13, lbl: "Catfish" },
-                    { val: 38, lbl: "Match" }, { val: 886, lbl: "Ghosted" }, { val: 56, lbl: "Blocked" }, { val: 20, lbl: "Catfish" },
-                    { val: 15, lbl: "Match" }, { val: 62, lbl: "Ghosted" }, { val: 898, lbl: "Blocked" }, { val: 25, lbl: "Catfish" },
-                    { val: 11, lbl: "Match" }, { val: 18, lbl: "Ghosted" }, { val: 34, lbl: "Blocked" }, { val: 937, lbl: "Catfish" }
+                    { val: 5893, lbl: "True Neg" }, { val: 137, lbl: "False Pos" },
+                    { val: 3873, lbl: "False Neg" }, { val: 97, lbl: "True Pos" }
                 ]
             },
             gb: {
                 title: "Gradient Boosting (XGBoost)",
-                desc: "Sequential ensemble boosting trees built with histogram-based optimizations. Strong predictive modeling power for categorical thresholds.",
-                acc: "89.2%",
-                f1: "88.9%",
+                desc: "Sequential ensemble boosting trees built with histogram-based optimizations. Usually strong, but limited by intrinsic dataset signal.",
+                acc: "56.1%",
+                f1: "29.4%",
                 matrix: [
-                    { val: 945, lbl: "Match" }, { val: 29, lbl: "Ghosted" }, { val: 18, lbl: "Blocked" }, { val: 8, lbl: "Catfish" },
-                    { val: 24, lbl: "Match" }, { val: 911, lbl: "Ghosted" }, { val: 45, lbl: "Blocked" }, { val: 20, lbl: "Catfish" },
-                    { val: 10, lbl: "Match" }, { val: 51, lbl: "Ghosted" }, { val: 915, lbl: "Blocked" }, { val: 24, lbl: "Catfish" },
-                    { val: 8, lbl: "Match" }, { val: 12, lbl: "Ghosted" }, { val: 28, lbl: "Blocked" }, { val: 952, lbl: "Catfish" }
+                    { val: 4692, lbl: "True Neg" }, { val: 1338, lbl: "False Pos" },
+                    { val: 3055, lbl: "False Neg" }, { val: 915, lbl: "True Pos" }
                 ]
             },
             dt: {
                 title: "Decision Tree Classifier",
-                desc: "A single interpretability-focused classification tree using Gini impurity. Perfect for drafting rule extractions, though prone to slight overfitting.",
-                acc: "81.5%",
-                f1: "81.2%",
+                desc: "A single interpretability-focused classification tree using Gini impurity. Explores raw threshold boundaries on the features.",
+                acc: "51.1%",
+                f1: "40.0%",
                 matrix: [
-                    { val: 820, lbl: "Match" }, { val: 78, lbl: "Ghosted" }, { val: 55, lbl: "Blocked" }, { val: 47, lbl: "Catfish" },
-                    { val: 72, lbl: "Match" }, { val: 808, lbl: "Ghosted" }, { val: 80, lbl: "Blocked" }, { val: 40, lbl: "Catfish" },
-                    { val: 49, lbl: "Match" }, { val: 92, lbl: "Ghosted" }, { val: 814, lbl: "Blocked" }, { val: 45, lbl: "Catfish" },
-                    { val: 32, lbl: "Match" }, { val: 41, lbl: "Ghosted" }, { val: 68, lbl: "Blocked" }, { val: 859, lbl: "Catfish" }
+                    { val: 3484, lbl: "True Neg" }, { val: 2546, lbl: "False Pos" },
+                    { val: 2342, lbl: "False Neg" }, { val: 1628, lbl: "True Pos" }
                 ]
             },
             lr: {
                 title: "Logistic Regression",
-                desc: "L2-Regularized multi-class logit model. Serves as our primary linear classification baseline. High processing velocity but limited by non-linear interactions.",
-                acc: "76.8%",
-                f1: "76.4%",
+                desc: "L2-Regularized logit model serving as baseline. With ROC-AUC of 0.50, it collapses to majority class prediction (all Negative).",
+                acc: "60.3%",
+                f1: "0.0%",
                 matrix: [
-                    { val: 765, lbl: "Match" }, { val: 98, lbl: "Ghosted" }, { val: 80, lbl: "Blocked" }, { val: 57, lbl: "Catfish" },
-                    { val: 88, lbl: "Match" }, { val: 742, lbl: "Ghosted" }, { val: 110, lbl: "Blocked" }, { val: 60, lbl: "Catfish" },
-                    { val: 69, lbl: "Match" }, { val: 120, lbl: "Ghosted" }, { val: 755, lbl: "Blocked" }, { val: 56, lbl: "Catfish" },
-                    { val: 42, lbl: "Match" }, { val: 65, lbl: "Ghosted" }, { val: 88, lbl: "Blocked" }, { val: 805, lbl: "Catfish" }
+                    { val: 6030, lbl: "True Neg" }, { val: 0, lbl: "False Pos" },
+                    { val: 3970, lbl: "False Neg" }, { val: 0, lbl: "True Pos" }
                 ]
             },
             knn: {
                 title: "K-Nearest Neighbors (KNN)",
-                desc: "Instance-based non-parametric classifier using Euclidean distance spacing (K=7). Excellent clustering boundaries but computation-heavy.",
-                acc: "83.1%",
-                f1: "82.8%",
+                desc: "Instance-based non-parametric classifier using Euclidean distance spacing (K=5).",
+                acc: "53.6%",
+                f1: "35.0%",
                 matrix: [
-                    { val: 855, lbl: "Match" }, { val: 62, lbl: "Ghosted" }, { val: 44, lbl: "Blocked" }, { val: 39, lbl: "Catfish" },
-                    { val: 59, lbl: "Match" }, { val: 825, lbl: "Ghosted" }, { val: 66, lbl: "Blocked" }, { val: 50, lbl: "Catfish" },
-                    { val: 38, lbl: "Match" }, { val: 72, lbl: "Ghosted" }, { val: 839, lbl: "Blocked" }, { val: 51, lbl: "Catfish" },
-                    { val: 24, lbl: "Match" }, { val: 30, lbl: "Ghosted" }, { val: 44, lbl: "Blocked" }, { val: 902, lbl: "Catfish" }
+                    { val: 4116, lbl: "True Neg" }, { val: 1914, lbl: "False Pos" },
+                    { val: 2720, lbl: "False Neg" }, { val: 1250, lbl: "True Pos" }
                 ]
             }
         };
@@ -1538,25 +1563,25 @@
                     datasets: [
                         {
                             label: 'Accuracy',
-                            data: [76.8, 81.5, 83.1, 87.4, 89.2],
+                            data: [60.3, 51.1, 53.6, 59.9, 56.1],
                             backgroundColor: 'rgba(255, 46, 147, 0.85)',
                             borderRadius: 4
                         },
                         {
                             label: 'F1-Score',
-                            data: [76.4, 81.2, 82.8, 87.1, 88.9],
+                            data: [0.0, 40.0, 35.0, 4.6, 29.4],
                             backgroundColor: 'rgba(138, 43, 226, 0.85)',
                             borderRadius: 4
                         },
                         {
                             label: 'Precision',
-                            data: [75.9, 80.9, 82.4, 86.9, 88.5],
+                            data: [0.0, 39.0, 39.5, 41.5, 40.6],
                             backgroundColor: 'rgba(0, 240, 255, 0.85)',
                             borderRadius: 4
                         },
                         {
                             label: 'Recall',
-                            data: [77.2, 81.8, 83.5, 87.6, 89.4],
+                            data: [0.0, 41.0, 31.5, 2.4, 23.0],
                             backgroundColor: 'rgba(57, 255, 20, 0.85)',
                             borderRadius: 4
                         }
@@ -1596,9 +1621,9 @@
             container.innerHTML = '';
 
             data.matrix.forEach((cell, idx) => {
-                const isDiag = (idx === 0 || idx === 5 || idx === 10 || idx === 15);
+                const isDiag = (idx === 0 || idx === 3);
                 const cellDiv = document.createElement('div');
-                cellDiv.className = `matrix-cell ${isDiag ? 'diagonal' : ''}`;
+                cellDiv.className = 'matrix-cell' + (isDiag ? ' diagonal' : '');
                 cellDiv.innerHTML = `${cell.val} <span class="cell-lbl">${cell.lbl}</span>`;
                 container.appendChild(cellDiv);
             });

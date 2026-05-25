@@ -770,6 +770,11 @@
 
   <span class="nav-section-label">System</span>
 
+  <a class="nav-item" href="javascript:void(0)" onclick="switchTab('visuals')">
+    <span class="nav-icon">🖼️</span>
+    <span>Notebook Visuals</span>
+  </a>
+
   <a class="nav-item" href="javascript:void(0)" onclick="switchTab('reports')">
     <span class="nav-icon">📁</span>
     <span>Reports</span>
@@ -1541,34 +1546,34 @@
               <div class="kpi-label">Top Algorithm Accuracy</div>
               <div class="kpi-icon">🏆</div>
             </div>
-            <div class="kpi-value">88.1%</div>
+            <div class="kpi-value">60.3%</div>
             <div class="kpi-footer">
-              <span class="badge-up">Gradient Boosting (XGBoost)</span>
-              <span class="kpi-sub">tuned hyperparameters</span>
+              <span class="badge-up">Logistic Reg & SVM</span>
+              <span class="kpi-sub">Highest CV accuracy</span>
             </div>
           </div>
 
           <div class="kpi-card teal">
             <div class="kpi-top">
-              <div class="kpi-label">Random Forest F1-Score</div>
+              <div class="kpi-label">Random Forest Accuracy</div>
               <div class="kpi-icon">🌲</div>
             </div>
-            <div class="kpi-value">87.1%</div>
+            <div class="kpi-value">59.8%</div>
             <div class="kpi-footer">
               <span class="badge-up">Highly robust ensemble</span>
-              <span class="kpi-sub">within 0.7% of XGBoost</span>
+              <span class="kpi-sub">within 0.5% of Top</span>
             </div>
           </div>
 
           <div class="kpi-card green">
             <div class="kpi-top">
-              <div class="kpi-label">AutoML Top score</div>
+              <div class="kpi-label">AutoML Baseline Match</div>
               <div class="kpi-icon">🤖</div>
             </div>
-            <div class="kpi-value">88.9%</div>
+            <div class="kpi-value">~60.0%</div>
             <div class="kpi-footer">
               <span class="badge-up">Auto-Sklearn Search</span>
-              <span class="kpi-sub">optimized search space</span>
+              <span class="kpi-sub">confirms dataset bounds</span>
             </div>
           </div>
 
@@ -1577,10 +1582,10 @@
               <div class="kpi-label">Baseline Classifier</div>
               <div class="kpi-icon">⚖️</div>
             </div>
-            <div class="kpi-value">78.5%</div>
+            <div class="kpi-value">52.2%</div>
             <div class="kpi-footer">
-              <span class="badge-neutral">Logistic Regression</span>
-              <span class="kpi-sub">baseline linear split</span>
+              <span class="badge-neutral">Decision Tree</span>
+              <span class="kpi-sub">baseline single split</span>
             </div>
           </div>
         </div>
@@ -1619,28 +1624,152 @@
               </thead>
               <tbody>
                 <tr style="border-bottom:1px solid var(--border);">
-                  <td style="padding:8px 0; color:var(--purple-light)">XGBoost</td>
-                  <td style="padding:8px 0; text-align:right; font-weight:600; color:var(--text-primary)">88.1%</td>
-                  <td style="padding:8px 0; text-align:right;">0.94</td>
+                  <td style="padding:8px 0; color:var(--purple-light)">Logistic Reg.</td>
+                  <td style="padding:8px 0; text-align:right; font-weight:600; color:var(--text-primary)">60.3%</td>
+                  <td style="padding:8px 0; text-align:right;">0.50</td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border);">
                   <td style="padding:8px 0; color:var(--purple-light)">Random Forest</td>
-                  <td style="padding:8px 0; text-align:right; font-weight:600; color:var(--text-primary)">87.4%</td>
-                  <td style="padding:8px 0; text-align:right;">0.93</td>
+                  <td style="padding:8px 0; text-align:right; font-weight:600; color:var(--text-primary)">59.8%</td>
+                  <td style="padding:8px 0; text-align:right;">0.51</td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border);">
-                  <td style="padding:8px 0; color:var(--purple-light)">Logistic Reg.</td>
-                  <td style="padding:8px 0; text-align:right; font-weight:600; color:var(--text-primary)">78.5%</td>
-                  <td style="padding:8px 0; text-align:right;">0.84</td>
+                  <td style="padding:8px 0; color:var(--purple-light)">XGBoost</td>
+                  <td style="padding:8px 0; text-align:right; font-weight:600; color:var(--text-primary)">55.9%</td>
+                  <td style="padding:8px 0; text-align:right;">0.51</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
           <div style="background:rgba(20,184,166,0.06); border:1px dashed rgba(20,184,166,0.25); border-radius:var(--radius-sm); padding:14px; font-size:12px; color:var(--teal); line-height:1.45;">
-            <strong>🤖 AutoML Baseline Comparison:</strong> Our tuned XGBoost algorithm matches Google Colab's Auto-Sklearn optimized search space (88.9%) within 0.8% error margin, yielding excellent production inference efficiency.
+            <strong>🤖 Synthetic Data Constraints:</strong> Our models hover around 50-60% accuracy due to the uniformly distributed and synthetically generated nature of the target variables in this dataset. This confirms there is virtually no predictive signal between the features and the targets, as expected from the `PROJECT_NOTES.md`.
           </div>
         </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== TAB: VISUALS ==================== -->
+    <div id="visuals-tab" class="tab-content">
+      <div>
+        <div class="section-header">
+          <span class="section-title">Notebook Visualizations Gallery</span>
+        </div>
+        <p style="color:var(--text-secondary); margin-bottom:20px; font-size:14px;">High-resolution static plots extracted directly from the ML pipeline notebook.</p>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px;">
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 3 Target Variable Match Outcome</div>
+          <img src="assets/plots/01_3_3_target_variable_match_outcome.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 4 Categorical Feature Distributions</div>
+          <img src="assets/plots/02_3_4_categorical_feature_distributions.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 5 Numerical Feature Distributions</div>
+          <img src="assets/plots/03_3_5_numerical_feature_distributions.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 6 Numerical Features Outlier Detection Boxplots</div>
+          <img src="assets/plots/04_3_6_numerical_features_outlier_detection_boxplots.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 7 Feature Vs Target Numerical Features By Outcom</div>
+          <img src="assets/plots/05_3_7_feature_vs_target_numerical_features_by_outcom.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 8 Feature Vs Target Categorical Features By Outc</div>
+          <img src="assets/plots/06_3_8_feature_vs_target_categorical_features_by_outc.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 9 Correlation Heatmap Numerical Features</div>
+          <img src="assets/plots/07_3_9_correlation_heatmap_numerical_features.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 10 Interest Tags Analysis</div>
+          <img src="assets/plots/08_3_10_interest_tags_analysis.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">5 2 Anova F Score Feature Selection Selectkbest</div>
+          <img src="assets/plots/09_5_2_anova_f_score_feature_selection_selectkbest.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">5 3 Mutual Information Feature Selection</div>
+          <img src="assets/plots/10_5_3_mutual_information_feature_selection.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">6 1 Explained Variance Analysis</div>
+          <img src="assets/plots/11_6_1_explained_variance_analysis.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">6 3 Pca Biplot First Two Principal Components</div>
+          <img src="assets/plots/12_6_3_pca_biplot_first_two_principal_components.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Section 7 Train Test Split</div>
+          <img src="assets/plots/13_section_7_train_test_split.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">9 2 Model Comparison Table</div>
+          <img src="assets/plots/14_9_2_model_comparison_table.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Confusion Matrix 9 3 Confusion Matrices</div>
+          <img src="assets/plots/15_confusion_matrix_9_3_confusion_matrices.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">9 4 Roc Curves</div>
+          <img src="assets/plots/16_9_4_roc_curves.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">9 6 Cross Validation Scores 5 Fold</div>
+          <img src="assets/plots/17_9_6_cross_validation_scores_5_fold.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">9 7 Learning Curves Top 3 Models</div>
+          <img src="assets/plots/18_9_7_learning_curves_top_3_models.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">10 3 Before Vs After Tuning Comparison</div>
+          <img src="assets/plots/19_10_3_before_vs_after_tuning_comparison.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Confusion Matrix 10 4 Best Tuned Model Detailed Results</div>
+          <img src="assets/plots/20_confusion_matrix_10_4_best_tuned_model_detailed_results.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Section 11 Feature Importance Analysis</div>
+          <img src="assets/plots/21_section_11_feature_importance_analysis.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Section 12 Final Model Summary</div>
+          <img src="assets/plots/22_section_12_final_model_summary.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
       </div>
     </div>
 
@@ -1809,6 +1938,9 @@
     } else if (tabId === 'experiments') {
       headerTitle.innerText = "Model Evaluation Arena";
       headerDesc.innerText = "Hyperparameter validations comparing 5 classification models";
+    } else if (tabId === 'visuals') {
+      headerTitle.innerText = "Notebook Visualizations Gallery";
+      headerDesc.innerText = "Static high-resolution plots extracted from the original exploratory and ML pipelines";
     } else if (tabId === 'reports') {
       headerTitle.innerText = "Download & Report Center";
       headerDesc.innerText = "Export datasets, presentation slides, and Jupyter notebooks";
@@ -2252,8 +2384,8 @@
   function initImportanceCharts() {
     {
       const ctx = document.getElementById('featureImportanceChart');
-      const labels = ['mutual_matches', 'likes_received', 'relationship_intent', 'app_usage_time_min', 'swipe_right_ratio', 'bio_length', 'profile_pics_count', 'age', 'message_sent_count', 'gender'];
-      const values = [0.38, 0.22, 0.15, 0.08, 0.06, 0.04, 0.03, 0.02, 0.015, 0.005];
+      const labels = ['mutual_matches', 'app_usage_time_min', 'likes_received', 'bio_length', 'age', 'swipe_right_ratio', 'message_sent_count', 'emoji_usage_rate', 'profile_pics_count', 'gender'];
+      const values = [0.087, 0.083, 0.075, 0.071, 0.045, 0.025, 0.012, 0.011, 0.011, 0.011];
       initializedCharts.importance = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -2286,7 +2418,7 @@
   function initExperimentsCharts() {
     {
       const ctx = document.getElementById('modelCompareChart');
-      const models = ['Logistic Reg.', 'KNN', 'Decision Tree', 'Random Forest', 'XGBoost'];
+      const models = ['Logistic Reg.', 'KNN', 'Decision Tree', 'Random Forest', 'XGBoost', 'SVM'];
       initializedCharts.compare = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -2294,23 +2426,15 @@
           datasets: [
             {
               label: 'Accuracy',
-              data: [78.5, 75.1, 80.2, 87.4, 88.1],
+              data: [60.3, 54.1, 52.2, 59.8, 55.9, 60.3],
               backgroundColor: PURPLE + '99',
               borderColor: PURPLE,
               borderWidth: 1.5,
               borderRadius: 4,
             },
             {
-              label: 'F1 Score',
-              data: [76.0, 74.2, 79.5, 87.1, 87.9],
-              backgroundColor: PINK + '99',
-              borderColor: PINK,
-              borderWidth: 1.5,
-              borderRadius: 4,
-            },
-            {
               label: 'ROC-AUC',
-              data: [84.0, 81.0, 80.0, 93.0, 94.0],
+              data: [50.1, 50.2, 49.4, 51.4, 50.9, 51.4],
               backgroundColor: TEAL + '99',
               borderColor: TEAL,
               borderWidth: 1.5,

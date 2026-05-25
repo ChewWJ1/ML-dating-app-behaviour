@@ -1,0 +1,125 @@
+"""
+SwipeIQ Streamlit Dashboard — Data Loader Utility
+Handles caching and preprocessing of the dataset.
+"""
+import os
+import json
+import pandas as pd
+import streamlit as st
+from sklearn.preprocessing import StandardScaler
+
+# Define paths relative to the project root
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DATA_PATH = os.path.join(ROOT_DIR, 'dating_app_behavior_dataset_extended1.csv')
+EDA_STATS_PATH = os.path.join(ROOT_DIR, 'eda_stats.json')
+CV_STATS_PATH = os.path.join(ROOT_DIR, 'cv_stats.json')
+FI_STATS_PATH = os.path.join(ROOT_DIR, 'feature_importances.json')
+
+@st.cache_data
+def load_raw_data():
+    """Load the raw extended dataset."""
+    if not os.path.exists(DATA_PATH):
+        st.error(f"Dataset not found at {DATA_PATH}")
+        return pd.DataFrame()
+    return pd.read_csv(DATA_PATH)
+
+@st.cache_data
+def load_eda_stats():
+    """Load precomputed EDA statistics."""
+    if not os.path.exists(EDA_STATS_PATH):
+        return {}
+    with open(EDA_STATS_PATH, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+@st.cache_data
+def load_cv_stats():
+    """Load cross-validation statistics."""
+    if not os.path.exists(CV_STATS_PATH):
+        return {}
+    with open(CV_STATS_PATH, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+@st.cache_data
+def load_feature_importances():
+    """Load feature importance data."""
+    if not os.path.exists(FI_STATS_PATH):
+        return {}
+    with open(FI_STATS_PATH, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+@st.cache_data
+def get_preprocessed_data():
+    """
+    Replicates the notebook preprocessing pipeline.
+    Returns: X_train, X_test, y_train, y_test, feature_names, scaler, encoders
+    We don't actually split train/test here to save memory, we just return the full X and y
+    since this is mainly for the prediction pipeline.
+    """
+    df = load_raw_data().copy()
+    if df.empty:
+        return None, None, None, None
+        
+    # 1. Drop redundant columns
+    cols_to_drop = ['app_usage_time_label', 'swipe_right_label']
+    df.drop(columns=[col for col in cols_to_drop if col in df.columns], inplace=True)
+    
+    # 2. Binary target
+    positive_outcomes = {'Mutual Match', 'Instant Match', 'Date Happened', 'Relationship Formed'}
+    if 'match_outcome' in df.columns:
+        y = df['match_outcome'].apply(lambda x: 1 if x in positive_outcomes else 0)
+        df.drop(columns=['match_outcome'], inplace=True)
+    else:
+        y = pd.Series([0] * len(df))
+        
+    # 3. Ordinal Encoding mappings
+    income_map = {
+        'Very Low': 0, 'Low': 0,
+        'Lower-Middle': 1, 'Middle': 1, 'Upper-Middle': 1,
+        'High': 2, 'Very High': 2
+    }
+    
+    def map_education(val):
+        val = str(val)
+        if any(k in val for k in ['No Formal', 'High School', 'Diploma']): return 0
+        elif any(k in val for k in ['Associate', 'Bachelor']): return 1
+        elif any(k in val for k in ['Master', 'MBA', 'PhD', 'Postdoc']): return 2
+        return 0
+        
+    if 'income_bracket' in df.columns:
+        df['income_enc'] = df['income_bracket'].map(income_map)
+        df.drop(columns=['income_bracket'], inplace=True)
+    if 'education_level' in df.columns:
+        df['education_enc'] = df['education_level'].apply(map_education)
+        df.drop(columns=['education_level'], inplace=True)
+        
+    # 4. One-Hot Encoding
+    nominal_cols = ['gender', 'sexual_orientation', 'location_type', 
+                    'swipe_time_of_day', 'body_type', 'relationship_intent', 'zodiac_sign']
+    nominal_cols = [c for c in nominal_cols if c in df.columns]
+    
+    # We must ensure consistent dummy columns for inference. We'll use get_dummies for now
+    # and in the forecaster we align the columns.
+    df = pd.get_dummies(df, columns=nominal_cols, drop_first=False, dtype=int)
+    
+    # 5. Multi-Hot Encoding for interest_tags
+    if 'interest_tags' in df.columns:
+        # Simplified manual multi-hot encoding for the top tags to avoid dependency on MultiLabelBinarizer
+        tags_lists = df['interest_tags'].fillna('').str.split(', ')
+        all_unique_tags = set(tag.strip() for tags in tags_lists for tag in tags if tag.strip())
+        
+        for tag in all_unique_tags:
+            df[f'interest_{tag}'] = tags_lists.apply(lambda x: 1 if tag in x else 0)
+            
+        df.drop(columns=['interest_tags'], inplace=True)
+        
+    # 6. StandardScaler
+    numeric_cols = ['age', 'height_cm', 'weight_kg', 'app_usage_time_min',
+                    'swipe_right_ratio', 'likes_received', 'mutual_matches',
+                    'profile_pics_count', 'bio_length', 'message_sent_count',
+                    'emoji_usage_rate', 'last_active_hour']
+    numeric_cols = [c for c in numeric_cols if c in df.columns]
+    
+    scaler = StandardScaler()
+    df[numeric_cols] = scaler.fit_transform(df[numeric_cols])
+    
+    return df, y, list(df.columns), scaler
