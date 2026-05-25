@@ -25,10 +25,13 @@
 
 | File | Description |
 |---|---|
-| `ML_dating_app_behaviour.ipynb` | Main Jupyter notebook — full pipeline (105 cells) |
+| `ML_dating_app_behaviour.ipynb` | Main Jupyter notebook — full pipeline (115 cells) |
 | `dating_app_behavior_dataset.csv` | Original dataset (50k × 19 features, 7.6 MB) |
 | `dating_app_behavior_dataset_extended1.csv` | **Extended dataset used** (50k × 25 features, 9.6 MB) |
 | `PROJECT_NOTES.md` | This documentation file |
+| `run_pipeline.py` | Python script to run the notebook headless |
+| `dashboard.html` | Interactive frontend dashboard mock-up |
+| `autosklearn_colab_example.ipynb` | Example notebook for Auto-Sklearn configuration in Colab |
 
 ---
 
@@ -571,6 +574,8 @@ To optimize compute times and prevent hardware bottlenecks, we implemented three
   - **`learning_curve_data.joblib`**: Stores the pre-computed arrays of learning curve scores (`train_sizes`, `train_scores`, `val_scores`) for the top 3 models.
   - **`tuned_results.joblib`**: Stores the tuned estimators, parameters, and scores found during the randomized search.
   
+  *(Note: these `.joblib` files are large and are ignored by `.gitignore` to prevent Git push errors.)*
+  
   **How it works:** When a teammate opens the notebook and runs it, the code automatically detects these `.joblib` files on disk. If found, it **loads them instantly in 0.1 seconds** instead of running the training algorithms! 
   
   **How to force a fresh retrain:** If you edit the preprocessing steps and want to force a fresh, clean training run from scratch, simply delete the `.joblib` files from your workspace directory. The cells will automatically fall back to training and generate fresh checkpoints.
@@ -649,6 +654,10 @@ During the development of this pipeline, several additional advanced ML techniqu
 - **What it does:** Projects the selected features down to 55 principal components using PCA, then trains a K-Nearest Neighbors classifier on this reduced feature space.
 - **Why not implemented:** With ROC-AUC ≈ 0.50 across the board, the issue isn't dimensionality — it's that the features contain no predictive signal. Reducing 67 → 55 dimensions won't create information that doesn't exist. Distance-based models like KNN are highly sensitive to noise, and performing PCA on uninformative features merely projects that noise into a lower-dimensional space without improving the signal-to-noise ratio.
 
+### 6. Auto-Sklearn
+- **What it does:** An automated machine learning toolkit that frees the machine learning user from algorithm selection and hyperparameter tuning.
+- **Why not implemented:** Auto-Sklearn failed to install reliably in Google Colab because it relies on a very outdated version of scikit-learn (0.24), which is incompatible with modern Python 3.10+ environments. Attempting to force the downgrade caused dependency conflicts that broke the rest of the pipeline. We replaced it with two modern, lightweight, and actively maintained alternatives: **FLAML** and **PyCaret**.
+
 > **Note:** The decision to exclude these techniques was a deliberate methodological choice, not an oversight. Including them would have added computational cost and code complexity without improving model performance on this particular dataset. This is consistent with the scientific principle that **no technique can extract signal from data where none exists**. The uniform ROC-AUC ≈ 0.50 scores prove that the features in this dataset do not carry predictive power for dating app match outcomes.
 
 ---
@@ -669,7 +678,7 @@ During the development of this pipeline, several additional advanced ML techniqu
 | Statistical significance testing | ✅ Done (paired t-test) |
 | SHAP explainability | ✅ Done |
 | Ethics & demographic parity | ✅ Done |
-| Auto-sklearn comparison | 🔲 Pending (Colab, Linux) |
+| AutoML comparison | ✅ Done (FLAML & PyCaret) |
 | EDA complete | ✅ Done |
 | Data preprocessing complete | ✅ Done |
 | Feature selection (F-score + MI) | ✅ Done |
@@ -686,19 +695,22 @@ During the development of this pipeline, several additional advanced ML techniqu
 
 | Section | Cells | Description |
 |---|---|---|
-| 1 — Install & Import | 2–4 | Libraries and plot style |
-| 2 — Data Loading | 5–7 | Load CSV, column overview |
-| 3 — EDA | 8–29 | 10 subsections of exploration and visualisation |
-| 4 — Preprocessing | 30–46 | Drop, encode, normalise |
-| 5 — Feature Selection | 47–57 | F-Score, MI, union strategy |
-| 6 — PCA | 58–64 | Variance analysis, biplot |
-| 7 — Train/Test Split | 65–67 | 80/20 stratified |
-| 8 — Pre-Training Checklist | 68 | Status summary |
-| 9 — Model Training | 69–87 | 6 models, comparison, confusion matrices, ROC, CV, learning curves |
-| 10 — Hyperparameter Tuning | 88–99 | RandomizedSearchCV, before/after comparison |
-| 11 — Feature Importance | 100–101 | Top 20 features from best tree model |
-| 12 — Final Summary | 102–105 | Comprehensive ranking, best model |
+| 1 — Install & Import | 3–5 | Libraries and plot style |
+| 2 — Data Loading | 6–8 | Load CSV, column overview |
+| 3 — EDA | 9–30 | 10 subsections of exploration and visualisation |
+| 4 — Preprocessing | 31–47 | Drop, encode, normalise |
+| 5 — Feature Selection | 48–58 | F-Score, MI, union strategy |
+| 6 — PCA | 59–65 | Variance analysis, biplot |
+| 7 — Train/Test Split | 66–68 | 80/20 stratified |
+| 8 — Pre-Training Checklist | 69 | Status summary |
+| 9 — Model Training | 70–90 | 6 models, comparison, confusion matrices, ROC, CV, learning curves |
+| 10 — Hyperparameter Tuning | 91–103 | RandomizedSearchCV, before/after comparison |
+| 11 — Feature Importance | 104–106 | Top 20 features from best tree model |
+| 12 — Ethical Considerations | 107–108 | Ethical Implications & Demographic Parity |
+| 13 — Final Summary | 109–111 | Comprehensive ranking, best model |
+| 14 — Pipeline Summary | 112 | Hardware Optimisations & Next Steps |
+| 15 — AutoML Comparison | 113–115 | FLAML and PyCaret |
 
 ---
 
-*Last updated: 23 May 2026*
+*Last updated: 25 May 2026*
