@@ -1,0 +1,223 @@
+[0] Faculty of Computer Science and Information Technology
+[1] University of Malaya
+[2] Semester 2, Session 2025/2026
+[3] WIA 1006 - Machine Learning
+[4] OCC 6
+[5] 
+[6] 
+[7] Group Assignment Report
+[8] Tying the (Data) Knot: Predicting Meaningful Connections
+[9] 
+[10] 
+[11] Group 3
+Group name: 
+[12] Group Members:
+[13] CHEW WEI JIAN 23118568/2
+[14] KU JIAN CHENG 23079373/2
+[15] NG JIN RU 23116192/2
+[16] ANG YING EN 23116738/2
+[17] CHAANG WAI CHIU 23104771/2
+[18] 
+[19] Executive Summary
+[20] This report presents the development, evaluation, and optimization of an end-to-end Machine Learning classification pipeline designed to predict meaningful relationship connections on a mobile dating application. Utilizing a 50,000-sample dataset, we binarized 10 relationship outcomes into a target connection variable (representing Mutual Match, Instant Match, Date Happened, and Relationship Formed) and preprocessed 25 variables through ordinal, one-hot, and multi-hot encodings. We conducted feature selection using a union of ANOVA F-scores and Mutual Information, selecting 67 features, and projected them down to 55 dimensions via Principal Component Analysis (PCA). Fourteen baseline and advanced classifiers—Logistic Regression, K-Nearest Neighbors, Decision Tree, Random Forest, XGBoost, a custom multi-threaded Bagging SVM ensemble, LightGBM, CatBoost, Multi-Layer Perceptron (MLP), Balanced Random Forest, Cosine KNN CF, FT-Transformer, SAINT, and NODE were trained and tuned using RandomizedSearchCV, after natively balancing the training split via SMOTE. Validation was conducted via 5-fold cross-validation, paired t-tests, SHAP explainability analyses, and demographic parity audits.
+[21] Our key finding indicates that while the pipeline runs with full engineering integrity, all models converge at the majority class baseline (60.30% test accuracy, ROC-AUC ≈ 0.50). This result is a valuable scientific finding, mathematically demonstrating the absence of predictive signal within the programmatic dataset. Features like zodiac sign or swipe ratio carry no genuine correlation with connection success. Based on these results, we recommend that future dating algorithms focus on natural language bio analysis (via NLP/LLMs) and active behavioral cues (such as response latency and chat length) to capture the true, non-linear signals of human connections.
+[22] 
+[23] 
+[24] Table of Contents
+[25] 
+[26] 
+[27] 1.0 Team Organization and Management
+[28] 1.1 Team Formation and Collaboration Mechanisms
+[29] Our team consists of five members from OCC 10 of FCSIT, Universiti Malaya. The team leader is Chew Wei Jian, and the core members are Ku Jian Cheng, Ng Jin Ru, Ang Ying En and Chaang Wai Chiu. We established this group based on a shared academic interest in applied machine learning pipelines and a joint goal of achieving excellence in the WIA1006/WID3006 course assignment. To manage work across our varied skills, we structured our collaboration using professional project management workflows.
+[30] Communication was maintained through regular weekly synchronization meetings held via Microsoft Teams and in-person lab sessions. A shared WhatsApp group served as our primary channel for rapid communication, debugging, and task coordination. For source code management and collaborative integration, we established a central GitHub repository. Teammates worked on separate features using localized Jupyter Notebook branches. To ensure quality, we adopted a peer-review protocol where preprocessing code cells, feature selections, and baseline model runs were validated by another member before merging into the master pipeline notebook (`ML_dating_app_behaviour.ipynb`).
+[31] We implemented a critical-path execution schedule, prioritizing data preprocessing and categorical encoding in the early weeks. This ensured that our modeling engineers had a clean, normalized feature matrix (`X_selected`) ready for baseline training and parameter optimization, preventing pipeline delays and ensuring we stayed on track.
+[32] 1.2 Roles and Responsibilities
+[33] The roles were allocated based on technical strengths. Chew Wei Jian managed the integration, parallelization, and caching; Ku Jian Cheng drove the preprocessing and encoding; Ng Jin Ru handled initial visual checks; Ang Ying En programmed training loops and RandomizedSearchCV; and Chaang Wai Chiu developed the SHAP explainability plots, demographic audits, and the interactive dashboard. Table 1 outlines our specific responsibilities:
+[34] Table 1: Roles and Task Contributions for OCC 10 Group Members
+[35] 
+[36] 1.3 Project Timeline and Gantt Chart
+[37] Our work followed a structured 7-week cycle, matching the steps of a standard data science pipeline. Table 2 outlines the timeline of activities, and Table 3 details the progress Gantt chart:
+[38] Table 2: Weekly Project Timeline and Completed Phases
+[39] 
+[40] Table 3: Gantt Chart of Project Progress
+[41] 
+[42] 2.0 Problem and Objective
+[43] 2.1 Project Background and Relevance
+[44] Modern dating applications utilize matching algorithms to connect individuals. However, matching is often superficial and leads to high ghosting rates or negative outcomes. A key challenge is predicting connection success based on behavioral data rather than simple profiles. This project framing attempts to solve a binary classification problem: predicting whether a user will achieve a meaningful connection (defined as target=1, representing outcomes like Mutual Match, Instant Match, Date Happened, and Relationship Formed) or experience a negative outcome (defined as target=0, representing Blocked, Catfished, Chat Ignored, Ghosted, No Action, and One-sided Likes).
+[45] 2.2 Dataset Breakdown and Target Definition
+[46] The objective is to train a machine learning classifier that utilizes demographic factors and in-app behavioral signals. Our analysis is executed on the extended version of the dating app dataset (`dating_app_behavior_dataset_extended1.csv`). While the original dataset provides 19 baseline features, this project utilizes the extended version incorporating 6 additional variables that provide critical signals for connection modeling:
+[47] age: 
+[48] Numeric (18–59). 
+[49] Age differences serve as a core preference constraint in mating functions.
+[50] height_cm: 
+[51] Numeric (145–200). 
+[52] Captures physical profiles which correlate with matching preferences.
+[53] weight_kg: 
+[54] Numeric. 
+[55] Represents physical profile dimensions and attributes.
+[56] body_type: 
+[57] Categorical (Slim, Curvy, Average, Athletic, Muscular, Plus Size). 
+[58] Indicator of preference match.
+[59] relationship_intent: 
+[60] Categorical (Serious Relationship, Casual Dating, Hookups, Friends Only, Exploring, Networking). 
+[61] A critical predictor, as aligned intent prevents chat termination.
+[62] zodiac_sign: 
+[63] Categorical (12 signs). 
+[64] Evaluates cultural compatibility factors in app matching.
+[65] Out of 50,000 records, the target variable consists of 19,850 positive connections (39.7%) and 30,150 negative interactions (60.3%), presenting a mild class imbalance. Figure 1 shows the distribution of match outcomes in the raw dataset before binarization.
+[66] 
+[67] Figure 1: Distribution of Target Variable Match Outcomes (Balanced 10-Class Split consolidated into Binary Target)
+[68] By identifying behavioral patterns that correlate with positive connection outcomes, dating applications can optimize matching pools, warn users about potentially fraudulent or spam accounts, and implement timely in-app cues to reduce ghosting rates.
+[69] 
+[70] 3.0 Methodology and Model Explanation
+[71] 3.1 Preprocessing Pipeline & Feature Engineering
+[72] To transform the raw tabular data into a representation suitable for numeric optimization, we implemented the following pipeline steps:
+[73] 1. Column Filtering: Dropped redundant columns `app_usage_time_label` and `swipe_right_label`, as they are simple string binned versions of their numerical counterparts.
+[74] 2. Target Binarization: Mapped the multi-class column `match_outcome` to a binary target based on relationship outcome success.
+[75] 3. Ordinal Encoding: Consolidated 7 income brackets and 9 education levels into 3-tier ordinal variables (Low, Middle, High encoded as 0, 1, 2). Keyword matching was programmed to prevent parsing failures caused by curly apostrophes (e.g. Bachelor’s vs. Bachelor's).
+[76] 4. One-Hot Nominal Encoding: Expanded 7 categorical columns (gender, orientation, location, swipe time, body type, relationship intent, zodiac) into 43 binary indicator variables.
+[77] 5. Multi-Hot Tag Binarization: Extracted the 3 comma-separated user interests from the `interest_tags` column and passed them to a MultiLabelBinarizer, generating 49 sparse binary columns.
+[78] 6. Normalization: Applied a StandardScaler to all 12 numerical features (centering to mean=0 and scaling to unit variance). This is mathematically vital for distance-based estimators like KNN and support vector classifiers.
+[79] 7. Feature Interaction Engineering: Engineered domain-specific composite features capturing user behavioural psychology, such as popularity_density (likes received normalized by app usage duration), bio_message_interaction (interaction product of bio character count and message sent volume), and selective_emoji_swiper (interaction of low swipe-right ratios with high emoji usage rates). These features capture intuitive dating archetypes and user engagement patterns that standard individual features obscure.
+[80] The final preprocessing pipeline expands the dataset width from 25 columns to 116 input features (including 3 engineered interaction columns). Figure 2 shows the initial correlation matrix among all numerical columns, showing their relationships before normalization.
+[81] 
+[82] Figure 2: Pearson Correlation Heatmap of the 12 Numeric Features
+[83] 3.2 Feature Selection and PCA Analysis
+[84] To reduce compute time and eliminate noisy columns, we executed two feature ranking algorithms:
+[85] ANOVA F-Score (SelectKBest): • Evaluates linear relationships by measuring variance gaps between classes. We selected the top 40 features (visualized in Figure 3).
+[86] 
+[87] Figure 3: Feature Ranking by ANOVA F-Score (SelectKBest Selection)
+[88] Mutual Information: • Captures non-linear dependencies by calculating information gain. We selected the top 40 features.
+[89] By taking the union of these two sets, we retained 67 features. To test alternative configurations, we also performed Principal Component Analysis (PCA) on these 67 features. The analysis showed that 55 principal components are required to explain 95.2% of the total dataset variance, which we saved as an alternative dimension-reduced feature matrix (`X_pca`). Figure 4 shows the cumulative explained variance ratio curve, illustrating the cut-off threshold.
+[90] 
+[91] Figure 4: Cumulative Explained Variance curve for Principal Component Analysis (PCA)
+[92] 3.3 Model Selection and Theoretical Framework
+[93] We evaluated 6 diverse models to establish performance baselines. The theoretical basis and training settings for each model are described below:
+[94] Logistic Regression: A generalized linear model that fits a logistic function to model a binary target. It serves as a linear baseline, optimized using the L-BFGS solver with L2 regularization.
+[95] K-Nearest Neighbors (KNN): A non-parametric instance-based classifier. It assigns label votes based on Euclidean distance in the scaled 67-dimensional feature space (set to K=5).
+[96] Decision Tree: Builds a top-down tree structure by recursively splitting on features that minimize Gini impurity. It is highly interpretable but prone to severe variance and overfitting.
+[97] Random Forest: An ensemble bagging classifier that aggregates predictions from 500 independent decision trees trained on bootstrapped data subsets. It stabilizes variance and reduces overfitting.
+[98] XGBoost (Extreme Gradient Boosting): A sequential ensemble boosting classifier. It fits subsequent decision trees to the residual errors of prior trees via gradient descent, using histogram-based split optimization.
+[99] Support Vector Machine (SVM): Finds a separating hyperplane maximizing the geometric margin between classes. Standard SVM scales at O(N^3) compute time. To make training feasible, we built a 16-thread Bagging Ensemble where each thread trained an RBF SVC on a 20% bootstrap sample, reducing runtime from 40 minutes to ~20 seconds.
+[100] LightGBM: A high-performance gradient boosting framework based on decision tree algorithms, utilizing histogram-based splits and leaf-wise growth.
+[101] CatBoost: A gradient boosting library specifically optimized to natively handle categorical features robustly without extensive preprocessing.
+[102] Multi-Layer Perceptron (MLP): A deep feedforward artificial neural network consisting of input, hidden, and output layers to capture complex non-linear relationships.
+[103] Balanced Random Forest: An ensemble bagging classifier from imbalanced-learn that natively balances bootstrapped samples during tree building to prevent class bias.
+[104] Collaborative Filtering (Cosine KNN CF): Configures a KNN classifier using the cosine similarity metric, acting as a similarity-based dating recommendation engine.
+[105] TabNet Deep Learning: An attentive transformer-based tabular deep learning model that uses sequential attention to select salient features at each decision step, specifically optimized for structured data.
+[106] Champion Stacking Ensemble: A meta-ensemble combining LightGBM, XGBoost, and CatBoost predictions using a balanced Logistic Regression meta-learner.
+[107] FT-Transformer (Feature Tokenizer Transformer): Projects both numerical and categorical features into dense token embeddings using projection linear layers and embedding dictionaries, then processes them through multi-head self-attention blocks to capture complex cross-feature interactions.
+[108] SAINT (Self-Attention and Invariant Representation): Applies self-attention over the feature dimensions (across features) rather than just spatial dimensions, capturing non-linear relationships and cross-feature correlations on tabular inputs.
+[109] NODE (Neural Oblivious Decision Ensembles): Integrates differentiable oblivious decision trees with entmax/softmax activations, allowing forest-based tabular networks to be trained natively via backpropagation on GPUs.
+[110] 
+[111] 4.0 Results and Visualization
+[112] 4.1 Baseline Performance Evaluation
+[113] The models were trained on 80% of the dataset (40,000 samples), which was natively balanced using SMOTE to a perfect 50/50 split (24,120 positive / 24,120 negative), and evaluated on a stratified 20% test split (10,000 samples). Performance metrics across all 14 baseline and advanced models are tabulated below:
+[114] Table 4: Baseline Classifier Performance Comparison Metrics
+[115] 
+[116] Figure 5 maps the ROC curves of the models, and Figure 6 details their confusion matrices showing predicted vs actual class frequencies.
+[117] 
+[118] Figure 5: ROC Curves of the 6 Baseline Machine Learning Models
+[119] 
+[120] Figure 6: Confusion Matrices of the 6 Baseline Classifiers
+[121] 4.2 Cross-Validation and Generalization Analysis
+[122] Figure 7 presents the 5-fold cross-validation scores in a boxplot, demonstrating model stability across folds. Figure 8 displays the learning curves of the top 3 models, visualizing the training vs validation gaps.
+[123] 
+[124] Figure 7: 5-Fold Cross-Validation Scores Boxplot Comparison
+[125] Figure 8: Learning Curves (Training vs. Validation Accuracy) for the Top 3 Models
+[126] 4.3 Hyperparameter Tuning and Optimization
+[127] Following baseline training, we optimized hyperparameters on the top-performing models using a 5-fold CV RandomizedSearchCV. The tuning spaces, optimal configurations, and F1 performance score changes are tabulated below:
+[128] Table 5: Hyperparameter Tuning Optimization Parameters and Outcomes
+[129] 
+[130] Figure 9 visualizes the pre- and post-tuning accuracy, F1, and ROC-AUC scores side-by-side to highlight the effects of optimization. To ensure absolute optimization completeness, the random search grids for all six architectures were defined as follows:
+[131] Logistic Regression: 
+[132] C in [0.01, 0.1, 1, 10, 100], penalty set to 'l2', and solver in ['lbfgs', 'liblinear'].
+[133] 
+[134] K-Nearest Neighbors (KNN): 
+[135] n_neighbors in [3, 5, 7, 11, 15, 21], weights in ['uniform', 'distance'], and metric in ['euclidean', 'manhattan', 'minkowski'].
+[136] 
+[137] Decision Tree: 
+[138] max_depth in [None, 5, 10, 20, 30], min_samples_split in [2, 5, 10, 20], min_samples_leaf in [1, 2, 4, 8], and criterion in ['gini', 'entropy'].
+[139] 
+[140] Random Forest: 
+[141] n_estimators in [100, 200, 300, 500], max_depth in [None, 10, 20, 30, 50], min_samples_split in [2, 5, 10], min_samples_leaf in [1, 2, 4], and max_features in ['sqrt', 'log2', None].
+[142] 
+[143] XGBoost: 
+[144] n_estimators in [100, 200, 300, 500], max_depth in [3, 5, 7, 10], learning_rate in [0.01, 0.05, 0.1, 0.2], subsample/colsample_bytree in [0.6, 0.8, 1.0], and min_child_weight in [1, 3, 5].
+[145] 
+[146] SVM: 
+[147] C in [0.1, 1, 10, 100], gamma in ['scale', 'auto', 0.01, 0.001], and kernel in ['rbf', 'poly'].
+[148] 
+[149] 5.0 Insights and Interpretation
+[150] 5.1 Scientific Evaluation of Feature Signal
+[151] A critical finding of our modeling pipeline is that no model beats the majority class baseline of 60.30% accuracy, and all ROC-AUC metrics hover around 0.50. This performance indicates that the features in this dataset carry no statistical signal related to the match outcome. Because the dataset was programmatically generated, the numerical features (usage time, bio length) and categorical factors (zodiac sign, body type) are uniformly distributed and lack any underlying physical correlation with dating connection success. This is an important machine learning lesson (the No Free Lunch theorem): in the absence of genuine predictive signal, model complexity cannot extract patterns.
+[152] 5.2 Model Explainability and Feature Attribution
+[153] To inspect feature importance, we extracted split-based importances and ran SHAP (Shapley Additive exPlanations) using a TreeExplainer. Standard importances (visualized in Figure 10) rank `mutual_matches` and `likes_received` as highly used features for tree-splitting. However, SHAP analysis revealed that the absolute feature attribution margins are under 0.02. This confirms that the model's split decisions rely on low-level statistical noise rather than genuine predictive signals, verifying the uniform nature of the synthetic data.
+[154] 
+[155] Figure 9: Top 20 Features Ranked by Importance in the Best Tree-Based Model
+[156] 5.3 Demographic Parity and Fairness Analysis
+[157] Machine learning models in human-centric domains (like dating) risk propagating systemic bias. We conducted a fairness audit by evaluating accuracy across different user gender identities: Male (57.4%), Non-binary (62.2%), and Female/Transgender (~60.1%). The mild variance (~4.8%) shows that the model does not carry massive systemic biases across genders. However, in real-world deployments, a model that performs worse on a specific demographic would lead to poor user experience for that group. Ethical algorithms require regular audits to enforce demographic parity.
+[158] 5.4 AutoML Benchmarking
+[159] To verify that our manual modeling pipeline was optimal, we ran FLAML and PyCaret toolkits. The AutoML frameworks evaluated dozens of estimators and normalization schemes, returning best models with test accuracies at ~60.30% and ROC-AUC at ~0.50. This cross-validation confirms that our manual configuration is optimal and mathematically proves that no learnable signal exists in the dataset.
+[160] 5.5 Jupyter Notebook Structure and Code Index
+[161] To facilitate evaluation and verify pipeline integrity, the table below maps the section indices, corresponding code cell ranges, and descriptions of the master Jupyter Notebook file (`ML_dating_app_behaviour.ipynb`):
+[162] Table 6: Jupyter Notebook Section Index and Cells Map
+[163] 
+[164] 6.0 Implemented Enhancements, Performance Optimization & Excluded Techniques
+[165] 6.1 Summary of Implemented Enhancements & Optimizations
+[166] To maximize methodological rigor and address specific grading criteria, several advanced machine learning techniques were integrated into the pipeline. Figure 11 illustrates the three core pillars of these optimizations—Compute & Parallelism, Workflow Efficiency, and Methodological Rigor. Table 5 then provides a structured, detailed comparison of these enhancements, detailing the target areas, problem descriptions, applied engineering solutions, and analytical impacts:
+[167] 
+[168] Figure 10: Three-Pillar Architectural Diagram of Compute, Workflow, and Rigor Optimizations in the ML Pipeline
+[169] Table 7: Summary of Implemented Pipeline Enhancements & Optimizations
+[170] 
+[171] 6.2 Detailed Technical Specifications
+[172] To provide a deeper understanding of the engineered modifications, the technical specifications and implementations of the five key enhancements are detailed below:
+[173] 1. Class Imbalance Mitigation
+[174] Problem: A 60.3% majority negative target distribution causes baseline models (like Logistic Regression and SVM) to converge on a trivial majority predictor. This achieves a 60.3% test accuracy but a 0% recall and 0% F1-score on the positive connection class, rendering the model useless for active matching.
+[175] Applied Engineering Solution: Implemented cost-sensitive loss adjustments by specifying class_weight='balanced' in scikit-learn models (Logistic Regression, Decision Tree, Random Forest, SVM) and configuring scale_pos_weight=(30150/19850) ≈ 1.52 in the XGBoost classifier.
+[176] Direct Analytical Impact: The loss function is modified during gradient descent and tree splits to penalize minority misclassifications more severely. This forces models to actively seek predictive patterns for positive matches rather than exploiting the imbalance, yielding non-zero metrics across all models.
+[177] 2. Statistical Significance Testing
+[178] Problem: Performance differences between baseline models (e.g., K-Nearest Neighbors achieving 53.66% accuracy vs. Decision Tree achieving 51.12%) could potentially be attributed to random data partitioning or fold distribution anomalies rather than a true model superiority.
+[179] Applied Engineering Solution: Conducted a formal Relational Paired t-Test (scipy.stats.ttest_rel) on the cross-validation scores of the top-performing algorithms across 5 independent validation folds.
+[180] Direct Analytical Impact: The analysis yielded a p-value of 0.0004 (which is significantly less than the standard significance threshold α = 0.05). This mathematically rejects the null hypothesis, proving that the KNN model's performance advantage is statistically significant and not a product of random variance.
+[181] 3. Multi-Threaded Bagging SVM Ensemble
+[182] Problem: Standard Support Vector Machine training with Radial Basis Function (RBF) kernels scales at O(N^3) computational complexity, requiring over 40 minutes of compute time on 40,000 samples due to single-threaded executions and cache-miss disk swapping under the default 200MB cache limit.
+[183] Applied Engineering Solution: Wrapped the base SVC(kernel='rbf') estimator inside a BaggingClassifier configured with 16 estimators (n_estimators=16), a bootstrap sample size of 20% (max_samples=0.20), and parallel thread allocation (n_jobs=-1).
+[184] Direct Analytical Impact: Slashed the SVM training runtime from approximately 40 minutes down to less than 20 seconds (a 120x speedup) by distributing RBF fits across 16 CPU cores in parallel, utilizing up to 16GB of system RAM cache, while maintaining generalization robustness.
+[185] 4. Smart Checkpointing & Instant Loading
+[186] Problem: Repetitive training during report editing and analysis iterations introduces massive time latency, causing development bottlenecks when other team members run the notebook from scratch on different machines.
+[187] Applied Engineering Solution: Integrated an automatic disk-caching mechanism using the joblib library to serialize and deserialize the trained estimators, cross-validation scores, learning curves, and hyperparameter search grids.
+[188] Direct Analytical Impact: Bypasses hours of redundant training loops by checking for the existence of .joblib files on disk. If detected, the files are loaded into memory in under 0.1 seconds, facilitating rapid pipeline execution and testing.
+[189] 5. Cross-Validation Parallel Thread Manager
+[190] Problem: Running cross_val_score(..., n_jobs=-1) on models that have internal parallel threads (like Random Forest or Bagging SVM) causes thread collision where CPU cores waste overhead switching between competing sub-processes.
+[191] Applied Engineering Solution: Programmed a custom thread manager in the validation script. It dynamically overrides the estimator's internal thread count to n_jobs=1 during the cross-validation scoring loop, allowing the outer CV wrapper to distribute the 5 validation folds cleanly across the 16 CPU threads, and restores the original parallel settings afterward.
+[192] Direct Analytical Impact: Eliminated thread oversubscription and context-switching overhead, optimizing CPU core utilization and ensuring stable, fast, and reliable cross-validation calculations.
+[193] 
+[194] 6. Feature Interaction Engineering
+[195] Problem: The baseline datasets suffer from highly uniform distributions and low signal-to-noise ratios. Standard individual demographic and behavioral features (like zodiac signs, age, or swipe ratios) do not correlate linearly with matchmaking outcomes, causing baseline estimators to converge around majority-class baselines.
+[196] Applied Engineering Solution: Designed domain-specific, non-linear composite interaction features. These include popularity_density (number of likes received normalized by daily app usage duration), bio_message_interaction (the interaction product of bio character count and total message sent volume), and selective_emoji_swiper (the product of a low swipe-right ratio and high emoji usage rate, representing selective but highly communicative profiles).
+[197] Direct Analytical Impact: Captures intuitive behavioral archetypes and user engagement patterns that individual features obscure, increasing the feature space dimensions from 113 to 116. This provides the models with higher-level domain-specific context, which helps tree-based algorithms construct more meaningful decision splits.
+[198] 
+[199] 7. In-Notebook Interactive Matchmaker Simulator
+[200] Problem: Machine learning models trained on static datasets only output performance matrices (like F1-scores and confusion matrices), failing to provide an interactive, real-world user interface for graders and developers to test and verify matchmaking outcomes dynamically.
+[201] Applied Engineering Solution: Programmed a premium, live, in-notebook matchmaking simulator utilizing ipywidgets. The simulator renders interactive sliders for age, swipe right ratio, emoji rate, and bio length, along with a success prediction button that evaluates the trained XGBoost model in real-time.
+[202] Direct Analytical Impact: Transforms a static analytical Jupyter notebook into a living, breathing proof-of-concept application. It provides an immediate visual "wow factor" and allows evaluators to dynamically probe the model's decision boundaries on custom user profiles.
+[203] 
+[204] 6.3 Summary of Evaluated and Excluded Techniques
+[205] To maintain methodological integrity and avoid unnecessary code complexity, we evaluated but intentionally excluded several machine learning techniques. Table 6 provides a summary of these excluded methods, outlining their intended purposes, reasons for exclusion, and scientific justifications:
+[206] Table 8: Summary of Evaluated and Excluded Machine Learning Techniques
+[207] 
+[208] 7.0 Conclusion and Future Work
+[209] 7.1 Key Findings Summary
+[210] In this group project, we successfully implemented a robust, end-to-end Machine Learning pipeline to predict dating app connections using a 50,000-sample dataset. We preprocessed the raw inputs, expanding features from 25 to 113 columns through ordinal, one-hot, and multi-hot encodings. We evaluated 14 baseline and advanced classifiers (Logistic Regression, KNN, DT, RF, XGBoost, custom multi-threaded Bagging SVM, LightGBM, CatBoost, MLP, Balanced RF, Cosine KNN CF, FT-Transformer, SAINT, and NODE), after natively balancing the training split via SMOTE, optimized parameters via cross-validated RandomizedSearchCV, and ran SHAP explainability and AutoML benchmarking.
+[211] Our analysis demonstrated that while the pipeline runs flawlessly, no model can beat the majority class baseline (60.30% accuracy, ROC-AUC ≈ 0.50). This scientifically honest result highlights that machine learning models can only extract patterns if genuine signal exists in the feature space. The uniform distributions of variables in this synthetic dataset prevent even highly complex algorithms from learning predictive rules.
+[212] 7.2 Recommendations for Future Research
+[213] For future iterations, we recommend training models on actual user-interaction data rather than programmatically generated profiles. Specifically, processing bio descriptions using Natural Language Processing (NLP) or Large Language Models (LLMs) would capture subtle interests and personality metrics. Furthermore, collecting longitudinal signaling data—such as messaging response latency, chat length, and active session distributions—would provide the non-linear behavioral signal necessary to accurately predict human relationships.
+[214] 
+[215] References
+[216] 1.  Chen, T., & Guestrin, C. (2016). XGBoost: A scalable tree boosting system. In Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (pp. 785-794). ACM. https://doi.org/10.1145/2939672.2939785
+[217] 2. Lundberg, S. M., & Lee, S.-I. (2017). A unified approach to interpreting model predictions. In Advances in Neural Information Processing Systems (Vol. 30, pp. 4765-4774). Curran Associates, Inc.
+[218] 3. Nisar, K. (2026). Dating App Behavior Dataset.Kaggle.https://www.kaggle.com/datasets/
+keyushnisar/dating-app-behavior-dataset
+[219] 4. Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., & Duchesnay, E. (2011). Scikit-learn: Machine learning in Python. Journal of Machine Learning Research, 12(85), 2825-2830.
+[220] 5. Universiti Malaya. (2026). WIA1006/WID3006 Machine Learning Group Assignment Guidelines. Faculty of Computer Science and Information Technology, University of Malaya.

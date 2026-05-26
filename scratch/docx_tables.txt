@@ -1,0 +1,124 @@
+--- Table 0 ---
+Row 0: 
+
+--- Table 1 ---
+Row 0: 
+
+--- Table 2 ---
+Row 0: Executive Summary | 1
+Row 1: Table of Content | 2
+Row 2: 1.0 Team Organization and Management | 3
+Row 3: 1.1 Team Formation and Collaboration Mechanisms | 3
+Row 4: 1.2 Roles and Responsibilities | 3
+Row 5: 1.3 Project Timeline and Gantt Chart | 4
+Row 6: 2.0 Problem and Objective | 6
+Row 7: 2.1 Project Background and Relevance | 6
+Row 8: 2.2 Dataset Breakdown and Target Definition | 6
+Row 9: 3.0 Methodology and Model Explanation | 8
+Row 10: 3.1 Preprocessing Pipeline & Feature Engineering | 8
+Row 11: 3.2 Feature Selection and PCA Analysis | 9
+Row 12: 3.3 Model Selection and Theoretical Framework | 10
+Row 13: 4.0 Results and Visualization | 11
+Row 14: 4.1 Baseline Performance Evaluation | 11
+Row 15: 4.2 Cross-Validation and Generalization Analysis | 13
+Row 16: 4.3 Hyperparameter Tuning and Optimization | 13
+Row 17: 5.0 Insights and Interpretation | 15
+Row 18: 6.0 Implemented Enhancements, Performance Optimization & Excluded Techniques | 18
+Row 19: 7.0 Conclusion and Future Work | 22
+Row 20: References (APA Format) | 23
+
+--- Table 3 ---
+Row 0: Member | Role | Assigned Features & Responsibilities
+Row 1: Chew Wei Jian (23118568/2) | Project Leader & ML Pipeline Lead | • Coordinates task delegation, project timeline tracking, and repository management. • Programmed the core pipeline execution script and automatic Google Colab/local path configs. • Implemented parallel computing optimizations, custom bagging SVM multi-threading logic to slash train times, and cross-validation thread isolation managers.
+Row 2: Ku Jian Cheng (23079373/2) | Data Preprocessing & Feature Engineer | • Handled data extraction and cleaned redundant variables from the 50,000 dating dataset records. • Designed ordinal mappings for education and income, using regex/keyword matching to fix unicode character issues. • Built categorical nominal one-hot encoders and interest tag multi-hot encoders.
+Row 3: Ng Jin Ru (23116192/2) | Exploratory Data Analysis (EDA) Analyst | • Performed initial univariate and bivariate visualizations (histograms, count plots, box plots). • Analyzed target class balance and examined missing values and duplicate records (zero found). • Visualized correlation matrices (Pearson) and feature-versus-target relationships (likes, swipe ratio).
+Row 4: Ang Ying En (23116738/2) | Model Optimization & Tuning Engineer | • Configured and trained 6 baseline ML models: Logistic Regression, KNN, Decision Tree, Random Forest, XGBoost, and SVM. • Programmed cross-validation performance loops to evaluate accuracy, precision, recall, F1, and ROC-AUC. • Setup RandomizedSearchCV tuning grids and executed 150 fits per candidate estimator to identify optimal hyperparameters.
+Row 5: Chaang Wai Chiu (23104771/2) | Explainability, Ethics & Dashboard UI Developer | • Implemented SHAP (Shapley Additive exPlanations) values and generated beeswarm interpretability plots. • Evaluated fairness through demographic parity checks across user gender identities. • Constructed the premium, interactive HTML/CSS dashboard with an embedded prediction simulator for dating app outcomes.
+
+--- Table 4 ---
+Row 0: Week | Task Phase | Activities
+Row 1: Week 1 | Planning & Setup | • Brainstormed dating app connection prediction; defined binary target classes. • Gathered dataset; setup GitHub repository and virtual environment.
+Row 2: Week 2 | Exploratory Data Analysis | • Generated summary statistics; checked duplicates/outliers; evaluated 60/40 target split. • Visualized distributions and correlation matrices of behavioral features.
+Row 3: Week 3 | Data Preprocessing | • Binarized target column; dropped redundant string-category labels. • Mapped income brackets, cleaned education strings, and encoded 49 interest tags.
+Row 4: Week 4 | Feature Engineering & PCA | • Performed ANOVA F-score and Mutual Information feature selection; unioned top 47 features. • Executed PCA to project selected features down to 55 principal components (95% variance).
+Row 5: Week 5 | Baseline Model Training | • Split data into 80/20 stratified train/test sets. • Trained 6 baseline classifiers (Logistic Regression, KNN, DT, RF, XGBoost, and Bagging SVM).
+Row 6: Week 6 | Hyperparameter Tuning | • Ran RandomizedSearchCV (30 iterations, 5-fold CV) on top models to optimize F1 scores. • Saved trained weights and results to joblib caches to prevent re-training latency.
+Row 7: Week 7 | Interpretability & Dashboard | • Extracted SHAP values; checked demographic parity metrics across genders. • Built interactive HTML dashboard UI; compiled final documentation and group report.
+
+--- Table 5 ---
+Row 0: Task / Activity | Week 1 | Week 2 | Week 3 | Week 4 | Week 5 | Week 6 | Week 7
+Row 1: Project Planning & Setup | ■ | 
+Row 2: Exploratory Data Analysis (EDA) |  | ■ | 
+Row 3: Data Preprocessing & Encoding |  | ■ | 
+Row 4: Feature Selection & PCA |  | ■ | 
+Row 5: Baseline Model Training & CV Evaluation |  | ■ | 
+Row 6: Hyperparameter Tuning & Optimization |  | ■ | 
+Row 7: Explainability (SHAP) & Fairness Check |  | ■
+Row 8: Dashboard UI Development & Group Report |  | ■
+
+--- Table 6 ---
+Row 0: Model | Train Acc | Test Acc | Precision | Recall | F1-Score | ROC-AUC | Train Time (s)
+Row 1: Logistic Regression | 60.30% | 0.00% | 0.5014 | 0.25
+Row 2: K-Nearest Neighbors (KNN) | 70.25% | 53.66% | 39.51% | 31.49% | 35.04% | 0.5021 | 0.02
+Row 3: Decision Tree | 100.00% | 51.12% | 39.00% | 41.01% | 39.98% | 0.4939 | 0.65
+Row 4: Random Forest | 100.00% | 59.90% | 41.45% | 2.44% | 4.61% | 0.5140 | 3.00
+Row 5: XGBoost | 85.28% | 56.07% | 40.61% | 23.05% | 29.41% | 0.5092 | 0.72
+Row 6: SVM (Bagging Ensemble) | 60.48% | 60.30% | 0.00% | 0.5143 | 19.83
+Row 7: LightGBM | 60.40% | 60.30% | 0.00% | 0.5010 | 0.45
+Row 8: CatBoost | 60.30% | 0.00% | 0.5005 | 0.98
+Row 9: Multi-Layer Perceptron (MLP) | 60.30% | 0.00% | 0.5000 | 4.20
+Row 10: Balanced Random Forest | 62.45% | 54.10% | 39.85% | 44.60% | 42.09% | 0.5042 | 2.10
+Row 11: Collaborative Filtering (Cosine KNN) | 69.80% | 53.20% | 39.10% | 33.40% | 36.03% | 0.5018 | 0.08
+Row 12: FT-Transformer (PyTorch) | 60.30% | 0.00% | 0.5000 | 5.80
+Row 13: SAINT (PyTorch) | 60.30% | 0.00% | 0.5000 | 6.20
+Row 14: NODE (PyTorch) | 60.30% | 0.00% | 0.5000 | 7.50
+
+--- Table 7 ---
+Row 0: Model | Tuned Hyperparameters Space | Best Parameter Set Found | Pre-Tuning F1 | Post-Tuning F1
+Row 1: Logistic Regression | • C: [0.01, 0.1, 1, 10, 100] • solver: [lbfgs, liblinear] | {'solver': 'lbfgs', 'C': 0.01, 'penalty': 'l2'} | 0.00%
+Row 2: Random Forest | • n_estimators: [100, 200, 300, 500] • max_depth: [None, 10, 20, 30] • min_samples_split: [2, 5, 10] | {'n_estimators': 200, 'min_samples_split': 2, 'max_features': None, 'max_depth': None} | 4.61% | 9.69%
+Row 3: SVM | • C: [0.1, 1, 10, 100] • kernel: [rbf, poly] • gamma: [scale, auto, 0.01] | {'estimator__kernel': 'poly', 'estimator__gamma': 0.01, 'estimator__C': 100} | 0.00%
+
+--- Table 8 ---
+Row 0: Notebook Section | Jupyter Code Cells | Analytical Focus & Content
+Row 1: Section 10 — Hyperparameter Tuning | Cells 92–104 | RandomizedSearchCV tuning grids and 1,000-trial GPU Optuna search loops.
+Row 2: Section 2 — Data Loading | Cells 6–8 | Reading database CSV; verification of data shape and column structures.
+Row 3: Section 3 — EDA | Cells 9–30 | 10 subsections visualizing distributions, outliers, heatmaps, and target split.
+Row 4: Section 4 — Preprocessing | Cells 31–47 | Redundant column drops, ordinal mappings, and nominal one/multi-hot encoding.
+Row 5: Section 5 — Feature Selection | Cells 48–58 | SelectKBest ANOVA F-scores, Mutual Information, and union selection.
+Row 6: Section 6 — PCA | Cells 59–65 | Cumulative explained variance ratio analysis; PCA biplot dimension projection.
+Row 7: Section 7 — Train/Test Split | Cells 66–68 | Stratified 80/20 data split; train-test ratio verifications.
+Row 8: Section 8 — Pre-Training Checklist & SMOTE | Cells 68–70 | Status summary + physical class balancing natively in the pipeline
+Row 9: Section 9 — Model Training | Cells 71–91 | Training of 14 baseline/advanced models; evaluations of CV, learning curves, ROC, and CM.
+Row 10: Section 10 — Hyperparameter Tuning | Cells 92–104 | RandomizedSearchCV tuning grids and 1,000-trial GPU Optuna search loops.
+Row 11: Section 11 — Feature Importance | Cells 105–107 | Feature weight extractions and bar visualizations on best estimators.
+Row 12: Section 12 — Ethical Considerations | Cells 108–109 | Moral reflections, gender-parity checks, and accuracy disparity audits.
+Row 13: Section 13 — Final Summary | Cells 110–112 | Comparative score tabulations and final models rankings by F1 scores.
+Row 14: Section 14 — AutoML Comparison | Cells 113–115 | FLAML and PyCaret pipelines evaluation; benchmarking validation.
+Row 15: Section 15 — Pipeline Summary | Cell 116 | Hardware resource management, compute bottlenecks, and AMD iGPU setups.
+
+--- Table 9 ---
+Row 0: Enhancement / Optimization | Target Area | Core Problem Addressed | Applied Engineering Solution | Direct Analytical Impact
+Row 1: Class Imbalance Mitigation | Modeling & Loss | Class split imbalance causes estimators to bias towards predicting majority negative connection target (60.3%). | Configured cost-sensitive loss parameters (class_weight='balanced' in sklearn and scale_pos_weight in XGBoost). | Forced models to seek predictive features of minority class, generating non-zero metrics.
+Row 2: Statistical Significance Testing | Validation & Hypothesis | Uncertainty whether baseline performance gaps are due to random data partitioning or true model differences. | Conducted a Relational Paired t-test (scipy.stats.ttest_rel) on the 5-fold cross-validation scores. | Proved score differences are statistically significant (p-value of 0.0004 < 0.05).
+Row 3: SHAP Game-Theoretic Explainability | Model Interpretability | Standard impurity feature importances only measure split magnitude, lacking directionality. | Deployed SHAP (Shapley Additive exPlanations) TreeExplainer on the best model to analyze attributions. | Mapped the impact of feature values and verified the lack of single dominant predictors in the dataset.
+Row 4: Ethical Parity Audit | Moral & Professional Ethics | Dating apps carry risk of algorithmic gender bias; model behavior across subgroups was unknown. | Calculated and compared test accuracy metrics separately across user gender identity groups. | Identified small accuracy parity variance (~4.8%), satisfying moral guidelines and proving fairness.
+Row 5: Multi-Threaded Bagging SVM | Compute & Parallelism | Standard RBF SVM has O(N^3) complexity, taking over 40 minutes on 40,000 samples due to cache bottlenecks. | Wrapped SVC in a 16-thread BaggingClassifier running on bootstrapped 20% sample subsets in parallel. | Slashed SVM training runtime from 40 minutes to under 20 seconds while improving F1 stability.
+Row 6: Nested Parallelism Prevention | Compute Efficiency | Nested n_jobs=-1 settings in base estimators and CV wrappers cause thread collision and CPU context-switching. | Set base models to run single-threaded during RandomizedSearchCV tuning, allowing outer loops to distribute fits. | Eliminated thread oversubscription, optimizing CPU core utilization during grid searches.
+Row 7: Caching & Checkpointing | Workflow Efficiency | Repetitive training during report and analysis iterations causes latency, slowing down development. | Serialized baseline and tuned results to joblib caches (e.g. baseline_results.joblib, tuned_results.joblib) on disk. | Enabled instant model loading (0.1 seconds), bypassing hours of repetitive retraining loops.
+Row 8: Feature Interaction Engineering | Feature Engineering | Individual features lack contextual correlation; machine learning models need domain-specific cross-features to capture dating app psychology. | Engineered composite behavioural features: popularity_density, bio_message_interaction, and selective_emoji_swiper. | Captures intuitive user engagement archetypes (e.g. "selective emoji swiper"), increasing dataset width from 113 to 116 features.
+Row 9: In-Notebook Interactive Simulator | Inference & Usability | Static model evaluation scripts do not provide a real-world testing interface for human-centric matching verification. | Constructed an in-notebook interactive interface using ipywidgets with sliders for age, swipe right ratio, emoji rate, and bio length. | Provides graders and developers with a live, real-time matchmaking simulator directly inside the Jupyter environment.
+Row 10: SMOTE Class Balancing | Preprocessing & Class Imbalance | Class split imbalance causes baseline estimators to bias towards predicting majority target (60.3%). | Implemented imblearn.over_sampling.SMOTE natively in the training pipeline before model fitting. | Balanced the training split to a perfect 50/50 ratio, preventing majority-class shortcut bias and enabling non-zero recall/F1 scores.
+Row 11: Champion Stacking Ensemble | Ensemble Modeling | Individual baseline models capture distinct patterns but struggle to generalize robustly on tabular data. | Built a StackingClassifier combining XGBoost, LightGBM, and CatBoost with a balanced Logistic Regression meta-learner. | Ensembles multiple diverse estimators to improve voting stability and robustness.
+Row 12: Dynamic Hardware Auto-Detection Engine | Compute & Cross-Device Execution | Pipeline execution crashes or slows down when running on different GPUs or fallback devices across teammate environments. | Programmed a dynamic hardware auto-detection engine that dynamically routes PyTorch execution to NVIDIA CUDA, AMD Radeon DirectML, or standard CPU fallback. | Provides cross-device compatibility, letting any teammate run the notebook on their available hardware without modifications.
+Row 13: Custom PyTorch Sklearn Wrapper | Workflow Compatibility | Custom PyTorch architectures cannot natively run inside scikit-learn cross-validation, metric generators, or parameter tuning loops. | Created a custom sklearn-compatible wrapper class inheriting from BaseEstimator and ClassifierMixin to wrap PyTorch architectures. | Integrates neural models natively into standard evaluation loops, comparisons, and scoring pipelines.
+Row 14: 1,000-Trial GPU-Accelerated Optuna Search | Hyperparameter Tuning | Standard grid searches are slow, low-coverage, and cannot leverage GPU acceleration for tree-based models. | Integrated Optuna with GPU-accelerated histogram algorithms to perform a massive 1,000-trial hyperparameter search. | Identified optimal parameters in under 4 minutes, ensuring highly rigorous and complete optimization audits.
+Row 15: SVM-only Bypass and models_advanced Routing | Workflow Efficiency | Retraining the RBF SVM takes 30+ minutes, causing massive delays when retraining other models from scratch. | Redirected newly trained checkpoints to models_advanced/ and bypassed SVM training by reloading the original SVM weights from joblib. | Saves 30+ minutes of redundant training per run while allowing the rest of the 13 models to be retrained and validated from scratch.
+
+--- Table 10 ---
+Row 0: Excluded Technique | Intended Purpose | Core Reason for Exclusion | Scientific & Compute Justification
+Row 1: Decision Threshold Tuning | Maximize F1-scores via PR curve. | The precision-recall curve is flat/random due to the complete lack of feature-to-target signals. | Optimizing the threshold is equivalent to adjusting volume on a radio with no reception—the output remains noise.
+Row 2: Probability Calibration | Align predicted vs. true probabilities. | Predicted probabilities represent random noise. | Calibrating random noise simply yields calibrated random noise, providing zero analytical value.
+Row 3: KNN on PCA Dimensions | Dimensionality-reduced distance search. | PCA projects uninformative features without creating signal. | KNN is highly sensitive to noise; projecting noise into PCA space does not improve the signal-to-noise ratio.
+Row 4: Auto-Sklearn AutoML Search | Automated model selection. | Auto-Sklearn has rigid legacy requirements (scikit-learn 0.24) that fail to compile under modern Python 3.10+. | Substituted with FLAML and PyCaret, which compile cleanly and cross-validated the pipeline performance.
+
