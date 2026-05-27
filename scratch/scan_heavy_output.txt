@@ -1,0 +1,478 @@
+Scanning notebook cells for heavy processing operations...
+
+Cell 2:
+  Matches: ['optuna', 'shap', 'tabpfn']
+  Has joblib: False
+  Snippet:
+# Install required packages (run once in Colab)
+
+!pip install -q pandas numpy matplotlib seaborn scikit-learn xgboost imbalanced-learn mapie category-encoders boruta causal-learn opacus lime fairlearn shap optuna statsmodels matplotlib-venn torch_geometric tabpfn dice-ml shap
+
+--------------------------------------------------
+Cell 6:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+# ------------------------------------------------------------------
+
+# Dataset Path Setup (Local)
+
+# ------------------------------------------------------------------
+
+DATA_PATH = '../data/dating_app_behavior_dataset_extended1.csv'
+
+--------------------------------------------------
+Cell 35:
+  Matches: ['RandomForestClassifier', 'RandomForestRegressor', 'shap', 'fit\\(']
+  Has joblib: False
+  Snippet:
+# --- V5.1 CAUSAL TREATMENT EFFECTS: DOUBLE MACHINE LEARNING (DML) ---
+
+import numpy as np
+
+import pandas as pd
+
+from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+
+--------------------------------------------------
+Cell 38:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+df = df_raw.copy()
+
+
+
+# Drop label/string versions of numeric columns (they add no new information)
+
+# app_usage_time_label mirrors app_usage_time_min
+
+--------------------------------------------------
+Cell 46:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+# These features have no natural order — use one-hot encoding
+
+nominal_cols = [
+
+    'gender',
+
+    'sexual_orientation',
+
+--------------------------------------------------
+Cell 48:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+# Each user has 3 interests (comma-separated) — create binary columns per unique tag
+
+mlb = MultiLabelBinarizer()
+
+interests_split = df['interest_tags'].str.split(', ')
+
+interest_dummies = pd.DataFrame(
+
+--------------------------------------------------
+Cell 54:
+  Matches: ['fit\\(']
+  Has joblib: False
+  Snippet:
+# --- V5 METHODOLOGY 1: OUT-OF-DISTRIBUTION (OOD) REJECTION GUARDRAIL ---
+
+from sklearn.ensemble import IsolationForest
+
+import numpy as np
+
+import pandas as pd
+
+--------------------------------------------------
+Cell 56:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+print(f'Final dataset shape: {df.shape}')
+
+print(f'Total features: {df.shape[1] - 1}  |  Target column: target')
+
+print(f'\nMissing values after preprocessing: {df.isnull().sum().sum()}')
+
+print(f'\nData types:')
+
+--------------------------------------------------
+Cell 59:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+X = df.drop(columns=['target'])
+
+y = df['target']
+
+
+
+print(f'Feature matrix X: {X.shape}')
+
+--------------------------------------------------
+Cell 61:
+  Matches: ['fit\\(']
+  Has joblib: False
+  Snippet:
+selector_f = SelectKBest(score_func=f_classif, k='all')
+
+selector_f.fit(X, y)
+
+
+
+f_scores = pd.DataFrame({
+
+--------------------------------------------------
+Cell 64:
+  Matches: ['RandomForestClassifier', 'fit\\(']
+  Has joblib: True
+  Snippet:
+import os, joblib
+
+os.makedirs('../models_v5', exist_ok=True)
+
+cache_file_boruta = '../models_v5/boruta_support.joblib'
+
+
+
+--------------------------------------------------
+Cell 69:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+# Keep union of top-40 features from both F-score and Mutual Information rankings
+
+top_f_features  = set(f_scores.head(40)['feature'])
+
+top_mi_features = set(mi_df.head(40)['feature'])
+
+selected_features = sorted(top_f_features.union(top_mi_features))
+
+--------------------------------------------------
+Cell 72:
+  Matches: ['shap', 'fit\\(']
+  Has joblib: False
+  Snippet:
+pca_full = PCA(random_state=RANDOM_STATE)
+
+pca_full.fit(X_selected)
+
+
+
+cumvar = np.cumsum(pca_full.explained_variance_ratio_) * 100
+
+--------------------------------------------------
+Cell 74:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+# We keep BOTH feature sets to compare models with and without PCA
+
+N_COMPONENTS = n_components_95
+
+
+
+pca = PCA(n_components=N_COMPONENTS, random_state=RANDOM_STATE)
+
+--------------------------------------------------
+Cell 78:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+# --- Split on ORIGINAL selected features (primary — used for most models) ---
+
+X_train, X_test, y_train, y_test = train_test_split(
+
+    X_selected, y,
+
+    test_size=0.2,
+
+--------------------------------------------------
+Cell 81:
+  Matches: ['SMOTE', 'shap']
+  Has joblib: False
+  Snippet:
+# Apply SMOTE to perfectly balance training set (50/50 split) natively in the pipeline
+
+from imblearn.over_sampling import SMOTE
+
+print("🔄 Applying SMOTE to balance class distribution in training set...")
+
+smote = SMOTE(random_state=RANDOM_STATE)
+
+--------------------------------------------------
+Cell 83:
+  Matches: ['RandomForestClassifier', 'KNeighborsClassifier', 'SVC', 'cross_val_score', 'StackingClassifier']
+  Has joblib: False
+  Snippet:
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.neighbors import KNeighborsClassifier
+
+from sklearn.tree import DecisionTreeClassifier
+
+from sklearn.ensemble import BaggingClassifier, BaggingClassifier, RandomForestClassifier, GradientBoostingClassifier
+
+--------------------------------------------------
+Cell 88:
+  Matches: ['RandomForestClassifier', 'KNeighborsClassifier', 'SVC', 'shap', 'TabNet', 'fit\\(']
+  Has joblib: False
+  Snippet:
+# --- ADVANCED DIFFERENTIAL NEURAL ARCHITECTURES & SKLEARN WRAPPER ---
+
+import torch.nn as nn
+
+import torch.optim as optim
+
+from torch.utils.data import TensorDataset, DataLoader
+
+--------------------------------------------------
+Cell 91:
+  Matches: ['fit\\(']
+  Has joblib: True
+  Snippet:
+# Train all models and collect results (With smart SVM bypass and selector)
+
+import joblib
+
+import os
+
+import time
+
+--------------------------------------------------
+Cell 102:
+  Matches: ['cross_val_score']
+  Has joblib: True
+  Snippet:
+import os
+
+import joblib
+
+from sklearn.model_selection import cross_val_score
+
+
+
+--------------------------------------------------
+Cell 108:
+  Matches: ['RandomizedSearchCV']
+  Has joblib: False
+  Snippet:
+from sklearn.model_selection import RandomizedSearchCV
+
+from scipy.stats import randint, uniform
+
+
+
+print('Hyperparameter tuning libraries loaded')
+--------------------------------------------------
+Cell 111:
+  Matches: ['shap']
+  Has joblib: True
+  Snippet:
+import os
+
+reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+
+os.makedirs(reports_dir, exist_ok=True)
+
+import os, joblib
+
+--------------------------------------------------
+Cell 115:
+  Matches: ['shap', 'TabNet']
+  Has joblib: False
+  Snippet:
+# --- V5.1 ATTENTIVE TABULAR NETWORK: TABNET-STYLE INSTANCE FEATURE SELECTION ---
+
+import torch
+
+import torch.nn as nn
+
+import torch.nn.functional as F
+
+--------------------------------------------------
+Cell 117:
+  Matches: ['GAT', 'shap', 'kneighbors_graph']
+  Has joblib: False
+  Snippet:
+# pip install torch-geometric
+
+import torch
+
+import torch.nn.functional as F
+
+from torch_geometric.nn import GATConv
+
+--------------------------------------------------
+Cell 121:
+  Matches: ['shap', 'fit\\(']
+  Has joblib: True
+  Snippet:
+import os
+
+reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+
+os.makedirs(reports_dir, exist_ok=True)
+
+import os, joblib
+
+--------------------------------------------------
+Cell 123:
+  Matches: ['tabpfn', 'TabPFN', 'fit\\(']
+  Has joblib: True
+  Snippet:
+# --- V5 METHODOLOGY 2: ZERO-SHOT TABULAR TRANSFORMERS (TabPFN) ---
+
+import os
+
+os.environ["TABPFN_TOKEN"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiOWI5NWRmN2EtZTM4OC00MGE1LTk4ZmEtOTFjZDNlMzU0Y2M1IiwiZXhwIjoxODExMzk2NjYzfQ.LryeZpS_5yI2D1syynUdMkMusHGwbPn14ZxVhkvQ48A"
+
+os.environ["HF_TOKEN"] = "hf_REDACTED_TOKEN_1234567890abcdef"
+
+--------------------------------------------------
+Cell 127:
+  Matches: ['TabNet']
+  Has joblib: False
+  Snippet:
+# Define parameter grids for top models
+
+param_grids = {
+
+    'Random Forest': {
+
+        'n_estimators': [200, 300, 500, 800, 1000],
+
+--------------------------------------------------
+Cell 129:
+  Matches: ['RandomForestClassifier', 'Optuna', 'optuna', 'KNeighborsClassifier', 'SVC', 'MLPClassifier', 'TabNet', 'fit\\(', 'RandomizedSearchCV', 'StackingClassifier']
+  Has joblib: True
+  Snippet:
+# --- GPU-ACCELERATED OPTUNA HYPERPARAMETER SEARCH ENGINE ---
+
+import optuna
+
+from sklearn.neural_network import MLPClassifier
+
+import logging
+
+--------------------------------------------------
+Cell 145:
+  Matches: ['fit\\(']
+  Has joblib: True
+  Snippet:
+from flaml import AutoML
+
+import sklearn.metrics
+
+import joblib
+
+import os
+
+--------------------------------------------------
+Cell 146:
+  Matches: ['pycaret', 'PyCaret']
+  Has joblib: True
+  Snippet:
+import pandas as pd
+
+import os, joblib
+
+
+
+os.makedirs('../models_v5', exist_ok=True)
+
+--------------------------------------------------
+Cell 150:
+  Matches: ['shap']
+  Has joblib: True
+  Snippet:
+import os, joblib
+
+reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+
+os.makedirs(reports_dir, exist_ok=True)
+
+from sklearn.inspection import PartialDependenceDisplay, partial_dependence
+
+--------------------------------------------------
+Cell 152:
+  Matches: ['shap', 'SHAP']
+  Has joblib: True
+  Snippet:
+# --- V5 METHODOLOGY 4: SHAP INTERACTION VALUES ---
+
+import shap
+
+import numpy as np
+
+import pandas as pd
+
+--------------------------------------------------
+Cell 157:
+  Matches: ['fit\\(']
+  Has joblib: True
+  Snippet:
+import os
+
+reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+
+os.makedirs(reports_dir, exist_ok=True)
+
+import os, joblib
+
+--------------------------------------------------
+Cell 167:
+  Matches: ['fit\\(']
+  Has joblib: False
+  Snippet:
+# --- V5 METHODOLOGY 5: MODEL CALIBRATION & RELIABILITY CURVES ---
+
+from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+--------------------------------------------------
+Cell 172:
+  Matches: ['shap']
+  Has joblib: False
+  Snippet:
+import os
+
+reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+
+os.makedirs(reports_dir, exist_ok=True)
+
+import torch
+
+--------------------------------------------------
+Cell 174:
+  Matches: ['dice_ml']
+  Has joblib: False
+  Snippet:
+# --- V5 METHODOLOGY 6: ALGORITHMIC RECOURSE (DiCE COUNTERFACTUALS) ---
+
+import dice_ml
+
+import pandas as pd
+
+import numpy as np
+
+--------------------------------------------------
+Cell 176:
+  Matches: ['RandomForestClassifier', 'T-Learner', 'fit\\(']
+  Has joblib: False
+  Snippet:
+# --- V5.1 UPLIFT MODELING: T-LEARNER META-CLASSIFIER ---
+
+import numpy as np
+
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+--------------------------------------------------

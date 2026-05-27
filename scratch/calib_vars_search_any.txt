@@ -1,0 +1,9 @@
+Searching for occurrences of X_calib in any context...
+Cell Index: 157 (code)
+--- FIRST 5 LINES ---
+  import os
+  reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+  os.makedirs(reports_dir, exist_ok=True)
+  import os, joblib
+  os.makedirs('../models_v5', exist_ok=True)
+---------------------

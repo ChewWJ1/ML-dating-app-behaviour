@@ -1,0 +1,44 @@
+================== CELL 35 ==================
+Markdown Cell at Index 34:
+## Flex 2.1: 🔬 Causal Inference — Double Machine Learning (DML)
+While the PC Algorithm allows us to discover the qualitative causal directed acyclic graph (DAG), it does not quantify the **causal treatment effect** of our actions. In dating platforms, understanding whether profile effort (e.g. uploading more profile pictures) *causes* more matches is essential.
+
+To estimate this, we implement **Double Machine Learning (DML)**. Simple regressions suffer from selection bias because location and income are confounders. DML solves this via a two-stage residual estimation:
+1. Residual out confounders from treatment using a classifier: $\tilde{T} = T - P(T|W)$
+2. Residual out confounders from outcome using a classifier: $\tilde{Y} = Y - E(Y|W)$
+3. Regress outcome residuals on treatment residuals: $\tilde{Y} = \theta \tilde{T}$ to isolate the **Average Treatment Effect (ATE)**.
+
+We calculate the p-value and estimate the **95% Bootstrap Confidence Interval** to establish causal significance with PhD-level statistical rigor.
+
+------------------------------
+================== CELL 117 ==================
+Markdown Cell at Index 116:
+## Flex 7: 🕸️ Graph Neural Network — Users as a Social Network
+We constructed a k-nearest-neighbor similarity graph over user profiles and applied a Graph Attention Network (GAT) for semi-supervised node classification.
+
+------------------------------
+================== CELL 174 ==================
+Markdown Cell at Index 173:
+## Flex 15: ⚖️ Algorithmic Recourse & Counterfactual Explanations (DiCE)
+In ethical AI, providing a negative prediction (e.g. "Ghosted") without explanation is insufficient. The principle of **Algorithmic Recourse** dictates that we must provide users with concrete, actionable steps they can take to change their outcome from negative to positive.
+
+Using Microsoft's **DiCE (Diverse Counterfactual Explanations)** framework, we generate counterfactual profiles. These are synthetic but realistic profiles that are minimally different from a target user's profile, but are classified as "Matched" (1) by the model. 
+
+For a user predicted to be "Ghosted", we show the exact minimal changes (e.g., increasing engagement or profile completeness by a specific amount) required to reverse the prediction, putting transparency and agency back into the hands of the user.
+
+------------------------------
+================== CELL 176 ==================
+Markdown Cell at Index 175:
+## Flex 16: 🎯 Causal Uplift Modeling (T-Learner Meta-Classifier)
+Traditional machine learning focuses purely on **prediction** (e.g. *will this user match?*). In contrast, **Uplift Modeling (Causal ML)** focuses on **prescriptive intervention**—estimating the *incremental impact* of a treatment (e.g., placing a profile highlight or push notification) on the target outcome.
+
+We construct a **T-Learner (Two-Learner)** meta-learning framework. We fit separate classifiers on the Treated ($M_1$) and Control ($M_0$) populations:
+$$\text{Uplift}(X) = M_1.\text{predict\_proba}(X)[:, 1] - M_0.\text{predict\_proba}(X)[:, 1]$$
+
+This allows us to segment app users into four causal quadrants:
+1. **Persuadables:** Users who match *only if* treated (high positive uplift). **This is our target group!**
+2. **Sure Things:** Users who match regardless of treatment.
+3. **Lost Causes:** Users who never match regardless of treatment.
+4. **Sleeping Dogs (Do Not Disturb):** Users who match *unless* treated (negative uplift).
+
+------------------------------

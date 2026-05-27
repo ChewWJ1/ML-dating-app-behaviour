@@ -1,0 +1,57 @@
+# --- V5 METHODOLOGY 5: MODEL CALIBRATION & RELIABILITY CURVES ---
+from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+import numpy as np
+import matplotlib.pyplot as plt
+
+print("📈 Standardizing Probabilities via Isotonic Calibration...")
+
+# Select the champion model
+champion_name = None
+for name in ['Random Forest (Tuned)', 'XGBoost (Tuned)', 'Random Forest', 'XGBoost', 'LightGBM']:
+    if name in results:
+        champion_name = name
+        break
+
+if champion_name:
+    print(f"👉 Champion model selected for calibration: {champion_name}")
+    r_entry = results[champion_name]
+    base_model = r_entry.get('model')
+    
+    if base_model:
+        # Fit Isotonic Calibration on balanced training data
+        calibrated_clf = CalibratedClassifierCV(base_model, method='isotonic', cv=3)
+        calibrated_clf.fit(X_train, y_train)
+        
+        # Generate probabilities
+        probs_raw = r_entry['prob']
+        probs_cal = calibrated_clf.predict_proba(X_test)[:, 1]
+        
+        # Calculate reliability curves (10 bins)
+        prob_true_raw, prob_pred_raw = calibration_curve(y_test, probs_raw, n_bins=10)
+        prob_true_cal, prob_pred_cal = calibration_curve(y_test, probs_cal, n_bins=10)
+        
+        # Plot reliability diagram
+        plt.figure(figsize=(10, 6))
+        plt.plot([0, 1], [0, 1], linestyle='--', color='gray', label='Perfect Calibration (Oracle)')
+        plt.plot(prob_pred_raw, prob_true_raw, marker='s', color='#FF9800', label=f'Uncalibrated Champion ({champion_name})')
+        plt.plot(prob_pred_cal, prob_true_cal, marker='o', color='#4CAF50', label='Calibrated Champion (Isotonic Regression)')
+        
+        plt.title('📈 Probability Calibration Curve (Reliability Diagram)', fontsize=14, fontweight='bold', pad=15)
+        plt.xlabel('Mean Predicted Probability (Confidence)', fontsize=12)
+        plt.ylabel('Fraction of Positive Outcomes (Actual matches)', fontsize=12)
+        plt.grid(True, linestyle=':', alpha=0.6)
+        plt.legend(fontsize=11, loc='upper left')
+        plt.tight_layout()
+        plt.show()
+        
+        # Display Brier Scores (lower is better)
+        from sklearn.metrics import brier_score_loss
+        brier_raw = brier_score_loss(y_test, probs_raw)
+        brier_cal = brier_score_loss(y_test, probs_cal)
+        print(f"👉 Uncalibrated Brier Score: {brier_raw:.4f}")
+        print(f"👉 Calibrated Brier Score  : {brier_cal:.4f} ({(brier_raw-brier_cal)/brier_raw*100:.1f}% error reduction)")
+        
+    else:
+        print("⚠️ Champion model object not found in results.")
+else:
+    print("⚠️ No champion model found to perform calibration.")

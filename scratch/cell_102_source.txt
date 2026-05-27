@@ -1,0 +1,61 @@
+import os
+import joblib
+from sklearn.model_selection import cross_val_score
+
+# Load pre-computed SVM scores from original to save 15+ minutes of SVM CV
+original_cv_path = '../models/cv_results.joblib'
+
+# Save newly computed CV scores to bypass path so we don't overwrite original files
+cv_checkpoint_path = '../models_v5/cv_results.joblib'
+cv_results = {}
+temp_cv = {}
+
+# Ensure bypass directory exists
+os.makedirs('../models_v5', exist_ok=True)
+
+# Load original CV scores for SVM bypass
+if os.path.exists(original_cv_path):
+    try:
+        temp_cv = joblib.load(original_cv_path)
+    except Exception as e:
+        print(f'⚠️ Error loading original CV checkpoint: {e}')
+
+print('5-Fold Cross-Validation on Training Set:')
+print(f'{"" :<25} {"Mean Acc":>10} {"Std":>8} {"Min":>8} {"Max":>8}')
+print('-' * 65)
+
+if os.path.exists(cv_checkpoint_path):
+    print(f'⚡ Loading pre-computed cross-validation scores from {cv_checkpoint_path} instantly!...')
+    cv_results = joblib.load(cv_checkpoint_path)
+    for name, cv_scores in cv_results.items():
+        print(f'{name:<25} {cv_scores.mean():>10.4f} {cv_scores.std():>8.4f} '
+              f'{cv_scores.min():>8.4f} {cv_scores.max():>8.4f}')
+else:
+    print('🔄 Computing cross-validation scores (Smart SVM Bypass)...')
+    for name, model_info in results.items():
+        if name == 'SVM' and 'SVM' in temp_cv:
+            print(f'⚡ Reusing pre-computed SVM CV scores from original checkpoint...')
+            cv_results['SVM'] = temp_cv['SVM']
+            cv_scores = cv_results['SVM']
+            print(f'{name:<25} {cv_scores.mean():>10.4f} {cv_scores.std():>8.4f} '
+                  f'{cv_scores.min():>8.4f} {cv_scores.max():>8.4f}')
+            continue
+            
+        model = model_info['model']
+        original_n_jobs = getattr(model, 'n_jobs', None)
+        if original_n_jobs is not None:
+            model.n_jobs = 1
+            
+        cv_scores = cross_val_score(model, X_train, y_train, cv=5,
+                                    scoring='accuracy', n_jobs=1)
+        
+        if original_n_jobs is not None:
+            model.n_jobs = original_n_jobs
+            
+        cv_results[name] = cv_scores
+        print(f'{name:<25} {cv_scores.mean():>10.4f} {cv_scores.std():>8.4f} '
+              f'{cv_scores.min():>8.4f} {cv_scores.max():>8.4f}')
+              
+    # Save scores to bypass disk
+    joblib.dump(cv_results, cv_checkpoint_path)
+    print(f'\n💾 Cross-validation scores saved successfully to: {cv_checkpoint_path}')

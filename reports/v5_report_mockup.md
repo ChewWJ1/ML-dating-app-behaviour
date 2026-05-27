@@ -200,7 +200,17 @@ Providing a negative matchmaking forecast (e.g. "Ghosted") without guidance is u
 
 Our pipeline contains several high-performance backend engineering features built from scratch:
 1. **Parallel DirectML device allocation** manager sequentially routing PyTorch tensor graphs across dual graphics cards (dedicated NVIDIA Ti and integrated AMD Radeon cores) without deadlocks.
-2. **Dynamic Checkpoint Caching (`models_v5_cache/`)** wrapping heavy computations (Boruta masks, SCARF representations, TabPFN models, MAPIE sets) in `joblib` caches.
+2. **Dynamic Checkpoint Caching (`models_v5/`)** wrapping heavy computations in `joblib` caches to prevent redundant executions. This cache features **10 intelligent checkpoints**:
+   * *Boruta Feature Selection:* Caches the `feat_selector.support_` boolean mask (`boruta_support.joblib`).
+   * *SCARF Pre-training & t-SNE:* Caches PyTorch representations, epoch loss history, and pre-computed t-SNE 2D coordinates (`scarf.joblib`).
+   * *PyCaret AutoML Comparison:* Caches the entire comparative model leaderboard (`pycaret_results.joblib`).
+   * *Friedman's H-Statistic:* Caches the cross-feature permutation interaction matrices (`h_stat.joblib`).
+   * *SHAP Interaction Explanations:* Caches the multi-threaded TreeExplainer objects (`shap_interactions.joblib`).
+   * *Double Machine Learning (DML) Causal Results:* Caches computed treatment and control residuals, ATE coefficients, and bootstrap standard errors (`dml_causal.joblib`).
+   * *Graph Attention Network (GNN GAT) Weights:* Caches GAT model weights (device-mapped to CPU) and graph layout masks (`gnn_gat.joblib`).
+   * *DiCE Actionable Recourse Paths:* Caches generated counterfactual recourse objects and query indices (`dice_recourse.joblib`).
+   * *Causal Uplift T-Learner Estimators:* Caches treatment and control Random Forest models along with user ITE segmentation scores (`causal_uplift.joblib`).
+   * *Baseline Model Results:* Caches full cross-validation and evaluation metrics across all standard algorithms (`baseline_results.joblib` / `cv_results.joblib`).
 3. **Sequential GPU concurrency manager** limiting scikit-learn inner fold loops to `n_jobs=1` while running outer loops in parallel, completely preventing Windows kernel graphics concurrency deadlocks.
 
 ---

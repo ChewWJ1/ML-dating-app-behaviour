@@ -1,0 +1,16 @@
+Cell 54: print(f"✅ OOD Guardrail calibrated on training set.")
+Cell 157: # Validate that preceding calibration variables are defined in the interactive session
+Cell 157: if 'best_model' not in globals() or 'X_calib' not in globals() or 'y_calib' not in globals() or 'X_test' not in globals() or 'y_test' not in globals():
+Cell 157: raise NameError("❌ Required variables (best_model, X_calib, y_calib, X_test, y_test) are not defined in the active session.\n"
+Cell 157: mapie.fit(X_calib, y_calib)  # calibrate on a held-out calibration set
+Cell 157: mapie.conformalize(X_calib, y_calib)  # calibrate on a held-out calibration set
+Cell 167: from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+Cell 167: print(f"👉 Champion model selected for calibration: {champion_name}")
+Cell 167: calibrated_clf = CalibratedClassifierCV(base_model, method='isotonic', cv=3)
+Cell 167: calibrated_clf.fit(X_train, y_train)
+Cell 167: probs_cal = calibrated_clf.predict_proba(X_test)[:, 1]
+Cell 167: prob_true_raw, prob_pred_raw = calibration_curve(y_test, probs_raw, n_bins=10)
+Cell 167: prob_true_cal, prob_pred_cal = calibration_curve(y_test, probs_cal, n_bins=10)
+Cell 167: plt.plot(prob_pred_raw, prob_true_raw, marker='s', color='#FF9800', label=f'Uncalibrated Champion ({champion_name})')
+Cell 167: print(f"👉 Uncalibrated Brier Score: {brier_raw:.4f}")
+Cell 167: print("⚠️ No champion model found to perform calibration.")
