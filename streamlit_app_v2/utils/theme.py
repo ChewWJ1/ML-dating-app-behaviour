@@ -556,7 +556,7 @@ def render_header(page_title=None):
             align-items: center !important;
             background: rgba(15, 23, 42, 1.0) !important; /* Solid background so sidebar doesn't bleed through */
             border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-            padding: 0 24px !important;
+            padding: 0 24px 0 80px !important; /* Leaves 80px empty space on left for sidebar toggle */
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
             backdrop-filter: blur(12px) !important;
             margin: 0 !important;
@@ -616,7 +616,7 @@ def render_header(page_title=None):
             display: flex !important;
             align-items: center !important;
             gap: 14px !important;
-            margin-left: 50px !important; /* Make room for the streamlit sidebar toggle */
+            margin-left: 0px !important; /* Managed by header padding-left now */
             pointer-events: auto !important; /* Re-enable pointer events for logo and title */
         }}
         .web-logo-img {{
@@ -687,10 +687,18 @@ def render_header(page_title=None):
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            top: calc(100% + 8px); /* Starts tightly below the button now */
+            top: 100%; /* Connects dropdown directly to eliminate hover loss tunnel */
             left: 50%;
             transform: translateX(-50%);
             pointer-events: auto !important;
+        }}
+        /* Checkbox Hack for Dropdowns on mobile/click */
+        .web-dropdown-check {{
+            display: none !important;
+            visibility: hidden !important;
+        }}
+        .web-dropdown-check:checked ~ .web-dropdown-content {{
+            display: block !important;
         }}
         .web-dropdown-content a {{
             color: rgba(255, 255, 255, 0.8) !important;
@@ -734,7 +742,8 @@ def render_header(page_title=None):
 <div class="web-nav-menu">
 <a class="web-nav-item {act_home}" href="/" target="_top">🏠 Home</a>
 <div class="web-dropdown">
-<span class="web-nav-item {act_pipeline}" tabindex="0">⚙️ ML Pipeline ▾</span>
+<input type="checkbox" id="drop-pipeline" class="web-dropdown-check">
+<label class="web-nav-item {act_pipeline}" for="drop-pipeline" tabindex="0">⚙️ ML Pipeline ▾</label>
 <div class="web-dropdown-content">
 <a href="/Overview" target="_top">📊 Overview</a>
 <a href="/EDA" target="_top">🔍 EDA</a>
@@ -747,7 +756,8 @@ def render_header(page_title=None):
 </div>
 </div>
 <div class="web-dropdown">
-<span class="web-nav-item {act_advanced}" tabindex="0">🧠 Advanced Methods ▾</span>
+<input type="checkbox" id="drop-advanced" class="web-dropdown-check">
+<label class="web-nav-item {act_advanced}" for="drop-advanced" tabindex="0">🧠 Advanced Methods ▾</label>
 <div class="web-dropdown-content">
 <a href="/Advanced_Models" target="_top">🧠 Advanced Models</a>
 <a href="/Causal_Uplift" target="_top">⚖️ Causal Uplift</a>
@@ -756,7 +766,8 @@ def render_header(page_title=None):
 </div>
 <a class="web-nav-item {act_love}" href="/Love_Forecaster" target="_top">💝 Love Forecaster</a>
 <div class="web-dropdown">
-<span class="web-nav-item {act_docs}" tabindex="0">📄 Docs ▾</span>
+<input type="checkbox" id="drop-docs" class="web-dropdown-check">
+<label class="web-nav-item {act_docs}" for="drop-docs" tabindex="0">📄 Docs ▾</label>
 <div class="web-dropdown-content">
 <a href="/Documentation" target="_top">📄 Documentation</a>
 <a href="/Team" target="_top">👥 Team</a>
