@@ -3,8 +3,8 @@ import base64
 import os
 import re
 
-notebook_path = r'c:\Users\HP\Documents\GitHub\ML-dating-app-behaviour\ML_dating_app_behaviour.ipynb'
-output_dir = r'c:\Users\HP\Documents\GitHub\ML-dating-app-behaviour\assets\plots'
+notebook_path = r'c:\Users\HP\Documents\GitHub\ML-dating-app-behaviour\notebooks\ML_dating_app_behaviour V5.ipynb'
+output_dir = r'c:\Users\HP\Documents\GitHub\ML-dating-app-behaviour\assets\v5_plots'
 os.makedirs(output_dir, exist_ok=True)
 
 with open(notebook_path, 'r', encoding='utf-8') as f:

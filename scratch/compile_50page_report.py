@@ -100,7 +100,7 @@ print("Starting SOTA V5.1 Integrated Report Compiler...")
 
 # Copy baseline document as template
 src_path = "reports/WIA1006 Machine Learning - Tying the Data Knot Assignment Report.docx"
-dest_path = "reports/WIA1006 Machine Learning - Tying the Data Knot Assignment Report V5.1 SOTA.docx"
+dest_path = "reports/WIA1006 Machine Learning - Tying the Data Knot Assignment Report V5.2 SOTA.docx"
 
 if not os.path.exists(src_path):
     print("Baseline document not found at reports/!")

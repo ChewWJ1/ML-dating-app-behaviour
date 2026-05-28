@@ -1,3 +1,5 @@
 # Ignore large trained model checkpoint files (joblib)
 *.joblib
 tuned_results.joblib
+models_v5.zip
+models_v5/

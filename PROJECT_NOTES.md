@@ -37,6 +37,7 @@
 | `PROJECT_NOTES.md` | This documentation file (fully updated for V1 to V5 SOTA architectures) |
 | `run_pipeline.py` | Python script to run the notebook headless |
 | `dashboard.html` | Interactive frontend dashboard mock-up |
+| `streamlit_app_v2/` | **SwipeIQ V2 Interactive Analytics Web Dashboard** — 15-stage multi-page Streamlit app with 9 interactive sandboxes / playgrounds |
 | `autosklearn_colab_example.ipynb` | Example notebook for Auto-Sklearn configuration in Colab |
 
 ---
@@ -439,6 +440,35 @@ While V3 pushed hardware capabilities to the limit, the V4 notebook focuses on *
 
 ---
 
+## 🎨 SwipeIQ V2 Streamlit Interactive Analytics Dashboard
+
+To maximize visual impact and provide an educational tool for evaluators, we developed **SwipeIQ V2** (`streamlit_app_v2/`), a multi-page interactive web application matching the V5 PhD-level machine learning pipeline. 
+
+### Running the Dashboard
+1. Activate the environment:
+   ```bash
+   .venv\Scripts\activate
+   ```
+2. Launch the Streamlit application:
+   ```bash
+   streamlit run streamlit_app_v2/app.py --server.port 8502
+   ```
+3. Open `http://localhost:8502` in your browser.
+
+### The 9 Interactive Playgrounds & Sandboxes
+The dashboard contains **9 interactive workspaces** integrated directly into the pipeline stages:
+1. **Bivariate Correlation Sandbox (Page 2: EDA):** Dynamically calculates Pearson $r$, OLS trendlines, and two-tailed p-values for any two numerical features.
+2. **Outlier Scaling Sandbox (Page 3: Preprocessing):** Simulates standard standardizations vs. median-based `RobustScaler` under synthetic outlier injection (up to 50x magnitude).
+3. **PCA Dimensionality Sandbox (Page 4: Feature Selection):** Projects 67 preprocessed features to interactive 2D/3D Plotly coordinate spaces.
+4. **15-Model Boundary Playground (Page 5: Model Training):** Simulates decision contours of 15 classification algorithms on 5 complex geometric patterns, showing model-specific graphs (MLP nodes, KNN neighbor queries, SVM support vectors, and Naive Bayes likelihood ellipses).
+5. **FT-Transformer Self-Attention Heatmap (Page 6: Advanced Models):** Projects token sequence weights in a sequential attention map with dynamic heads, layers, and Softmax temperature scaling.
+6. **GNN Neighbor Topology Sandbox (Page 6: Advanced Models):** Constructs a similarity $k$-NN network over simulated users, highlighting local neighborhoods and message-passing edge weights dynamically.
+7. **Optuna Pareto Frontier Sandbox (Page 7: Hyperparameter Tuning):** Simulates hyperparameter search trials, trade-off tuning F1 Score against Demographic Parity.
+8. **Targeted Causal Uplift Marketing Simulator (Page 10: Causal Uplift):** Connects T-Learner meta-classification quadrants (Persuadables) to interactive ROI calculations.
+9. **Concept Drift & ADWIN Alarm Monitor (Page 11: Compression & Recourse):** Simulates real-time user feature streams under sudden, gradual, or seasonal drift. Tracks rolling Population Stability Index (PSI) and Wasserstein Distance, dynamically triggering ADWIN alarms when statistical anomalies exceed Hoeffding bounds.
+
+---
+
 ## 📋 Assignment Submission Checklist
 
 | Requirement | Status |
@@ -493,4 +523,4 @@ While V3 pushed hardware capabilities to the limit, the V4 notebook focuses on *
 
 ---
 
-*Last updated: 27 May 2026*
+*Last updated: 28 May 2026*
