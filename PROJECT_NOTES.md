@@ -442,6 +442,8 @@ While V3 pushed hardware capabilities to the limit, the V4 notebook focuses on *
 
 ## 🎨 SwipeIQ V2 Streamlit Interactive Analytics Dashboard
 
+**Live Demo URL:** [https://ml-tying-the-data-knot-swipeiq-app.streamlit.app/](https://ml-tying-the-data-knot-swipeiq-app.streamlit.app/)
+
 To maximize visual impact and provide an educational tool for evaluators, we developed **SwipeIQ V2** (`streamlit_app_v2/`), a multi-page interactive web application matching the V5 PhD-level machine learning pipeline. 
 
 ### Running the Dashboard
