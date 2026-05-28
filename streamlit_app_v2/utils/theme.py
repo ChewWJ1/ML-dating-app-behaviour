@@ -580,7 +580,11 @@ def render_header(page_title=None):
         }}
         /* Only re-enable clicks for the sidebar collapse/expand button */
         header[data-testid="stHeader"] [data-testid="stSidebarCollapsedControl"],
-        header[data-testid="stHeader"] [data-testid="stSidebarCollapsedControl"] * {{
+        header[data-testid="stHeader"] [data-testid="stSidebarCollapsedControl"] *,
+        header[data-testid="stHeader"] [data-testid="stSidebarCollapseButton"],
+        header[data-testid="stHeader"] [data-testid="stSidebarCollapseButton"] *,
+        header[data-testid="stHeader"] [data-testid="stHeaderSidebarCollapsedControl"],
+        header[data-testid="stHeader"] [data-testid="stHeaderSidebarCollapsedControl"] * {{
             pointer-events: auto !important;
         }}
         [data-testid="stHeaderActionElements"], .stAppDeployButton {{
@@ -658,6 +662,7 @@ def render_header(page_title=None):
             cursor: pointer !important;
             position: relative !important;
             z-index: 1000003 !important;
+            pointer-events: auto !important;
         }}
         .web-dropdown {{
             position: relative;
@@ -685,6 +690,7 @@ def render_header(page_title=None):
             top: calc(100% + 8px); /* Starts tightly below the button now */
             left: 50%;
             transform: translateX(-50%);
+            pointer-events: auto !important;
         }}
         .web-dropdown-content a {{
             color: rgba(255, 255, 255, 0.8) !important;
@@ -698,6 +704,7 @@ def render_header(page_title=None):
             text-transform: none !important;
             letter-spacing: 0 !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            pointer-events: auto !important;
         }}
         .web-dropdown-content a:last-child {{
             border-bottom: none;
@@ -727,7 +734,7 @@ def render_header(page_title=None):
 <div class="web-nav-menu">
 <a class="web-nav-item {act_home}" href="/" target="_top">🏠 Home</a>
 <div class="web-dropdown">
-<a class="web-nav-item {act_pipeline}" tabindex="0">⚙️ ML Pipeline ▾</a>
+<span class="web-nav-item {act_pipeline}" tabindex="0">⚙️ ML Pipeline ▾</span>
 <div class="web-dropdown-content">
 <a href="/Overview" target="_top">📊 Overview</a>
 <a href="/EDA" target="_top">🔍 EDA</a>
@@ -740,7 +747,7 @@ def render_header(page_title=None):
 </div>
 </div>
 <div class="web-dropdown">
-<a class="web-nav-item {act_advanced}" tabindex="0">🧠 Advanced Methods ▾</a>
+<span class="web-nav-item {act_advanced}" tabindex="0">🧠 Advanced Methods ▾</span>
 <div class="web-dropdown-content">
 <a href="/Advanced_Models" target="_top">🧠 Advanced Models</a>
 <a href="/Causal_Uplift" target="_top">⚖️ Causal Uplift</a>
@@ -749,7 +756,7 @@ def render_header(page_title=None):
 </div>
 <a class="web-nav-item {act_love}" href="/Love_Forecaster" target="_top">💝 Love Forecaster</a>
 <div class="web-dropdown">
-<a class="web-nav-item {act_docs}" tabindex="0">📄 Docs ▾</a>
+<span class="web-nav-item {act_docs}" tabindex="0">📄 Docs ▾</span>
 <div class="web-dropdown-content">
 <a href="/Documentation" target="_top">📄 Documentation</a>
 <a href="/Team" target="_top">👥 Team</a>
