@@ -740,37 +740,37 @@ def render_header(page_title=None):
 <span class="web-logo-title">💘 Tying the (Data) Knot: Love, Life & Likes SwipeIQ App</span>
 </div>
 <div class="web-nav-menu">
-<a class="web-nav-item {act_home}" href="/" target="_top">🏠 Home</a>
+<a class="web-nav-item {act_home}" href="/" target="_self">🏠 Home</a>
 <div class="web-dropdown">
 <input type="checkbox" id="drop-pipeline" class="web-dropdown-check">
 <label class="web-nav-item {act_pipeline}" for="drop-pipeline" tabindex="0">⚙️ ML Pipeline ▾</label>
 <div class="web-dropdown-content">
-<a href="/Overview" target="_top">📊 Overview</a>
-<a href="/EDA" target="_top">🔍 EDA</a>
-<a href="/Preprocessing" target="_top">⚙️ Preprocessing</a>
-<a href="/Feature_Selection" target="_top">🎯 Feature Selection</a>
-<a href="/Model_Training" target="_top">🤖 Model Training</a>
-<a href="/Hyperparameter_Tuning" target="_top">🔧 Hyperparameter Tuning</a>
-<a href="/Feature_Importance" target="_top">🔬 Feature Importance</a>
-<a href="/Robustness" target="_top">🛡️ Robustness</a>
+<a href="/Overview" target="_self">📊 Overview</a>
+<a href="/EDA" target="_self">🔍 EDA</a>
+<a href="/Preprocessing" target="_self">⚙️ Preprocessing</a>
+<a href="/Feature_Selection" target="_self">🎯 Feature Selection</a>
+<a href="/Model_Training" target="_self">🤖 Model Training</a>
+<a href="/Hyperparameter_Tuning" target="_self">🔧 Hyperparameter Tuning</a>
+<a href="/Feature_Importance" target="_self">🔬 Feature Importance</a>
+<a href="/Robustness" target="_self">🛡️ Robustness</a>
 </div>
 </div>
 <div class="web-dropdown">
 <input type="checkbox" id="drop-advanced" class="web-dropdown-check">
 <label class="web-nav-item {act_advanced}" for="drop-advanced" tabindex="0">🧠 Advanced Methods ▾</label>
 <div class="web-dropdown-content">
-<a href="/Advanced_Models" target="_top">🧠 Advanced Models</a>
-<a href="/Causal_Uplift" target="_top">⚖️ Causal Uplift</a>
-<a href="/Compression_Recourse" target="_top">🔄 Compression Recourse</a>
+<a href="/Advanced_Models" target="_self">🧠 Advanced Models</a>
+<a href="/Causal_Uplift" target="_self">⚖️ Causal Uplift</a>
+<a href="/Compression_Recourse" target="_self">🔄 Compression Recourse</a>
 </div>
 </div>
-<a class="web-nav-item {act_love}" href="/Love_Forecaster" target="_top">💝 Love Forecaster</a>
+<a class="web-nav-item {act_love}" href="/Love_Forecaster" target="_self">💝 Love Forecaster</a>
 <div class="web-dropdown">
 <input type="checkbox" id="drop-docs" class="web-dropdown-check">
 <label class="web-nav-item {act_docs}" for="drop-docs" tabindex="0">📄 Docs ▾</label>
 <div class="web-dropdown-content">
-<a href="/Documentation" target="_top">📄 Documentation</a>
-<a href="/Team" target="_top">👥 Team</a>
+<a href="/Documentation" target="_self">📄 Documentation</a>
+<a href="/Team" target="_self">👥 Team</a>
 </div>
 </div>
 </div>
