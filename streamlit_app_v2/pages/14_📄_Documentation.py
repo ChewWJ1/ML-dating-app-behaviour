@@ -20,7 +20,8 @@ tab1, tab2, tab3 = st.tabs(["📑 Assignment Report (PDF)", "📓 Jupyter Notebo
 with tab1:
     st.markdown("### 📑 Official Group Assignment Report")
     st.markdown("Tying the (Data) Knot: Predicting Meaningful Connections")
-    pdf_path = os.path.join(ROOT_DIR, 'reports', 'WIA1006 Machine Learning - Tying the Data Knot Assignment Report V5.1(long).pdf')
+    st.markdown("**Live Web Application:** [https://ml-tying-the-data-knot-swipeiq-app.streamlit.app/](https://ml-tying-the-data-knot-swipeiq-app.streamlit.app/)")
+    pdf_path = os.path.join(ROOT_DIR, 'reports', 'WIA1006 Machine Learning - Tying the Data Knot Assignment Report V5.2 (final).pdf')
     if os.path.exists(pdf_path):
         with open(pdf_path, "rb") as f:
             base64_pdf = base64.b64encode(f.read()).decode('utf-8')

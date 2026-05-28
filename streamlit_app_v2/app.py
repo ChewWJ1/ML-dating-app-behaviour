@@ -365,11 +365,17 @@ st.markdown("""
 # ══════════════════════════════════════════════════════════════════════════════
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center; color: #f472b6; font-family: Outfit, sans-serif;'>🎯 Limits of Predictive Matchmaking Research</h4>", unsafe_allow_html=True)
-limits_pipeline_img = os.path.join(ROOT_DIR, "assets", "NotebookLM", "Limits_of_Predictive_Matchmaking_Research.png")
+limits_pipeline_img = os.path.join(ROOT_DIR, "assets", "NotebookLM", "new", "Science_of_Digital_Romance_Infographic.png")
 if os.path.exists(limits_pipeline_img):
-    st.image(limits_pipeline_img, caption="Representation Boundaries: Limits of Predictive Matchmaking Research Diagram")
+    st.image(limits_pipeline_img, caption="Science of Digital Romance Infographic")
 else:
-    st.warning("Limits of Matchmaking flow diagram not found in assets.")
+    st.warning("Science of Digital Romance Infographic not found in assets.")
+
+journey_img = os.path.join(ROOT_DIR, "assets", "NotebookLM", "new", "Dating_Success_Machine_Learning_Journey.png")
+if os.path.exists(journey_img):
+    st.image(journey_img, caption="Dating Success Machine Learning Journey")
+else:
+    st.warning("Dating Success Machine Learning Journey not found in assets.")
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════

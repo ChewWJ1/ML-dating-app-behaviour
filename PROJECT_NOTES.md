@@ -1,3 +1,5 @@
+![Digital Romance Data Engineering Infographic](assets/NotebookLM/new/Digital_Romance_Data_Engineering_Infographic.png)
+
 # 💘 Tying the Data Knot: Predicting Meaningful Connections
 ### WIA1006/WID3006 Machine Learning — Group Assignment Documentation
 **Sem 2, Session 2025/2026 | FCSIT, Universiti Malaya**
