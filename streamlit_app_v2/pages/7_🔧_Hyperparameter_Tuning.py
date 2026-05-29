@@ -25,8 +25,6 @@ def show_plot(directory, filename, caption=''):
         st.warning(f'Plot not found: {filename}')
 
 # --- HEADER ---
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Efficient_Hyperparameter_Optimization_Strategy.png"), use_container_width=True)
-st.markdown("---")
 st.title("🔧 Hyperparameter Tuning")
 st.markdown("""
 After identifying the baseline performance, we attempt to improve the models using **Hyperparameter Tuning**.
@@ -41,6 +39,8 @@ st.markdown("""
     To maximize methodological rigor, we optimized hyperparameters using a 5-fold CV RandomizedSearchCV across the top-performing models. We employed <strong>Nested Parallelism Prevention</strong> by setting base models to run single-threaded during tuning, which eliminated thread oversubscription and optimized CPU core utilization. Even after exhaustive grid searching (150 fits per candidate estimator), improvements remained negligible (e.g., Random Forest F1 improved from 4.61% to 9.69%). This confirms our earlier hypothesis: no algorithm or tuning grid can conjure signal where only noise exists.
 </div>
 """, unsafe_allow_html=True)
+st.markdown("---")
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Efficient_Hyperparameter_Optimization_Strategy.png"), use_container_width=True)
 
 # --- 1. METHODOLOGY ---
 st.markdown('<div class="section-label">METHODOLOGY</div>', unsafe_allow_html=True)

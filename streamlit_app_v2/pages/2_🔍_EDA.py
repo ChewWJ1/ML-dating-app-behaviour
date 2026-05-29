@@ -21,8 +21,6 @@ def show_plot(directory, filename, caption=''):
     else:
         st.warning(f'Plot not found: {filename}')
 
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_Dataset_Insights_and_Analysis.png"), use_container_width=True)
-st.markdown("---")
 st.title("🔍 Exploratory Data Analysis")
 
 st.markdown("""
@@ -31,6 +29,8 @@ st.markdown("""
     The core project objective is to identify behavioral patterns that correlate with positive connection outcomes, allowing dating applications to optimize matching pools and reduce ghosting rates. However, our Exploratory Data Analysis confirms the synthetic programmatic nature of the dataset: <strong>all 25 features are uniformly distributed</strong>, no extreme outliers exist, and Pearson correlation matrices show an absence of any strong correlation (values near 0).
 </div>
 """, unsafe_allow_html=True)
+st.markdown("---")
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_Dataset_Insights_and_Analysis.png"), use_container_width=True)
 
 df = load_raw_data()
 eda_stats = load_eda_stats()

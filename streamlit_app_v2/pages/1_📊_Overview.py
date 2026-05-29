@@ -19,10 +19,11 @@ def to_rgba(hex_color, alpha=0.2):
 inject_css()
 render_sidebar()
 
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_App_Dataset_Overview.png"), use_container_width=True)
-st.markdown("---")
 st.title("📊 Dataset Overview")
 st.markdown("This section provides a high-level view of the dataset, including basic statistics, feature types, and the target variable distribution. The dataset represents synthetic dating app user behaviour, with 50,000 records and 25 features.")
+st.markdown("---")
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_App_Dataset_Overview.png"), use_container_width=True)
+st.markdown("---")
 
 df = load_raw_data()
 eda_stats = load_eda_stats()

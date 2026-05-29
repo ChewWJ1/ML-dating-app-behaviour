@@ -26,8 +26,6 @@ def show_plot(directory, filename, caption=''):
 
 
 # ── Header ──
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_AI_Efficiency_and_Agency.png"), use_container_width=True)
-st.markdown("---")
 st.title("🔄 Model Compression & Algorithmic Recourse")
 st.markdown("---")
 
@@ -41,6 +39,8 @@ st.markdown("""
     <strong>OOD rejection</strong> — detecting inputs too different from training data to trust.
 </div>
 """, unsafe_allow_html=True)
+st.markdown("---")
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_AI_Efficiency_and_Agency.png"), use_container_width=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SECTION 1 — Knowledge Distillation

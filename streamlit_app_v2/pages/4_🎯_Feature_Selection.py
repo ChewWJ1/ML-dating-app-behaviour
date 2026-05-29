@@ -25,8 +25,6 @@ def show_plot(directory, filename, caption=''):
     else:
         st.warning(f'Plot not found: {filename}')
 
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_Success_Feature_Selection_Infographic.png"), use_container_width=True)
-st.markdown("---")
 st.title("🎯 Feature Selection & PCA")
 
 st.markdown("""
@@ -35,6 +33,8 @@ st.markdown("""
     To reduce compute time and eliminate noisy columns, we executed two feature ranking algorithms: ANOVA F-Score and Mutual Information. By taking the union of the top 40 features from each, we retained a streamlined subset of 67 features from the original 113. V4 adds <strong>Boruta All-Relevant Feature Selection</strong> which independently confirmed all 67 union features as statistically relevant. Additionally, Principal Component Analysis (PCA) demonstrated that 55 principal components are required to explain 95.2% of the dataset variance, confirming the dataset's high-dimensionality and lack of simple dominating factors.
 </div>
 """, unsafe_allow_html=True)
+st.markdown("---")
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_Success_Feature_Selection_Infographic.png"), use_container_width=True)
 
 st.markdown('<div class="gradient-divider"></div>', unsafe_allow_html=True)
 

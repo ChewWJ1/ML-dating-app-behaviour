@@ -21,6 +21,8 @@
 
 ## 📌 Project Overview
 
+![Dating App Machine Learning Pipeline Overview](assets/NotebookLM/overview/Dating_App_Machine_Learning_Pipeline.png)
+
 **Project Name:** Tying the Data Knot: Predicting Meaningful Connections
 
 **Objective:** Predict whether a dating app user will achieve a **meaningful connection** based on their demographic profile and in-app behaviour patterns.
@@ -74,6 +76,8 @@ The extended dataset adds **6 new features** not present in the original:
 
 ## 🗂️ Dataset — Feature Breakdown
 
+![Dataset Overview](assets/NotebookLM/section%20overview/Dating_App_Dataset_Overview.png)
+
 ### Categorical Features
 
 | Feature | Type | Unique Values | Encoding Used |
@@ -120,6 +124,9 @@ The extended dataset adds **6 new features** not present in the original:
 ---
 
 ### Step 2: Exploratory Data Analysis (EDA)
+
+![Dataset Insights and Analysis](assets/NotebookLM/section%20overview/Dating_Dataset_Insights_and_Analysis.png)
+
 - Checked missing values and duplicates (zero found).
 - Analyzed target class distributions (~40/60 binary split).
 - Generated boxplots for outlier detection and correlation heatmaps.
@@ -140,6 +147,9 @@ The extended dataset adds **6 new features** not present in the original:
 ---
 
 ### Step 4: Feature Selection
+
+![Feature Selection Infographic](assets/NotebookLM/section%20overview/Dating_Success_Feature_Selection_Infographic.png)
+
 - **ANOVA F-Score & Mutual Information:** Selected the top robust features.
 - **[V4] Boruta All-Relevant Selection:** Applied the Boruta algorithm (via a Random Forest backbone) to find all statistically relevant features rather than a subjective top-k threshold, resulting in a robust subset of 67 features.
 
@@ -166,6 +176,9 @@ Benchmarks our pipeline against FLAML and PyCaret AutoML libraries to establish 
 ---
 
 ### Step 9: Advanced Model Training (Section 10 in notebook)
+
+![Model Training Pipeline Overview](assets/NotebookLM/section%20overview/Model_Training_Pipeline_Overview.png)
+
 We train 16 distinct baseline models, similarity recommenders, PyTorch deep learning architectures, and zero-shot transformers.
 - **[V4] Graph Neural Network (GNN):** Treats users as nodes in a similarity graph, applying a Graph Attention Network (GAT) for semi-supervised node classification.
 - **[V4] Self-Supervised Contrastive Pre-Training (SCARF):** Extracts latent structure without labels via random feature corruption.
@@ -177,6 +190,9 @@ We train 16 distinct baseline models, similarity recommenders, PyTorch deep lear
 ---
 
 ### Step 10: Hyperparameter Optimization (Section 11 in notebook)
+
+![Efficient Hyperparameter Optimization Strategy](assets/NotebookLM/section%20overview/Efficient_Hyperparameter_Optimization_Strategy.png)
+
 1,000-trial GPU-accelerated Optuna search grids.
 - **[V4] Multi-Objective Pareto Optimization:** Simultaneously optimizes for both predictive performance (F1 Score) and demographic fairness.
 
@@ -190,6 +206,9 @@ Extracts global importance scores from the best ensemble.
 ---
 
 ### Step 12: Advanced Model Robustness & Uncertainty (Section 13 in notebook)
+
+![Trustworthy AI Robustness Framework](assets/NotebookLM/section%20overview/Trustworthy_AI_Dating_Robustness_Framework.png)
+
 - **[V4] Conformal Prediction:** Generates statistically valid prediction sets with guaranteed finite-sample coverage instead of raw point predictions.
 - **[V4] Bayesian Uncertainty Quantification:** Uses Monte Carlo Dropout to establish epistemic uncertainty intervals (e.g. 73% ± 12% confidence).
 - **[V4] Adversarial Robustness Testing:** Evaluates model vulnerabilities against deliberate input perturbations using the Fast Gradient Sign Method (FGSM).
@@ -198,12 +217,18 @@ Extracts global importance scores from the best ensemble.
 ---
 
 ### Step 13: Model Compression, Recourse & Deployment (Section 14 in notebook)
+
+![AI Efficiency and Agency](assets/NotebookLM/section%20overview/Dating_AI_Efficiency_and_Agency.png)
+
 - **[V4] Knowledge Distillation:** Compresses the learned decision boundaries of a massive ensemble "teacher" into a lightweight, highly interpretable logistic regression "student".
 - **[V5] Algorithmic Recourse (DiCE):** Generated diverse counterfactual explanations using Microsoft's DiCE framework, outlining the minimal actionable profile changes (e.g. increasing profile completeness by a specific amount) for a user predicted to be "Ghosted" to achieve a "Matched" prediction.
 
 ---
 
 ### Step 14: Ethical Considerations, Demographic Parity & Uplift Modeling (Section 15 & 17 in notebook)
+
+![Maximizing Engagement with Causal Uplift](assets/NotebookLM/section%20overview/Maximizing_Engagement_with_Causal_Uplift.png)
+
 Analyzes model accuracy and bias across sensitive demographic attributes.
 - **[V5.1] Causal Uplift Modeling (T-Learner Meta-Classifier)**: Programmed Treatment ($M_1$) and Control ($M_0$) meta-learners to estimate the Individual Treatment Effect (ITE) of profile interventions, segmenting dating app users into *Persuadables*, *Sure Things*, *Lost Causes*, and *Sleeping Dogs* to enable targeted prescriptive premium feature recommendations.
 
@@ -401,6 +426,8 @@ Because the V4 "Wow-Factor" techniques (like Deep Learning, Optuna grids, and Co
 ---
 
 ## 🌌 V5 "PhD-Level" Methodologies (The State-of-the-Art Edition)
+
+![Engineering the SOTA Frontier](assets/NotebookLM/section%20overview/Engineering_the_SOTA_Frontier_Diagram.png)
 
 For the V5 and V5.1 iterations, we integrated **9 cutting-edge methodologies** focused on **Causal Estimation, Attentive Deep Networks, Safe Deployment, Uncertainty Alignment, and Ethical Actionability**, elevating the engineering complexity of this pipeline to the standards of a research-grade ML system:
 

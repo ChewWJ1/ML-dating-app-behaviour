@@ -26,8 +26,6 @@ def show_plot(directory, filename, caption=''):
 
 
 # ── Header ──
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Maximizing_Engagement_with_Causal_Uplift.png"), use_container_width=True)
-st.markdown("---")
 st.title("🧬 Causal Inference & Uplift Modeling")
 st.markdown("---")
 
@@ -41,6 +39,8 @@ st.markdown("""
     interventional questions that predictive models alone cannot address.
 </div>
 """, unsafe_allow_html=True)
+st.markdown("---")
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Maximizing_Engagement_with_Causal_Uplift.png"), use_container_width=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SECTION 1 — Causal Discovery (PC Algorithm)
