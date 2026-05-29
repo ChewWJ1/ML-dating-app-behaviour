@@ -1,4 +1,4 @@
-![Digital Romance Data Engineering Infographic](assets/NotebookLM/new/Digital_Romance_Data_Engineering_Infographic.png)
+![Science of Digital Romance Infographic](assets/NotebookLM/overview/Science_of_Digital_Romance_Infographic.png)
 
 # 💘 Tying the Data Knot: Predicting Meaningful Connections
 ### WIA1006 Machine Learning — Group Assignment Documentation
