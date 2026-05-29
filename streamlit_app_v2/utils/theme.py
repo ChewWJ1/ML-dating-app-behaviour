@@ -745,7 +745,7 @@ def render_header(page_title=None):
 <input type="checkbox" id="drop-pipeline" class="web-dropdown-check">
 <label class="web-nav-item {act_pipeline}" for="drop-pipeline" tabindex="0">⚙️ ML Pipeline ▾</label>
 <div class="web-dropdown-content">
-<a href="/Overview" target="_self">📊 Overview</a>
+<a href="/Overview" target="_self">📊 Dataset Overview</a>
 <a href="/EDA" target="_self">🔍 EDA</a>
 <a href="/Preprocessing" target="_self">⚙️ Preprocessing</a>
 <a href="/Feature_Selection" target="_self">🎯 Feature Selection</a>
