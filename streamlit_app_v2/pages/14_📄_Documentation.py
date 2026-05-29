@@ -83,7 +83,7 @@ with tab2:
 
 with tab3:
     st.markdown("### 📝 Master Project Notes")
-    md_path = os.path.join(ROOT_DIR, "PROJECT_NOTES.md")
+    md_path = os.path.join(ROOT_DIR, "README.md")
     if os.path.exists(md_path):
         with open(md_path, "r", encoding="utf-8") as f:
             content = f.read()

@@ -139,7 +139,7 @@ TUNED_PATH = _TUNED_V5 if os.path.exists(_TUNED_V5) else _TUNED_ROOT
 def load_baseline_models():
     """Load the baseline_results.joblib file."""
     if not os.path.exists(BASELINE_PATH):
-        st.error(f"Baseline models not found at {BASELINE_PATH}")
+        # Silently return empty dict to trigger graceful image fallback
         return {}
     try:
         inject_classes()
@@ -172,7 +172,6 @@ def load_cv_results():
     """Load the cross-validation results from models_v5/cv_results.joblib."""
     cv_path = os.path.join(MODELS_V5_DIR, 'cv_results.joblib')
     if not os.path.exists(cv_path):
-        st.warning(f"CV results not found at {cv_path}")
         return {}
     try:
         inject_classes()
@@ -186,7 +185,6 @@ def load_learning_curve_data():
     """Load the learning curve data from models_v5/learning_curve_data.joblib."""
     lc_path = os.path.join(MODELS_V5_DIR, 'learning_curve_data.joblib')
     if not os.path.exists(lc_path):
-        st.warning(f"Learning curve data not found at {lc_path}")
         return {}
     try:
         inject_classes()
