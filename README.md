@@ -40,22 +40,25 @@
 
 ## 📁 Repository Files
 
-| File | Description |
+| File/Directory | Description |
 |---|---|
+| `README.md` | Main repository documentation file (this document) |
 | `notebooks/ML_dating_app_behaviour V1.ipynb` | Main Jupyter notebook — original baseline pipeline (115 cells, pristine baseline) |
 | `notebooks/ML_dating_app_behaviour v1 SVM bypass.ipynb` | SVM-Bypassed notebook — identical baseline but skips slow SVM fitting via joblib caching, saving runs to `models_bypass/` |
-| `notebooks/ML_dating_app_behaviour V2.ipynb` | **Champion Stacking notebook** — SMOTE training balance, 12 baseline/advanced models, hyperparameter search grids, and a Champion Stacking Ensemble (saving runs to `models_champion/`) |
-| `notebooks/ML_dating_app_behaviour V3.ipynb` | **Advanced GPU-Accelerated Tabular notebook** — Injects dynamic hardware auto-detection (NVIDIA CUDA & AMD Radeon DirectML), custom PyTorch advanced architectures (FT-Transformer, SAINT, NODE), and 1,000-trial GPU-accelerated Optuna search grids. |
-| `notebooks/ML_dating_app_behaviour V4.ipynb` | **Advanced Robustness & Trustworthy AI notebook** — Injects 10 "Wow-Factor" flexes (GAT GNNs, SCARF self-supervision, Opacus differential privacy, Conformal predictions, MC Dropout, FGSM adversarial testing, and Knowledge Distillation). |
-| `notebooks/ML_dating_app_behaviour V5.ipynb` | **SOTA PhD-Level ML Pipeline notebook** — Injects 6 advanced methodologies: OOD Rejection (Isolation Forest), Zero-Shot Transformers (TabPFN), Label Smoothing & Mixup, SHAP Interactions, Isotonic Calibration reliability, and Microsoft DiCE Algorithmic Recourse counterfactuals. |
-| `scripts/dual_gpu_trainer.py` | Standalone parallel training engine running PyTorch multi-threading to train different networks concurrently across integrated AMD Radeon and dedicated NVIDIA GPUs. |
-| `dating_app_behavior_dataset.csv` | Original dataset (50k × 19 features, 7.6 MB) |
-| `dating_app_behavior_dataset_extended1.csv` | **Extended dataset used** (50k × 25 features, 9.6 MB) |
-| `PROJECT_NOTES.md` | This documentation file (fully updated for V1 to V5 SOTA architectures) |
-| `run_pipeline.py` | Python script to run the notebook headless |
-| `dashboard.html` | Interactive frontend dashboard mock-up |
+| `notebooks/ML_dating_app_behaviour V2 (SVM bypass).ipynb` | **Champion Stacking notebook** — SMOTE training balance, 12 baseline/advanced models, hyperparameter search grids, and a Champion Stacking Ensemble |
+| `notebooks/ML_dating_app_behaviour V3.ipynb` | **Advanced GPU-Accelerated Tabular notebook** — Injects dynamic hardware auto-detection (NVIDIA CUDA & AMD Radeon DirectML), custom PyTorch advanced architectures, and GPU-accelerated Optuna search grids. |
+| `notebooks/ML_dating_app_behaviour V4.ipynb` | **Advanced Robustness & Trustworthy AI notebook** — Injects 10 "Wow-Factor" flexes (GAT GNNs, SCARF self-supervision, Opacus differential privacy, Conformal predictions, MC Dropout, etc.). |
+| `notebooks/ML_dating_app_behaviour V5.ipynb` | **SOTA PhD-Level ML Pipeline notebook** — Injects advanced methodologies like OOD Rejection, TabPFN, Mixup, SHAP Interactions, and Microsoft DiCE. |
+| `data/dating_app_behavior_dataset.csv` | Original dataset (50k × 19 features) |
+| `data/dating_app_behavior_dataset_extended1.csv` | **Extended dataset used** (50k × 25 features) |
+| `scripts/dual_gpu_trainer.py` | Standalone parallel training engine running PyTorch multi-threading across integrated AMD Radeon and dedicated NVIDIA GPUs. |
+| `scripts/run_pipeline.py` | Python script to run the pipeline workflows headless |
+| `scripts/generate_presentation.py` | Utility script to compile findings and visuals into a presentation format |
+| `dashboards/dashboard.html` | Interactive frontend dashboard mock-up |
+| `streamlit_app/` | Initial version of the Streamlit interactive web dashboard |
 | `streamlit_app_v2/` | **SwipeIQ V2 Interactive Analytics Web Dashboard** — 15-stage multi-page Streamlit app with 9 interactive sandboxes / playgrounds |
-| `autosklearn_colab_example.ipynb` | Example notebook for Auto-Sklearn configuration in Colab |
+| `requirements.txt` | Python package dependencies for the project environment |
+| `docx_text.txt` | Extracted text and notes for report compilation |
 
 ---
 
