@@ -119,7 +119,8 @@ st.markdown(f"""
         max-width: 950px;
         margin: 0 auto;
         text-shadow: 0px 1px 2px rgba(0,0,0,0.5);
-        text-align: justify;
+        text-align: center;
+        white-space: normal;
     }}
     .hero-desc b {{ color: #a78bfa; font-weight: 700; }}
 
