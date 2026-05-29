@@ -25,6 +25,8 @@ def show_plot(directory, filename, caption=''):
     else:
         st.warning(f'Plot not found: {filename}')
 
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_Success_Feature_Selection_Infographic.png"), use_container_width=True)
+st.markdown("---")
 st.title("🎯 Feature Selection & PCA")
 
 st.markdown("""

@@ -21,6 +21,8 @@ def show_plot(directory, filename, caption=''):
     else:
         st.warning(f'Plot not found: {filename}')
 
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_Dataset_Insights_and_Analysis.png"), use_container_width=True)
+st.markdown("---")
 st.title("🔍 Exploratory Data Analysis")
 
 st.markdown("""

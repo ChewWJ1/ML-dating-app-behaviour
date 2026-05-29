@@ -25,6 +25,8 @@ def show_plot(directory, filename, caption=''):
 
 
 # ── Header ──
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Trustworthy_AI_Dating_Robustness_Framework.png"), use_container_width=True)
+st.markdown("---")
 st.title("🛡️ Robustness & Uncertainty Quantification")
 st.markdown("---")
 

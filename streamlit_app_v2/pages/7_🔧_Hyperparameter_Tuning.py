@@ -25,6 +25,8 @@ def show_plot(directory, filename, caption=''):
         st.warning(f'Plot not found: {filename}')
 
 # --- HEADER ---
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Efficient_Hyperparameter_Optimization_Strategy.png"), use_container_width=True)
+st.markdown("---")
 st.title("🔧 Hyperparameter Tuning")
 st.markdown("""
 After identifying the baseline performance, we attempt to improve the models using **Hyperparameter Tuning**.

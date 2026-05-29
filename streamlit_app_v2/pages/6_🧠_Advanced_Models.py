@@ -25,6 +25,8 @@ def show_plot(directory, filename, caption=''):
 
 
 # ── Header ──
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Engineering_the_SOTA_Frontier_Diagram.png"), use_container_width=True)
+st.markdown("---")
 st.title("🧠 Advanced Model Architectures")
 st.markdown("---")
 

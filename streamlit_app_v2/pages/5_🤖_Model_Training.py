@@ -27,6 +27,8 @@ def show_plot(directory, filename, caption=''):
         st.warning(f'Plot not found: {filename}')
 
 # --- HEADER ---
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Model_Training_Pipeline_Overview.png"), use_container_width=True)
+st.markdown("---")
 st.title("🤖 Model Training & Evaluation")
 st.markdown("""
 After preprocessing and feature selection, we evaluate **16 distinct machine learning models** — spanning classical sklearn classifiers, 

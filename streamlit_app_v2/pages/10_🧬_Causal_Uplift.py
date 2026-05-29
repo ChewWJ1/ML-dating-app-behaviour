@@ -26,6 +26,8 @@ def show_plot(directory, filename, caption=''):
 
 
 # ── Header ──
+st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Maximizing_Engagement_with_Causal_Uplift.png"), use_container_width=True)
+st.markdown("---")
 st.title("🧬 Causal Inference & Uplift Modeling")
 st.markdown("---")
 
