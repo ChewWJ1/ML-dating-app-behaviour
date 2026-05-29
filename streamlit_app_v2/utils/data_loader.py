@@ -80,7 +80,7 @@ def load_raw_data():
 
 @st.cache_data
 def load_eda_stats():
-    """Load precomputed EDA statistics."""
+    """Load precomputed EDA statistics from JSON."""
     if not os.path.exists(EDA_STATS_PATH):
         return {}
     with open(EDA_STATS_PATH, 'r', encoding='utf-8') as f:
@@ -88,7 +88,7 @@ def load_eda_stats():
 
 @st.cache_data
 def load_cv_stats():
-    """Load cross-validation statistics."""
+    """Load cross-validation statistics from JSON."""
     if not os.path.exists(CV_STATS_PATH):
         return {}
     with open(CV_STATS_PATH, 'r', encoding='utf-8') as f:
@@ -96,7 +96,7 @@ def load_cv_stats():
 
 @st.cache_data
 def load_feature_importances():
-    """Load feature importance data."""
+    """Load feature importance data from JSON."""
     if not os.path.exists(FI_STATS_PATH):
         return {}
     with open(FI_STATS_PATH, 'r', encoding='utf-8') as f:
