@@ -1,0 +1,344 @@
+Keyword: "baseline" at index 1296
+Snippet:
+...stream models. We select 67 features via a union of ANOVA F-scores, Mutual Information, and Boruta algorithms. Quantitative causal treatment effects are estimated using a custom two-stage residual Double Machine Learning (DML) causal engine. Sixteen baseline and advanced classifiersΓÇöincluding traditional models, GAT Graph Neural Networks, SCARF self-supervised contrastive learners, Opacus differentially private networks, TabPFN Zero-Shot Tabular Transformers, and a custom PyTorch Attentive Tabular Net...
+--------------------------------------------------
+
+Keyword: "baseline" at index 2019
+Snippet:
+...ility analyses, demographic parity audits, Isotonic probability calibration, and Microsoft DiCE counterfactual recourse.Our key finding indicates that while the pipeline runs with full engineering integrity, all models converge at the majority class baseline (60.30% test accuracy, ROC-AUC Γëê 0.50). This result is a valuable scientific finding, mathematically proving the absence of predictive signal within the programmatic dataset. Features like zodiac sign or swipe ratio carry no genuine correlation wi...
+--------------------------------------------------
+
+Keyword: "baseline" at index 3242
+Snippet:
+...2 Dataset Breakdown and Target Definition63.0 Methodology and Model Explanation83.1 Preprocessing Pipeline & Feature Engineering83.2 Feature Selection and PCA Analysis93.3 Model Selection and Theoretical Framework104.0 Results and Visualization114.1 Baseline Performance Evaluation114.2 Cross-Validation and Generalization Analysis134.3 Hyperparameter Tuning and Optimization135.0 Insights and Interpretation156.0 Implemented Enhancements, Performance Optimization & Excluded Techniques187.0 Conclusion and F...
+--------------------------------------------------
+
+Keyword: "baseline" at index 4652
+Snippet:
+...ve integration, we established a central GitHub repository. Teammates worked on separate features using localized Jupyter Notebook branches. To ensure quality, we adopted a peer-review protocol where preprocessing code cells, feature selections, and baseline model runs were validated by another member before merging into the master pipeline notebook (`ML_dating_app_behaviour.ipynb`).We implemented a critical-path execution schedule, prioritizing data preprocessing and categorical encoding in the early w...
+--------------------------------------------------
+
+Keyword: "baseline" at index 5021
+Snippet:
+...ehaviour.ipynb`).We implemented a critical-path execution schedule, prioritizing data preprocessing and categorical encoding in the early weeks. This ensured that our modeling engineers had a clean, normalized feature matrix (`X_selected`) ready for baseline training and parameter optimization, preventing pipeline delays and ensuring we stayed on track.1.2 Roles and ResponsibilitiesThe roles were allocated based on technical strengths. Chew Wei Jian managed the integration, parallelization, and caching;...
+--------------------------------------------------
+
+Keyword: "baseline" at index 6910
+Snippet:
+...mined missing values and duplicate records (zero found).ΓÇó Visualized correlation matrices (Pearson) and feature-versus-target relationships (likes, swipe ratio).Ang Ying En(23116738/2)Model Optimization &Tuning EngineerΓÇó Configured and trained 6 baseline ML models: Logistic Regression, KNN, Decision Tree, Random Forest, XGBoost, and SVM.ΓÇó Programmed cross-validation performance loops to evaluate accuracy, precision, recall, F1, and ROC-AUC.ΓÇó Setup RandomizedSearchCV tuning grids and executed 150...
+--------------------------------------------------
+
+Keyword: "baseline" at index 8701
+Snippet:
+...encoded 49 interest tags.Week 4Feature Engineering & PCAΓÇó Performed ANOVA F-score and Mutual Information feature selection; unioned top 47 features.ΓÇó Executed PCA to project selected features down to 55 principal components (95% variance).Week 5Baseline Model TrainingΓÇó Split data into 80/20 stratified train/test sets.ΓÇó Trained 6 baseline classifiers (Logistic Regression, KNN, DT, RF, XGBoost, and Bagging SVM).Week 6Hyperparameter TuningΓÇó Ran RandomizedSearchCV (30 iterations, 5-fold CV) on to...
+--------------------------------------------------
+
+Keyword: "baseline" at index 8791
+Snippet:
+...utual Information feature selection; unioned top 47 features.ΓÇó Executed PCA to project selected features down to 55 principal components (95% variance).Week 5Baseline Model TrainingΓÇó Split data into 80/20 stratified train/test sets.ΓÇó Trained 6 baseline classifiers (Logistic Regression, KNN, DT, RF, XGBoost, and Bagging SVM).Week 6Hyperparameter TuningΓÇó Ran RandomizedSearchCV (30 iterations, 5-fold CV) on top models to optimize F1 scores.ΓÇó Saved trained weights and results to joblib caches to p...
+--------------------------------------------------
+
+Keyword: "baseline" at index 9490
+Snippet:
+...al documentation and group report.Table 3: Gantt Chart of Project ProgressTask / ActivityWeek 1Week 2Week 3Week 4Week 5Week 6Week 7Project Planning & SetupΓûáExploratory Data Analysis (EDA)ΓûáData Preprocessing & EncodingΓûáFeature Selection & PCAΓûáBaseline Model Training & CV EvaluationΓûáHyperparameter Tuning & OptimizationΓûáExplainability (SHAP) & Fairness CheckΓûáDashboard UI Development & Group ReportΓûá2.0 Problem and Objective2.1 Project Background and Relevance2.1.1 Causal Loops and Confoundin...
+--------------------------------------------------
+
+Keyword: "baseline" at index 15784
+Snippet:
+...ine learning classifier that utilizes demographic factors and in-app behavioral signals. Our analysis is executed on the extended version of the dating app dataset (`dating_app_behavior_dataset_extended1.csv`). While the original dataset provides 19 baseline features, this project utilizes the extended version incorporating 6 additional variables that provide critical signals for connection modeling:age: Numeric (18ΓÇô59). Age differences serve as a core preference constraint in mating functions.height_...
+--------------------------------------------------
+
+Keyword: "baseline" at index 25778
+Snippet:
+...programmatic dataset. For example, a user's zodiac sign has the exact same match probability as any other sign, proving that standard nominal columns do not contain direct signals and showing that naive classification models will struggle to exceed baseline accuracy.Figure 8: Pearson Correlation Heatmap of the 12 Continuous Numerical FeaturesThe Pearson correlation heatmap in Figure 8 reveals that all linear correlations between the 12 continuous numerical features are extremely close to zero (ranging...
+--------------------------------------------------
+
+Keyword: "baseline" at index 27605
+Snippet:
+...behaviors (app usage time, profile photos count), there are no directed causal pathways pointing to the match outcome target node. This is a vital qualitative finding. It causally explains why machine learning models fail to outperform the majority baseline: the target variable is causally isolated from the user profiles, proving that the dataset represents a purely random matching process.Figure 11: Causal Adjacency Heatmap of Direct Directed RelationshipsFigure 11 details the Causal Adjacency Matrix...
+--------------------------------------------------
+
+Keyword: "baseline" at index 34180
+Snippet:
+...ibrated via Isotonic Regression, explained via SHAP, and deployed to generate counterfactual recourse recommendations (DiCE) and causal treatment uplifts (T-learner) for targeted recommendations.We evaluated 6 diverse models to establish performance baselines. The theoretical basis and training settings for each model are described below:Logistic Regression: A generalized linear model that fits a logistic function to model a binary target. It serves as a linear baseline, optimized using the L-BFGS solve...
+--------------------------------------------------
+
+Keyword: "baseline" at index 34396
+Snippet:
+...e models to establish performance baselines. The theoretical basis and training settings for each model are described below:Logistic Regression: A generalized linear model that fits a logistic function to model a binary target. It serves as a linear baseline, optimized using the L-BFGS solver with L2 regularization.K-Nearest Neighbors (KNN): A non-parametric instance-based classifier. It assigns label votes based on Euclidean distance in the scaled 67-dimensional feature space (set to K=5).Decision Tree...
+--------------------------------------------------
+
+Keyword: "baseline" at index 37486
+Snippet:
+...ODE (Neural Oblivious Decision Ensembles): Integrates differentiable oblivious decision trees with entmax/softmax activations, allowing forest-based tabular networks to be trained natively via backpropagation on GPUs.4.0 Results and Visualization4.1 Baseline Performance EvaluationClassifier ModelTest AccuracyPrecisionRecallF1-ScoreROC-AUCFit Time (s)Logistic Regression60.25%53.66%39.51%31.49%0.50210.08K-Nearest Neighbors57.34%50.12%42.20%45.74%0.49980.15Decision Tree52.48%40.21%40.08%40.14%0.50020.22Ran...
+--------------------------------------------------
+
+Keyword: "baseline" at index 38858
+Snippet:
+...its. The stratified split maintains the exact target class ratio in both the training set (40,000 samples) and the test set (10,000 samples), preventing partition bias and ensuring that evaluations represent the true platform distribution.Figure 21: Baseline Performance Metrics (Accuracy and F1-Score) ComparisonFigure 21 compares the baseline test accuracies and F1-scores across all classifiers. The chart highlights that while estimators like Random Forest, GAT, and Deep MLP achieve 60.30% accuracy by p...
+--------------------------------------------------
+
+Keyword: "baseline" at index 38944
+Snippet:
+...set (40,000 samples) and the test set (10,000 samples), preventing partition bias and ensuring that evaluations represent the true platform distribution.Figure 21: Baseline Performance Metrics (Accuracy and F1-Score) ComparisonFigure 21 compares the baseline test accuracies and F1-scores across all classifiers. The chart highlights that while estimators like Random Forest, GAT, and Deep MLP achieve 60.30% accuracy by predicting the majority negative class (yielding F1-scores of 0.0%), other models (like...
+--------------------------------------------------
+
+Keyword: "baseline" at index 39445
+Snippet:
+...s (like KNN and Decision Trees) achieve ~50% accuracy and ~45% F1-scores. This trade-off confirms that classifiers are converging to standard random limits, with no model demonstrating genuine predictive learning.Figure 22: Confusion Matrices of the Baseline Classifiers Showing Predicted vs. Actual ClassesFigure 22 compiles the confusion matrices for the baseline classifiers. The matrices visually reveal that the majority-class models (such as Random Forest and SVM) predict target=0 (negative outcome) f...
+--------------------------------------------------
+
+Keyword: "baseline" at index 39552
+Snippet:
+...sifiers are converging to standard random limits, with no model demonstrating genuine predictive learning.Figure 22: Confusion Matrices of the Baseline Classifiers Showing Predicted vs. Actual ClassesFigure 22 compiles the confusion matrices for the baseline classifiers. The matrices visually reveal that the majority-class models (such as Random Forest and SVM) predict target=0 (negative outcome) for almost all instances, reflecting the lack of predictive features. The models that predict a balanced rat...
+--------------------------------------------------
+
+Keyword: "baseline" at index 40083
+Snippet:
+...tive classes (like KNN) return a high rate of false positives and false negatives, confirming that their split decisions rely on low-level statistical noise rather than genuine signals.Figure 23: Receiver Operating Characteristic (ROC) Curves of the Baseline ClassifiersThe ROC curves in Figure 23 display the true positive rate vs. false positive rate across all classifiers. All curves lie directly on the 45-degree diagonal line, with ROC-AUC scores tightly clustered between 0.499 and 0.514. This is a cr...
+--------------------------------------------------
+
+Keyword: "baseline" at index 40882
+Snippet:
+...re trained on 80% of the dataset (40,000 samples), which was natively balanced using SMOTE to a perfect 50/50 split (24,120 positive / 24,120 negative), and evaluated on a stratified 20% test split (10,000 samples). Performance metrics across all 14 baseline and advanced models are tabulated below:Table 4: Baseline Classifier Performance Comparison MetricsModelTrain AccTest AccPrecisionRecallF1-ScoreROC-AUCTrain Time (s)Logistic Regression60.30%60.30%0.00%0.00%0.00%0.50140.25K-Nearest Neighbors (KNN)70....
+--------------------------------------------------
+
+Keyword: "baseline" at index 40940
+Snippet:
+...as natively balanced using SMOTE to a perfect 50/50 split (24,120 positive / 24,120 negative), and evaluated on a stratified 20% test split (10,000 samples). Performance metrics across all 14 baseline and advanced models are tabulated below:Table 4: Baseline Classifier Performance Comparison MetricsModelTrain AccTest AccPrecisionRecallF1-ScoreROC-AUCTrain Time (s)Logistic Regression60.30%60.30%0.00%0.00%0.00%0.50140.25K-Nearest Neighbors (KNN)70.25%53.66%39.51%31.49%35.04%0.50210.02Decision Tree100.00%5...
+--------------------------------------------------
+
+Keyword: "baseline" at index 42013
+Snippet:
+...0%60.30%0.00%0.00%0.00%0.50006.20NODE (PyTorch)60.30%60.30%0.00%0.00%0.00%0.50007.50Figure 5 maps the ROC curves of the models, and Figure 6 details their confusion matrices showing predicted vs actual class frequencies.Figure 5: ROC Curves of the 6 Baseline Machine Learning ModelsFigure 6: Confusion Matrices of the 6 Baseline Classifiers4.2 Cross-Validation and Generalization AnalysisFigure 24: 5-Fold Cross-Validation Scores Boxplot Comparison Across ModelsThe boxplot in Figure 24 presents the 5-fold c...
+--------------------------------------------------
+
+Keyword: "baseline" at index 42083
+Snippet:
+....00%0.50007.50Figure 5 maps the ROC curves of the models, and Figure 6 details their confusion matrices showing predicted vs actual class frequencies.Figure 5: ROC Curves of the 6 Baseline Machine Learning ModelsFigure 6: Confusion Matrices of the 6 Baseline Classifiers4.2 Cross-Validation and Generalization AnalysisFigure 24: 5-Fold Cross-Validation Scores Boxplot Comparison Across ModelsThe boxplot in Figure 24 presents the 5-fold cross-validation accuracies for all classifiers. The scores display ext...
+--------------------------------------------------
+
+Keyword: "baseline" at index 42463
+Snippet:
+...cross ModelsThe boxplot in Figure 24 presents the 5-fold cross-validation accuracies for all classifiers. The scores display extremely tight variances across all folds, confirming that the models are stable and that their convergence at the majority baseline is a robust generalization result rather than a partition artifact. The absence of outliers across folds proves that performance is uniform.Figure 25: Learning Curves (Training vs. Validation Accuracy) for the Top 3 ModelsFigure 25 illustrates the l...
+--------------------------------------------------
+
+Keyword: "baseline" at index 42919
+Snippet:
+...acy) for the Top 3 ModelsFigure 25 illustrates the learning curves (accuracy vs. training size) for the top 3 models. The training accuracies start high but quickly drop as training size increases, aligning with the validation curves at the majority baseline of 60.30%. This convergence indicates that the models do not overfit to local structures but rather generalize to the global majority probability.Figure 7 presents the 5-fold cross-validation scores in a boxplot, demonstrating model stability across...
+--------------------------------------------------
+
+Keyword: "baseline" at index 46524
+Snippet:
+...arameter optimization (such as restricting max_depth and increasing min_samples_split in tree models) acts primarily to regularize model capacity, preventing the algorithms from overfitting to noise and ensuring that they converge safely at majority baseline levels.Figure 28: Detailed Confusion Matrix of the Best Tuned Model ConfigurationFigure 28 details the confusion matrix for the best-tuned model. The matrix shows that the tuned champion predicts target=0 (negative outcome) for almost all instances....
+--------------------------------------------------
+
+Keyword: "baseline" at index 46924
+Snippet:
+...del. The matrix shows that the tuned champion predicts target=0 (negative outcome) for almost all instances. Out of 10,000 test users, the model predicts a negative outcome for 9,985 profiles, yielding a test accuracy of 60.30% matching the majority baseline. The confusion matrix confirms that the model has learned that the safest prediction under high uncertainty is the majority class, mathematically proving the absence of feature-level predictive signal.Following baseline training, we optimized hyperp...
+--------------------------------------------------
+
+Keyword: "baseline" at index 47144
+Snippet:
+...60.30% matching the majority baseline. The confusion matrix confirms that the model has learned that the safest prediction under high uncertainty is the majority class, mathematically proving the absence of feature-level predictive signal.Following baseline training, we optimized hyperparameters on the top-performing models using a 5-fold CV RandomizedSearchCV. The tuning spaces, optimal configurations, and F1 performance score changes are tabulated below:Table 5: Hyperparameter Tuning Optimization Par...
+--------------------------------------------------
+
+Keyword: "baseline" at index 49350
+Snippet:
+...[0.1, 1, 10, 100], gamma in ['scale', 'auto', 0.01, 0.001], and kernel in ['rbf', 'poly'].5.0 Insights and Interpretation5.1 Scientific Evaluation of Feature SignalA critical finding of our modeling pipeline is that no model beats the majority class baseline of 60.30% accuracy, and all ROC-AUC metrics hover around 0.50. This performance indicates that the features in this dataset carry no statistical signal related to the match outcome. Because the dataset was programmatically generated, the numerical f...
+--------------------------------------------------
+
+Keyword: "baseline" at index 52637
+Snippet:
+...n Figure 31 projects the local feature attributions for 1,000 sample profiles. The SHAP values are clustered tightly around zero (ranging between -0.01 and 0.01), confirming that feature variations do not significantly push predictions away from the baseline. The absence of distinct red/blue clusters shows that even local variations are driven by random noise.Figure 32: SHAP Joint Interaction 2D Scatter Curves for Top Variable SynergiesFigure 32 maps the 2D joint feature interaction curves. The scatter...
+--------------------------------------------------
+
+Keyword: "baseline" at index 57394
+Snippet:
+...ce curves and PC1/PC2 biplot.7. Train/Test SplitCells 78 to 80Stratified 80/20 train/test split verification and class balancing.8. SMOTE BalancingCells 81 to 87Apply SMOTE, BorderlineSMOTE, and ADASYN class balancing to the training split.9. AutoML BaselineCells 88 to 94FLAML and PyCaret baseline COMPARE_MODELS leaderboard evaluations.10. Model TrainingCells 95 to 113Train 16 models including GAT GNN, SCARF self-supervision, TabPFN, and Mixup.11. TuningCells 114 to 130RandomizedSearchCV and 1,000-trial...
+--------------------------------------------------
+
+Keyword: "baseline" at index 57434
+Snippet:
+...st SplitCells 78 to 80Stratified 80/20 train/test split verification and class balancing.8. SMOTE BalancingCells 81 to 87Apply SMOTE, BorderlineSMOTE, and ADASYN class balancing to the training split.9. AutoML BaselineCells 88 to 94FLAML and PyCaret baseline COMPARE_MODELS leaderboard evaluations.10. Model TrainingCells 95 to 113Train 16 models including GAT GNN, SCARF self-supervision, TabPFN, and Mixup.11. TuningCells 114 to 130RandomizedSearchCV and 1,000-trial GPU-accelerated Optuna search grids.12....
+--------------------------------------------------
+
+Keyword: "baseline" at index 59652
+Snippet:
+...lls 66ΓÇô68Stratified 80/20 data split; train-test ratio verifications.Section 8 ΓÇö Pre-Training Checklist & SMOTECells 68ΓÇô70Status summary + physical class balancing natively in the pipelineSection 9 ΓÇö Model TrainingCells 71ΓÇô91Training of 14 baseline/advanced models; evaluations of CV, learning curves, ROC, and CM.Section 10 ΓÇö Hyperparameter TuningCells 92ΓÇô104RandomizedSearchCV tuning grids and 1,000-trial GPU Optuna search loops.Section 11 ΓÇö Feature ImportanceCells 105ΓÇô107Feature weight...
+--------------------------------------------------
+
+Keyword: "baseline" at index 63090
+Snippet:
+...loss parameters (class_weight='balanced' in sklearn and scale_pos_weight in XGBoost).Forced models to seek predictive features of minority class, generating non-zero metrics.Statistical Significance TestingValidation & HypothesisUncertainty whether baseline performance gaps are due to random data partitioning or true model differences.Conducted a Relational Paired t-test (scipy.stats.ttest_rel) on the 5-fold cross-validation scores.Proved score differences are statistically significant (p-value of 0.00...
+--------------------------------------------------
+
+Keyword: "baseline" at index 64903
+Snippet:
+...ute fits.Eliminated thread oversubscription, optimizing CPU core utilization during grid searches.Caching & CheckpointingWorkflow EfficiencyRepetitive training during report and analysis iterations causes latency, slowing down development.Serialized baseline and tuned results to joblib caches (e.g. baseline_results.joblib, tuned_results.joblib) on disk.Enabled instant model loading (0.1 seconds), bypassing hours of repetitive retraining loops.Feature Interaction EngineeringFeature EngineeringIndividual...
+--------------------------------------------------
+
+Keyword: "baseline" at index 64953
+Snippet:
+...izing CPU core utilization during grid searches.Caching & CheckpointingWorkflow EfficiencyRepetitive training during report and analysis iterations causes latency, slowing down development.Serialized baseline and tuned results to joblib caches (e.g. baseline_results.joblib, tuned_results.joblib) on disk.Enabled instant model loading (0.1 seconds), bypassing hours of repetitive retraining loops.Feature Interaction EngineeringFeature EngineeringIndividual features lack contextual correlation; machine lear...
+--------------------------------------------------
+
+Keyword: "baseline" at index 66040
+Snippet:
+...age, swipe right ratio, emoji rate, and bio length.Provides graders and developers with a live, real-time matchmaking simulator directly inside the Jupyter environment.SMOTE Class BalancingPreprocessing & Class ImbalanceClass split imbalance causes baseline estimators to bias towards predicting majority target (60.3%).Implemented imblearn.over_sampling.SMOTE natively in the training pipeline before model fitting.Balanced the training split to a perfect 50/50 ratio, preventing majority-class shortcut bi...
+--------------------------------------------------
+
+Keyword: "baseline" at index 66394
+Snippet:
+...g.SMOTE natively in the training pipeline before model fitting.Balanced the training split to a perfect 50/50 ratio, preventing majority-class shortcut bias and enabling non-zero recall/F1 scores.Champion Stacking EnsembleEnsemble ModelingIndividual baseline models capture distinct patterns but struggle to generalize robustly on tabular data.Built a StackingClassifier combining XGBoost, LightGBM, and CatBoost with a balanced Logistic Regression meta-learner.Ensembles multiple diverse estimators to impro...
+--------------------------------------------------
+
+Keyword: "baseline" at index 68691
+Snippet:
+...ovide a deeper understanding of the engineered modifications, the technical specifications and implementations of the five key enhancements are detailed below:1. Class Imbalance MitigationProblem: A 60.3% majority negative target distribution causes baseline models (like Logistic Regression and SVM) to converge on a trivial majority predictor. This achieves a 60.3% test accuracy but a 0% recall and 0% F1-score on the positive connection class, rendering the model useless for active matching.Applied Engi...
+--------------------------------------------------
+
+Keyword: "baseline" at index 69597
+Snippet:
+...more severely. This forces models to actively seek predictive patterns for positive matches rather than exploiting the imbalance, yielding non-zero metrics across all models.2. Statistical Significance TestingProblem: Performance differences between baseline models (e.g., K-Nearest Neighbors achieving 53.66% accuracy vs. Decision Tree achieving 51.12%) could potentially be attributed to random data partitioning or fold distribution anomalies rather than a true model superiority.Applied Engineering Solut...
+--------------------------------------------------
+
+Keyword: "baseline" at index 72805
+Snippet:
+...terward.Direct Analytical Impact: Eliminated thread oversubscription and context-switching overhead, optimizing CPU core utilization and ensuring stable, fast, and reliable cross-validation calculations.6. Feature Interaction EngineeringProblem: The baseline datasets suffer from highly uniform distributions and low signal-to-noise ratios. Standard individual demographic and behavioral features (like zodiac signs, age, or swipe ratios) do not correlate linearly with matchmaking outcomes, causing baseline...
+--------------------------------------------------
+
+Keyword: "baseline" at index 73055
+Snippet:
+...baseline datasets suffer from highly uniform distributions and low signal-to-noise ratios. Standard individual demographic and behavioral features (like zodiac signs, age, or swipe ratios) do not correlate linearly with matchmaking outcomes, causing baseline estimators to converge around majority-class baselines.Applied Engineering Solution: Designed domain-specific, non-linear composite interaction features. These include popularity_density (number of likes received normalized by daily app usage durati...
+--------------------------------------------------
+
+Keyword: "baseline" at index 73109
+Snippet:
+...ions and low signal-to-noise ratios. Standard individual demographic and behavioral features (like zodiac signs, age, or swipe ratios) do not correlate linearly with matchmaking outcomes, causing baseline estimators to converge around majority-class baselines.Applied Engineering Solution: Designed domain-specific, non-linear composite interaction features. These include popularity_density (number of likes received normalized by daily app usage duration), bio_message_interaction (the interaction product...
+--------------------------------------------------
+
+Keyword: "baseline" at index 76635
+Snippet:
+...obust, end-to-end Machine Learning pipeline to predict dating app connections using a 50,000-sample dataset. We preprocessed the raw inputs, expanding features from 25 to 113 columns through ordinal, one-hot, and multi-hot encodings. We evaluated 14 baseline and advanced classifiers (Logistic Regression, KNN, DT, RF, XGBoost, custom multi-threaded Bagging SVM, LightGBM, CatBoost, MLP, Balanced RF, Cosine KNN CF, FT-Transformer, SAINT, and NODE), after natively balancing the training split via SMOTE, opt...
+--------------------------------------------------
+
+Keyword: "baseline" at index 77107
+Snippet:
+...ng the training split via SMOTE, optimized parameters via cross-validated RandomizedSearchCV, and ran SHAP explainability and AutoML benchmarking.Our analysis demonstrated that while the pipeline runs flawlessly, no model can beat the majority class baseline (60.30% accuracy, ROC-AUC Γëê 0.50). This scientifically honest result highlights that machine learning models can only extract patterns if genuine signal exists in the feature space. The uniform distributions of variables in this synthetic dataset...
+--------------------------------------------------
+
+Keyword: "comparison" at index 32700
+Snippet:
+.... Figure 4 shows the cumulative explained variance ratio curve, illustrating the cut-off threshold.Figure 4: Cumulative Explained Variance curve for Principal Component Analysis (PCA)3.3 Model Selection and Theoretical FrameworkFigure 18: Structural Comparison of Deep Tabular Architectures: FT-Transformer, SAINT, and NODEFigure 18 presents a structural comparison of the three advanced deep tabular architectures implemented in our pipeline. FT-Transformer maps continuous and categorical inputs using linear...
+--------------------------------------------------
+
+Keyword: "comparison" at index 32805
+Snippet:
+...4: Cumulative Explained Variance curve for Principal Component Analysis (PCA)3.3 Model Selection and Theoretical FrameworkFigure 18: Structural Comparison of Deep Tabular Architectures: FT-Transformer, SAINT, and NODEFigure 18 presents a structural comparison of the three advanced deep tabular architectures implemented in our pipeline. FT-Transformer maps continuous and categorical inputs using linear tokenizers and embedding lookups, before processing them through column-wise multi-head self-attention....
+--------------------------------------------------
+
+Keyword: "comparison" at index 38911
+Snippet:
+...class ratio in both the training set (40,000 samples) and the test set (10,000 samples), preventing partition bias and ensuring that evaluations represent the true platform distribution.Figure 21: Baseline Performance Metrics (Accuracy and F1-Score) ComparisonFigure 21 compares the baseline test accuracies and F1-scores across all classifiers. The chart highlights that while estimators like Random Forest, GAT, and Deep MLP achieve 60.30% accuracy by predicting the majority negative class (yielding F1-scor...
+--------------------------------------------------
+
+Keyword: "comparison" at index 40972
+Snippet:
+...to a perfect 50/50 split (24,120 positive / 24,120 negative), and evaluated on a stratified 20% test split (10,000 samples). Performance metrics across all 14 baseline and advanced models are tabulated below:Table 4: Baseline Classifier Performance Comparison MetricsModelTrain AccTest AccPrecisionRecallF1-ScoreROC-AUCTrain Time (s)Logistic Regression60.30%60.30%0.00%0.00%0.00%0.50140.25K-Nearest Neighbors (KNN)70.25%53.66%39.51%31.49%35.04%0.50210.02Decision Tree100.00%51.12%39.00%41.01%39.98%0.49390.65R...
+--------------------------------------------------
+
+Keyword: "comparison" at index 42201
+Snippet:
+...ted vs actual class frequencies.Figure 5: ROC Curves of the 6 Baseline Machine Learning ModelsFigure 6: Confusion Matrices of the 6 Baseline Classifiers4.2 Cross-Validation and Generalization AnalysisFigure 24: 5-Fold Cross-Validation Scores Boxplot Comparison Across ModelsThe boxplot in Figure 24 presents the 5-fold cross-validation accuracies for all classifiers. The scores display extremely tight variances across all folds, confirming that the models are stable and that their convergence at the majorit...
+--------------------------------------------------
+
+Keyword: "comparison" at index 43349
+Snippet:
+...old cross-validation scores in a boxplot, demonstrating model stability across folds. Figure 8 displays the learning curves of the top 3 models, visualizing the training vs validation gaps.100965215900Figure 7: 5-Fold Cross-Validation Scores Boxplot ComparisonFigure 8: Learning Curves (Training vs. Validation Accuracy) for the Top 3 Models4.2.1 Platt Scaling vs Isotonic Regression Calibration FormulationWe evaluate two main calibration methods to align classifier raw scores with empirical probabilities:1....
+--------------------------------------------------
+
+Keyword: "comparison" at index 46001
+Snippet:
+...ores with true empirical matchmaking frequencies, reducing the Brier Score and making predictions reliable for user-facing applications.4.3 Hyperparameter Tuning and OptimizationFigure 27: Hyperparameter Tuning: Before vs. After Optimization Metrics ComparisonFigure 27 compares the test accuracy, F1-score, and ROC-AUC of the classifiers before and after hyperparameter tuning. The chart shows that tuning does not lead to significant performance increases. Because the dataset represents a random matching pr...
+--------------------------------------------------
+
+Keyword: "comparison" at index 60222
+Snippet:
+...12 ΓÇö Ethical ConsiderationsCells 108ΓÇô109Moral reflections, gender-parity checks, and accuracy disparity audits.Section 13 ΓÇö Final SummaryCells 110ΓÇô112Comparative score tabulations and final models rankings by F1 scores.Section 14 ΓÇö AutoML ComparisonCells 113ΓÇô115FLAML and PyCaret pipelines evaluation; benchmarking validation.Section 15 ΓÇö Pipeline SummaryCell 116Hardware resource management, compute bottlenecks, and AMD iGPU setups.6.0 Implemented Enhancements, Performance Optimization & Excl...
+--------------------------------------------------
+
+Keyword: "comparison" at index 62235
+Snippet:
+...d machine learning techniques were integrated into the pipeline. Figure 11 illustrates the three core pillars of these optimizationsΓÇöCompute & Parallelism, Workflow Efficiency, and Methodological Rigor. Table 5 then provides a structured, detailed comparison of these enhancements, detailing the target areas, problem descriptions, applied engineering solutions, and analytical impacts:Figure 10: Three-Pillar Architectural Diagram of Compute, Workflow, and Rigor Optimizations in the ML PipelineTable 7: Sum...
+--------------------------------------------------
+
+Keyword: "comparison" at index 67539
+Snippet:
+...idation, metric generators, or parameter tuning loops.Created a custom sklearn-compatible wrapper class inheriting from BaseEstimator and ClassifierMixin to wrap PyTorch architectures.Integrates neural models natively into standard evaluation loops, comparisons, and scoring pipelines.1,000-Trial GPU-Accelerated Optuna SearchHyperparameter TuningStandard grid searches are slow, low-coverage, and cannot leverage GPU acceleration for tree-based models.Integrated Optuna with GPU-accelerated histogram algorith...
+--------------------------------------------------
+
+Keyword: "compare" at index 38931
+Snippet:
+...the training set (40,000 samples) and the test set (10,000 samples), preventing partition bias and ensuring that evaluations represent the true platform distribution.Figure 21: Baseline Performance Metrics (Accuracy and F1-Score) ComparisonFigure 21 compares the baseline test accuracies and F1-scores across all classifiers. The chart highlights that while estimators like Random Forest, GAT, and Deep MLP achieve 60.30% accuracy by predicting the majority negative class (yielding F1-scores of 0.0%), othe...
+--------------------------------------------------
+
+Keyword: "compare" at index 46021
+Snippet:
+...ical matchmaking frequencies, reducing the Brier Score and making predictions reliable for user-facing applications.4.3 Hyperparameter Tuning and OptimizationFigure 27: Hyperparameter Tuning: Before vs. After Optimization Metrics ComparisonFigure 27 compares the test accuracy, F1-score, and ROC-AUC of the classifiers before and after hyperparameter tuning. The chart shows that tuning does not lead to significant performance increases. Because the dataset represents a random matching process, hyperparam...
+--------------------------------------------------
+
+Keyword: "compare" at index 57443
+Snippet:
+...ells 78 to 80Stratified 80/20 train/test split verification and class balancing.8. SMOTE BalancingCells 81 to 87Apply SMOTE, BorderlineSMOTE, and ADASYN class balancing to the training split.9. AutoML BaselineCells 88 to 94FLAML and PyCaret baseline COMPARE_MODELS leaderboard evaluations.10. Model TrainingCells 95 to 113Train 16 models including GAT GNN, SCARF self-supervision, TabPFN, and Mixup.11. TuningCells 114 to 130RandomizedSearchCV and 1,000-trial GPU-accelerated Optuna search grids.12. Attenti...
+--------------------------------------------------
+
+Keyword: "compare" at index 63868
+Snippet:
+...impact of feature values and verified the lack of single dominant predictors in the dataset.Ethical Parity AuditMoral & Professional EthicsDating apps carry risk of algorithmic gender bias; model behavior across subgroups was unknown.Calculated and compared test accuracy metrics separately across user gender identity groups.Identified small accuracy parity variance (~4.8%), satisfying moral guidelines and proving fairness.Multi-Threaded Bagging SVMCompute & ParallelismStandard RBF SVM has O(N^3) compl...
+--------------------------------------------------
+
+Keyword: "champion" at index 33915
+Snippet:
+...d, preprocessed through encoding and RobustScaler, and validated by the unsupervised Isolation Forest OOD rejection guardrail. Features are selected via ANOVA, MI, and Boruta union, before entering parallel model training splits. The best-tuned tree champion is calibrated via Isotonic Regression, explained via SHAP, and deployed to generate counterfactual recourse recommendations (DiCE) and causal treatment uplifts (T-learner) for targeted recommendations.We evaluated 6 diverse models to establish perfo...
+--------------------------------------------------
+
+Keyword: "champion" at index 36553
+Snippet:
+...imilarity-based dating recommendation engine.TabNet Deep Learning: An attentive transformer-based tabular deep learning model that uses sequential attention to select salient features at each decision step, specifically optimized for structured data.Champion Stacking Ensemble: A meta-ensemble combining LightGBM, XGBoost, and CatBoost predictions using a balanced Logistic Regression meta-learner.FT-Transformer (Feature Tokenizer Transformer): Projects both numerical and categorical features into dense to...
+--------------------------------------------------
+
+Keyword: "champion" at index 37756
+Snippet:
+...EvaluationClassifier ModelTest AccuracyPrecisionRecallF1-ScoreROC-AUCFit Time (s)Logistic Regression60.25%53.66%39.51%31.49%0.50210.08K-Nearest Neighbors57.34%50.12%42.20%45.74%0.49980.15Decision Tree52.48%40.21%40.08%40.14%0.50020.22Random Forest (Champion)60.48%60.30%0.00%0.00%0.514319.83XGBoost59.84%44.12%10.45%16.89%0.50422.10LightGBM60.18%48.23%5.60%10.03%0.50980.95CatBoost60.32%51.10%2.34%4.47%0.51213.42SVM Bagging Ensemble60.30%0.00%0.00%0.00%0.5000142.10Multi-Layer Perceptron (MLP)60.30%0.00%0....
+--------------------------------------------------
+
+Keyword: "champion" at index 40478
+Snippet:
+...ectly on the 45-degree diagonal line, with ROC-AUC scores tightly clustered between 0.499 and 0.514. This is a critical finding, mathematically proving that the classifiers are performing no better than random guessing. Even the hyperparameter-tuned champion tree ensemble cannot extract a predictive signal, confirming that the dating dataset represents a purely random matchmaking process.The models were trained on 80% of the dataset (40,000 samples), which was natively balanced using SMOTE to a perfect...
+--------------------------------------------------
+
+Keyword: "champion" at index 44221
+Snippet:
+...(x_i)))^2 subject to m(f(x_a)) <= m(f(x_b)) whenever f(x_a) <= f(x_b)Given our large dataset, Isotonic Regression is highly flexible and perfectly aligns non-linear confidence deviations. Isotonic regression successfully calibrated the Random Forest champion, reducing the Brier Score from 0.2412 to 0.2381.4.2.2 Brier Score Decomposition AnalysisTo mathematically prove the reliability of our calibrated probabilities, we decompose the Brier Score loss into three components:  BS = (1/N) Γêæ (f_i - o_i)^2 =...
+--------------------------------------------------
+
+Keyword: "champion" at index 46711
+Snippet:
+...ng to noise and ensuring that they converge safely at majority baseline levels.Figure 28: Detailed Confusion Matrix of the Best Tuned Model ConfigurationFigure 28 details the confusion matrix for the best-tuned model. The matrix shows that the tuned champion predicts target=0 (negative outcome) for almost all instances. Out of 10,000 test users, the model predicts a negative outcome for 9,985 profiles, yielding a test accuracy of 60.30% matching the majority baseline. The confusion matrix confirms that...
+--------------------------------------------------
+
+Keyword: "champion" at index 66340
+Snippet:
+...ority target (60.3%).Implemented imblearn.over_sampling.SMOTE natively in the training pipeline before model fitting.Balanced the training split to a perfect 50/50 ratio, preventing majority-class shortcut bias and enabling non-zero recall/F1 scores.Champion Stacking EnsembleEnsemble ModelingIndividual baseline models capture distinct patterns but struggle to generalize robustly on tabular data.Built a StackingClassifier combining XGBoost, LightGBM, and CatBoost with a balanced Logistic Regression meta-...
+--------------------------------------------------
+
+Keyword: "best model" at index 55964
+Snippet:
+...regular audits to enforce demographic parity.5.4 AutoML BenchmarkingTo verify that our manual modeling pipeline was optimal, we ran FLAML and PyCaret toolkits. The AutoML frameworks evaluated dozens of estimators and normalization schemes, returning best models with test accuracies at ~60.30% and ROC-AUC at ~0.50. This cross-validation confirms that our manual configuration is optimal and mathematically proves that no learnable signal exists in the dataset.5.5 Jupyter Notebook Structure and Code IndexSect...
+--------------------------------------------------
+
+Keyword: "best model" at index 63573
+Snippet:
+...nificant (p-value of 0.0004 < 0.05).SHAP Game-Theoretic ExplainabilityModel InterpretabilityStandard impurity feature importances only measure split magnitude, lacking directionality.Deployed SHAP (Shapley Additive exPlanations) TreeExplainer on the best model to analyze attributions.Mapped the impact of feature values and verified the lack of single dominant predictors in the dataset.Ethical Parity AuditMoral & Professional EthicsDating apps carry risk of algorithmic gender bias; model behavior across su...
+--------------------------------------------------

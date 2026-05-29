@@ -299,7 +299,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 # --- 6. CHAMPION MODEL ---
 st.markdown('<div class="section-label">CHAMPION MODEL</div>', unsafe_allow_html=True)
-st.subheader("Detailed Results: Best Tuned Model")
+st.subheader("Detailed Results: Best Tuned Model (Random Forest)")
 
 st.markdown("This is the detailed confusion matrix and classification report for the single best model found across all tuning runs.")
 

@@ -45,7 +45,7 @@
 | `README.md` | Main repository documentation file (this document) |
 | `notebooks/ML_dating_app_behaviour V1.ipynb` | Main Jupyter notebook — original baseline pipeline (115 cells, pristine baseline) |
 | `notebooks/ML_dating_app_behaviour v1 SVM bypass.ipynb` | SVM-Bypassed notebook — identical baseline but skips slow SVM fitting via joblib caching, saving runs to `models_bypass/` |
-| `notebooks/ML_dating_app_behaviour V2 (SVM bypass).ipynb` | **Champion Stacking notebook** — SMOTE training balance, 12 baseline/advanced models, hyperparameter search grids, and a Champion Stacking Ensemble |
+| `notebooks/ML_dating_app_behaviour V2 (SVM bypass).ipynb` | **Stacking notebook** — SMOTE training balance, 12 baseline/advanced models, hyperparameter search grids, and a Stacking Ensemble |
 | `notebooks/ML_dating_app_behaviour V3.ipynb` | **Advanced GPU-Accelerated Tabular notebook** — Injects dynamic hardware auto-detection (NVIDIA CUDA & AMD Radeon DirectML), custom PyTorch advanced architectures, and GPU-accelerated Optuna search grids. |
 | `notebooks/ML_dating_app_behaviour V4.ipynb` | **Advanced Robustness & Trustworthy AI notebook** — Injects 10 "Wow-Factor" flexes (GAT GNNs, SCARF self-supervision, Opacus differential privacy, Conformal predictions, MC Dropout, etc.). |
 | `notebooks/ML_dating_app_behaviour V5.ipynb` | **SOTA PhD-Level ML Pipeline notebook** — Injects advanced methodologies like OOD Rejection, TabPFN, Mixup, SHAP Interactions, and Microsoft DiCE. |
@@ -392,7 +392,7 @@ To drastically optimize iterative development and testing, the V3, V4, and V5 pi
 
 #### V3 Baseline Caching (`models_advanced/`)
 * All baseline outputs (`.joblib` files) are routed and saved dynamically to `models_advanced/`.
-* A `RETRAIN_BASELINE` flag allows the notebook to bypass the 10+ minute 14-model training loop entirely, loading the pre-trained weights and evaluations instantly in 0.5 seconds.
+* A `RETRAIN_BASELINE` flag allows the notebook to bypass the 10+ minute 16-model training loop entirely, loading the pre-trained weights and evaluations instantly in 0.5 seconds.
 
 #### V4 Deep Computation Caching (`models_v4_cache/`)
 Because the V4 "Wow-Factor" techniques (like Deep Learning, Optuna grids, and Conformal Prediction) are highly computationally expensive, we wrapped the 6 heaviest computational blocks in intelligent `os.path.exists()` caching barriers inside `models_v4_cache/`:
@@ -514,7 +514,7 @@ The dashboard contains **9 interactive workspaces** integrated directly into the
 
 | Requirement | Status |
 |---|---|
-| Min 5 ML models trained | ✅ Done (14 models) |
+| Min 5 ML models trained | ✅ Done (16 models) |
 | Hyperparameter tuning | ✅ Done (RandomizedSearchCV & 1000-trial Optuna grids) |
 | Model comparison table | ✅ Done |
 | Cross-validation | ✅ Done (5-fold) |
