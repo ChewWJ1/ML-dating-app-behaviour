@@ -444,12 +444,6 @@ For the V5 and V5.1 iterations, we integrated **9 cutting-edge methodologies** f
 8. **Probability Calibration & Reliability Diagrams:** We wrapped the champion model in Isotonic Regression to map raw confidence scores to empirical frequencies. We validated predictive uncertainty by plotting Calibration reliability curves and calculating Brier Score reductions.
 9. **Algorithmic Recourse (Microsoft DiCE):** To enforce algorithmic agency, we deployed the DiCE framework. For a user predicted to be "Ghosted", DiCE uses randomized optimization to find the minimal actionable alterations (e.g., target changes in bio length or engagement metrics) required to flip the prediction to "Matched".
 
-1. **Out-of-Distribution (OOD) Rejection System (Isolation Forest):** We implemented an unsupervised Isolation Forest at the end of preprocessing. It isolates anomalies by random feature selection and binary splits. By monitoring path lengths, the system flags and rejects out-of-distribution profile configurations at inference time to prevent downstream predictive failure.
-2. **Zero-Shot Tabular Transformers (TabPFN):** TabPFN is a prior-data fitted network pre-trained on millions of synthetic tabular datasets. It approximates the true Bayesian posterior in a single forward pass without requiring gradient descent or hyperparameter tuning. We deployed it using a subsampled prior support context of 1,000 training instances.
-3. **Advanced Regularization (Label Smoothing & Mixup):** We modified our PyTorch Sklearn-compatible wrapper's `fit` loop. It applies label smoothing (mapping binary labels 0/1 to 0.1/0.9) to prevent model overconfidence, and Mixup input interpolation (convex combinations of feature pairs and smooth labels) to regularize decision boundaries on noisy dating app data.
-4. **SHAP Joint Interaction Values:** Using the TreeExplainer framework, we computed the Shapley Interaction Index matrix for the champion tree ensemble. This splits feature contributions into main effects and joint pair attributions, mapping the precise mathematical synergy between top interacting features (e.g. `swipe_right_ratio` and `mutual_matches`).
-5. **Probability Calibration & Reliability Diagrams:** We wrapped the champion model in Isotonic Regression to map raw confidence scores to empirical frequencies. We validated predictive uncertainty by plotting Calibration reliability curves and calculating Brier Score reductions.
-6. **Algorithmic Recourse (Microsoft DiCE):** To enforce algorithmic agency, we deployed the DiCE framework. For a user predicted to be "Ghosted", DiCE uses randomized optimization to find the minimal actionable alterations (e.g., target changes in bio length or engagement metrics) required to flip the prediction to "Matched".
 
 ## 🌌 V4 Advanced Wow-Factor Methodologies (The "Flex" Edition)
 
@@ -570,4 +564,4 @@ The dashboard contains **9 interactive workspaces** integrated directly into the
 
 ---
 
-*Last updated: 28 May 2026*
+*Last updated: 29 May 2026*
