@@ -119,8 +119,7 @@ st.markdown(f"""
         max-width: 950px;
         margin: 0 auto;
         text-shadow: 0px 1px 2px rgba(0,0,0,0.5);
-        text-align: center;
-        white-space: normal;
+        text-align: justify;
     }}
     .hero-desc b {{ color: #a78bfa; font-weight: 700; }}
 
@@ -322,13 +321,7 @@ st.markdown("""
     <div class="hero-title">💘 Tying the (Data) Knot</div>
     <div class="hero-subtitle">Love, Life & Likes — SwipeIQ App</div>
     <p class="hero-desc">
-        Welcome to the official <b>SwipeIQ V2 Interactive Analytics Hub</b>. 
-        Developed as an academic capstone showcase, this platform hosts a 
-        <b>state of the art 15-stage machine learning pipeline</b> exploring <b>16+ baseline and advanced models</b>. 
-        By incorporating <b>Causal Discovery (DAGs)</b>, <b>Double Machine Learning (DML)</b>, 
-        <b>Graph Attention Networks (GNN)</b>, <b>Self-Supervised SCARF pre-training</b>, 
-        <b>TabPFN Zero-Shot Transformers</b>, and <b>Algorithmic Recourse (DiCE)</b>, 
-        we stress-test and visualize the mathematical predictability boundaries of programmatic human behavioral distributions.
+        Welcome to the official <b>SwipeIQ V2 Interactive Analytics Hub</b>. Developed as an academic capstone showcase, this platform hosts a <b>state of the art 15-stage machine learning pipeline</b> exploring <b>16+ baseline and advanced models</b>. By incorporating <b>Causal Discovery (DAGs)</b>, <b>Double Machine Learning (DML)</b>, <b>Graph Attention Networks (GNN)</b>, <b>Self-Supervised SCARF pre-training</b>, <b>TabPFN Zero-Shot Transformers</b>, and <b>Algorithmic Recourse (DiCE)</b>, we stress-test and visualize the mathematical predictability boundaries of programmatic human behavioral distributions.
     </p>
 </div>
 """, unsafe_allow_html=True)
