@@ -71,7 +71,7 @@ with tab1:
         <div class="kpi-value">19</div>
         <div class="kpi-footer">
           <span class="badge-up">V3 → V5.1</span>
-          <span class="kpi-sub">PhD-level methods</span>
+          <span class="kpi-sub">State-of-the-art methods</span>
         </div>
       </div>
       <div class="kpi-card amber">
@@ -527,7 +527,7 @@ with tab2:
 with tab3:
     st.markdown("""
     <div style="background:rgba(236,72,153,0.06); border:1px dashed rgba(236,72,153,0.3); border-radius:8px; padding:16px; font-size:13px; color:#f472b6; line-height:1.5; margin-bottom: 24px; margin-top: 10px;">
-        <strong>🌌 V5 PhD-Level Pipeline Summary:</strong><br>
+        <strong>🌌 V5 Pipeline Summary:</strong><br>
         This tab provides a quick reference of ALL advanced techniques implemented across V3 → V5.1 of the pipeline notebook.
     </div>
     """, unsafe_allow_html=True)
@@ -585,7 +585,7 @@ with tab3:
             </div>
             """, unsafe_allow_html=True)
 
-    st.markdown("### V5 & V5.1 — State-of-the-Art PhD-Level Methods")
+    st.markdown("### V5 & V5.1 — State-of-the-Art Methods")
     techniques_v5 = [
         ("🚀 Zero-Shot TabPFN", "Prior-data fitted network approximating Bayesian posterior in a single forward pass"),
         ("🎨 Label Smoothing & Mixup", "Training regularization against overconfidence with input interpolation"),
@@ -613,7 +613,7 @@ with tab3:
     ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     pipeline_img = os.path.join(ROOT_DIR, 'assets', 'pipeline_diagram.png')
     if os.path.exists(pipeline_img):
-        st.image(pipeline_img, caption="V5 PhD-Level ML Pipeline Architecture", use_container_width=True)
+        st.image(pipeline_img, caption="V5 State-of-the-art ML Pipeline Architecture", use_container_width=True)
 
 
 

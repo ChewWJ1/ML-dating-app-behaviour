@@ -326,6 +326,6 @@ def render_sidebar():
         st.markdown("**Task:** Binary classification")
         st.markdown("---")
         st.markdown(
-            '<p style="font-size:11px;color:#4b5563;">WIA1006/WID3006 · Universiti Malaya<br>Sem 2, 2025/2026</p>',
+            '<p style="font-size:11px;color:#4b5563;">WIA1006 · University of Malaya<br>Sem 2, 2025/2026</p>',
             unsafe_allow_html=True,
         )

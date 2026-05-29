@@ -323,7 +323,7 @@ st.markdown("""
     <p class="hero-desc">
         Welcome to the official <b>SwipeIQ V2 Interactive Analytics Hub</b>. 
         Developed as an academic capstone showcase, this platform hosts a 
-        <b>PhD-level 15-stage machine learning pipeline</b> exploring <b>16+ baseline and advanced models</b>. 
+        <b>state of the art 15-stage machine learning pipeline</b> exploring <b>16+ baseline and advanced models</b>. 
         By incorporating <b>Causal Discovery (DAGs)</b>, <b>Double Machine Learning (DML)</b>, 
         <b>Graph Attention Networks (GNN)</b>, <b>Self-Supervised SCARF pre-training</b>, 
         <b>TabPFN Zero-Shot Transformers</b>, and <b>Algorithmic Recourse (DiCE)</b>, 
@@ -780,7 +780,7 @@ with tab_team:
     st.markdown("""
     <div style="margin-top:16px; margin-bottom:24px;">
         <h3 style="font-family:'Outfit', sans-serif; font-weight:600; margin-bottom:4px; font-size:20px;">👥 FCSIT Research Group OCC 3</h3>
-        <p style="font-size:14px; color:#94a3b8; margin-top:0;">Universiti Malaya · OCC 6 · Allocation Matrix and Technical Ownership Breakdown</p>
+        <p style="font-size:14px; color:#94a3b8; margin-top:0;">University of Malaya · OCC 6 Group 3 · Allocation Matrix and Technical Ownership Breakdown</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -928,7 +928,7 @@ with tab_team:
         <div class="team-card-home" style="margin-top:20px; padding: 22px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(236,72,153,0.05)); height: 160px;">
             <div style="text-align: center;">
                 <div style="font-size: 32px; margin-bottom: 4px;">🎓</div>
-                <div style="font-family:'Outfit', sans-serif; font-size:16px; font-weight:700; color:#f1f5f9;">Universiti Malaya OCC 6</div>
+                <div style="font-family:'Outfit', sans-serif; font-size:16px; font-weight:700; color:#f1f5f9;">University of Malaya OCC 6</div>
                 <div style="font-size:13px; color:#94a3b8; font-weight:500;">Department of Artificial Intelligence</div>
                 <div style="font-size:11px; color:#64748b;">Faculty of Computer Science and Information Technology</div>
             </div>
@@ -961,7 +961,7 @@ with tab_diagrams:
 # ══════════════════════════════════════════════════════════════════════════════
 st.markdown("""
 <div style="text-align:center; color:#64748b; font-size:13px; padding:30px 0; border-top:1px solid rgba(255,255,255,0.06); margin-top: 40px;">
-    Universiti Malaya · FCSIT OCC 6 · SwipeIQ V2 Research Hub · Semester 2, Session 2025/2026
+    University of Malaya · FCSIT OCC 6 Group 3· SwipeIQ V2 Research Hub · Semester 2, Session 2025/2026
     <br>
     <p style="margin-top:10px; font-size:14.5px; color:#a78bfa;">👈 Select a stage from the sidebar or click any button above to begin auditing.</p>
 </div>

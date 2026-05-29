@@ -482,7 +482,7 @@ def render_sidebar():
         st.markdown("**Task:** Binary classification")
         st.markdown("---")
         st.markdown(
-            '<p style="font-size:11px;color:#4b5563;">WIA1006/WID3006 · Universiti Malaya<br>Sem 2, 2025/2026</p>',
+            '<p style="font-size:11px;color:#4b5563;">WIA1006 · University of Malaya<br>Sem 2, 2025/2026</p>',
             unsafe_allow_html=True,
         )
 
@@ -827,8 +827,8 @@ def render_footer():
     </style>
     <div class="global-footer-bar">
         <div class="footer-left">
-            <div class="footer-text-primary">🏛️ Department of Artificial Intelligence · Universiti Malaya</div>
-            <div class="footer-text-secondary">WIA1006 / WID3006 Machine Learning Assignment · FCSIT OCC 6 · Session 2025/2026</div>
+            <div class="footer-text-primary">🏛️ Department of Artificial Intelligence · University of Malaya</div>
+            <div class="footer-text-secondary">WIA1006 Machine Learning Assignment · FCSIT OCC 6 Group 3 · Session 2025/2026</div>
         </div>
         <div class="footer-right">
             <a class="footer-link" href="https://github.com/ChewWJ1/ML-dating-app-behaviour" target="_blank">🐙 GitHub Repository</a>

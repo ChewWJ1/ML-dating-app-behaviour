@@ -13,7 +13,7 @@ st.markdown("---")
 st.markdown("""
 <div style="background:rgba(59,130,246,0.06); border:1px dashed rgba(59,130,246,0.3); border-radius:8px; padding:16px; font-size:14px; color:#93c5fd; line-height:1.6; margin-bottom: 24px;">
     <strong>🤝 Team Formation and Collaboration Mechanisms</strong><br>
-    Our team consists of five members from OCC 10 of FCSIT, Universiti Malaya. We established this group based on a shared academic interest in applied machine learning pipelines. Communication was maintained through weekly Microsoft Teams synchronization meetings and in-person lab sessions. For source code management, we established a central GitHub repository and adopted a strict peer-review protocol for validating preprocessing and baseline models before merging into the master pipeline notebook.
+    Our team consists of five members from OCC 6 of FCSIT, University of Malaya. We established this group based on a shared academic interest in applied machine learning pipelines. Communication was maintained through weekly Microsoft Teams synchronization meetings and in-person lab sessions. For source code management, we established a central GitHub repository and adopted a strict peer-review protocol for validating preprocessing and baseline models before merging into the master pipeline notebook.
 </div>
 """, unsafe_allow_html=True)
 
