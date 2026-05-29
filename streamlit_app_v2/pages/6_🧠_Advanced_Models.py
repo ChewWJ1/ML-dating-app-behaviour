@@ -39,11 +39,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Add AI Process diagram
-ai_process_img = os.path.join(ROOT_DIR, "assets", "NotebookLM", "V5.1_SOTA_Pipeline_Cropped.jpg")
-if os.path.exists(ai_process_img):
-    st.image(ai_process_img, caption="Theoretical Framework: V5.1 state of the art ML Pipeline & Representation Process", use_container_width=True)
-    st.markdown("<br>", unsafe_allow_html=True)
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SECTION 1 — Deep Neural Architectures
