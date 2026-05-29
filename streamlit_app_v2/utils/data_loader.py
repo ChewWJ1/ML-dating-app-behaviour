@@ -17,9 +17,19 @@ _DATA_PATH_PRIMARY = os.path.join(ROOT_DIR, 'data', 'dating_app_behavior_dataset
 _DATA_PATH_FALLBACK = os.path.join(ROOT_DIR, 'dating_app_behavior_dataset_extended1.csv')
 DATA_PATH = _DATA_PATH_PRIMARY if os.path.exists(_DATA_PATH_PRIMARY) else _DATA_PATH_FALLBACK
 
-EDA_STATS_PATH = os.path.join(ROOT_DIR, 'eda_stats.json')
-CV_STATS_PATH = os.path.join(ROOT_DIR, 'cv_stats.json')
-FI_STATS_PATH = os.path.join(ROOT_DIR, 'feature_importances.json')
+MODELS_DIR = os.path.join(ROOT_DIR, 'models')
+
+_EDA_STATS_MODELS = os.path.join(MODELS_DIR, 'eda_stats.json')
+_EDA_STATS_ROOT = os.path.join(ROOT_DIR, 'eda_stats.json')
+EDA_STATS_PATH = _EDA_STATS_MODELS if os.path.exists(_EDA_STATS_MODELS) else _EDA_STATS_ROOT
+
+_CV_STATS_MODELS = os.path.join(MODELS_DIR, 'cv_stats.json')
+_CV_STATS_ROOT = os.path.join(ROOT_DIR, 'cv_stats.json')
+CV_STATS_PATH = _CV_STATS_MODELS if os.path.exists(_CV_STATS_MODELS) else _CV_STATS_ROOT
+
+_FI_STATS_MODELS = os.path.join(MODELS_DIR, 'feature_importances.json')
+_FI_STATS_ROOT = os.path.join(ROOT_DIR, 'feature_importances.json')
+FI_STATS_PATH = _FI_STATS_MODELS if os.path.exists(_FI_STATS_MODELS) else _FI_STATS_ROOT
 
 # V5 models directory
 MODELS_V5_DIR = os.path.join(ROOT_DIR, 'models_v5')
