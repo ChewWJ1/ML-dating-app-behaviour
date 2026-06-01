@@ -167,22 +167,51 @@ All 10 fixes were machine-verified by an automated post-patch verification scrip
 
 ---
 
+## 6a. Round 3 Fixes (Deep Audit)
+
+After the Round 2 retrain completed, a 14-category deep programmatic audit (`scripts/deep_audit.py`) scanned every cell in the notebook. It found 3 real issues (plus 1 false positive):
+
+### 6a.1 FLAML Stale Model (Cell 144)
+* **Problem:** FLAML was still trying to load the old V5 model from `../models/flaml_results.joblib` as a fallback. This model was trained on V5 feature columns which don't match V7, causing a column mismatch error.
+* **Fix:** Rewrote the entire FLAML cell cleanly. Removed the V5 fallback path. FLAML now trains from scratch on `X_train, y_train` (V7 features) with a 2-minute time budget, and caches to `models_v7/flaml_results.joblib`.
+
+### 6a.2 H-Statistic Hardcoded Fallback (Cell 149)
+* **Problem:** The Friedman H-statistic interaction cell had a hardcoded fallback loop: `for name in ['Random Forest (Tuned)', 'Random Forest', 'XGBoost (Tuned)', ...]`. This could select the wrong model.
+* **Fix:** Replaced with `for name in [best_name]:` to use the dynamically selected champion.
+
+### 6a.3 DiCE Hardcoded Fallback (Cell 173)
+* **Problem:** Same issue as 6a.2 — the DiCE counterfactual explanations cell had `for name in ['Random Forest', 'Random Forest (Tuned)', 'XGBoost', 'LightGBM']`.
+* **Fix:** Replaced with `for name in [best_name]:` to use the dynamically selected champion.
+
+### 6a.4 Cell 2 `!pip install` (False Positive)
+* **Problem:** Python's `compile()` flagged Cell 2 as a syntax error because it contains `!pip install ...` (Jupyter shell magic).
+* **Status:** False positive. Jupyter handles this correctly. No fix needed.
+
+**Stale caches deleted:** `h_stat.joblib`, `dice_recourse.joblib`, `pycaret_results.joblib`, and `flaml_results.joblib`.
+
+---
+
 ## 7. Final Results & Conclusion
 
-### Metrics After Full Pipeline Re-Engineering
+### Metrics After Full Pipeline Re-Engineering (Post Round 2 Retrain)
 After implementing the V7 Strict pipeline and removing all data leakage:
 
-| Metric     | Value   | Interpretation                                      |
-|------------|---------|-----------------------------------------------------|
-| ROC-AUC    | ~0.5045 | Indistinguishable from random chance (0.50)          |
-| F1 Score   | ~0.5684 | Near theoretical maximum for positive-class guessing |
-| Accuracy   | ~0.3971 | Below majority-class baseline (confirms F1 gaming)   |
+| Model | Accuracy | F1 | Precision | Recall | ROC-AUC |
+|-------|----------|-----|-----------|--------|---------|
+| XGBoost (Tuned) — Champion | 0.5706 | 0.2697 | 0.4152 | 0.1997 | **0.5058** |
+| KNN (Baseline) — Highest F1 | 0.4361 | 0.5356 | 0.3979 | 0.8191 | 0.5007 |
+| CatBoost (Tuned) | 0.5765 | 0.2002 | 0.4000 | 0.1335 | 0.5011 |
+| Decision Tree (Tuned) | 0.6004 | 0.0235 | 0.3934 | 0.0121 | 0.5041 |
+| SVM (Baseline) | 0.6030 | 0.0000 | 0.0000 | 0.0000 | 0.5143 |
+
+### Why ROC-AUC Is the Correct Selection Criterion
+KNN achieves the highest F1 (0.5356) by aggressively predicting "Positive" (Recall=0.82, Accuracy=0.44). However, F1 is gameable on imbalanced datasets. ROC-AUC is threshold-independent and cannot be inflated by guess-all-positive strategies. All models score ROC-AUC ≈ 0.50 (random chance), confirming zero discriminative ability. XGBoost is selected as champion by ROC-AUC (0.5058) among pipeline-compatible models.
 
 ### Why This Is Correct
 On a synthetic dataset with ~40% minority class and zero true predictive signal:
 * A model that predicts "Positive" for every instance achieves: `F1 = 2 × (0.4 × 1.0) / (0.4 + 1.0) = 0.5714`
-* XGBoost (Tuned) achieved `F1 = 0.5684` — almost exactly this theoretical ceiling.
-* `ROC-AUC = 0.5045` confirms the model has no genuine discriminative ability.
+* KNN's F1 of 0.5356 (with Recall=0.82) is mathematically consistent with aggressive positive guessing.
+* All ROC-AUC values cluster around 0.50, confirming no model has genuine discriminative ability.
 
 The dataset contains zero true predictive signal. The V7 pipeline correctly prevents any data leakage from artificially inflating the scores.
 
@@ -197,6 +226,9 @@ The dataset contains zero true predictive signal. The V7 pipeline correctly prev
 | `scripts/patch_v7_round2.py` | Phase 2: All 10 Round 2 fixes |
 | `scripts/verify_patches.py` | Automated verification of all 10 Round 2 fixes |
 | `scripts/audit_issues.py` | Locator script that finds every affected cell by issue number |
+| `scripts/deep_audit.py` | Phase 3: 14-category deep programmatic audit of every cell |
+| `scripts/fix_audit_issues.py` | Phase 3: Fixes for FLAML, H-statistic, and DiCE fallbacks |
+| `scripts/extract_results.py` | Extracts key outputs from notebook cells for review |
 
 ---
 
@@ -212,3 +244,5 @@ The dataset contains zero true predictive signal. The V7 pipeline correctly prev
 6. **The champion model is `XGBoost (Tuned)`.** It is selected dynamically via `best_name = max(eligible, key=lambda n: eligible[n]['roc_auc'])`. Do not hardcode model names.
 7. **Windows-specific issues:** `n_jobs=-1` can cause deadlocks with GPU-accelerated models. PyCaret must run with `use_gpu=False`. All Python scripts must use `-X utf8` flag due to Windows cp1252 encoding.
 8. **The dataset is synthetic.** ROC-AUC ≈ 0.50 is the *correct* result, not a bug. Do not attempt to "fix" model performance.
+9. **PyCaret and FLAML** are AutoML benchmarks. Their caches must be regenerated whenever the feature set changes. PyCaret must exclude SVM (`exclude=['svm']`) to avoid O(N³) deadlocks on 50k rows.
+10. **SHAP + XGBoost on Windows** triggers a known string-conversion bug (`could not convert string to float: '[5E-1]'`). The SHAP cell has a built-in fallback to LightGBM for interaction values only. This is expected behaviour.
