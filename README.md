@@ -43,6 +43,7 @@
 | File/Directory | Description |
 |---|---|
 | `README.md` | Main repository documentation file (this document) |
+| `reports/WIA1006_Assignment_Report_V8_Patched.docx` | **Final Project Report** — Comprehensive documentation of the ML methodology, findings, and evaluation. |
 | `notebooks/ML_dating_app_behaviour V1.ipynb` | Main Jupyter notebook — original baseline pipeline (115 cells, pristine baseline) |
 | `notebooks/ML_dating_app_behaviour v1 SVM bypass.ipynb` | SVM-Bypassed notebook — identical baseline but skips slow SVM fitting via joblib caching, saving runs to `models_bypass/` |
 | `notebooks/ML_dating_app_behaviour V2 (SVM bypass).ipynb` | **Stacking notebook** — SMOTE training balance, 12 baseline/advanced models, hyperparameter search grids, and a Stacking Ensemble |

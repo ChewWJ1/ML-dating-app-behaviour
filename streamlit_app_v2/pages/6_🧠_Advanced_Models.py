@@ -618,13 +618,8 @@ used with a simple linear probe.</p>
 </div>
 """, unsafe_allow_html=True)
 
-col1, col2 = st.columns(2)
-with col1:
-    show_plot(V8_PLOTS, '25_scarf_contrastive_learning_embeddings.png',
-              'SCARF Pre-training — Contrastive Loss Convergence')
-with col2:
-    show_plot(V8_PLOTS, '25_scarf_contrastive_learning_embeddings.png',
-              'SCARF Learned Embeddings (t-SNE Projection)')
+show_plot(V8_PLOTS, '25_scarf_contrastive_learning_embeddings.png',
+          'SCARF Pre-training Loss & Learned Embeddings (t-SNE)')
 
 st.markdown("""
 <div style="background:rgba(99,102,241,0.06); border:1px dashed rgba(99,102,241,0.3); border-radius:8px; padding:16px; font-size:13px; color:#818cf8; line-height:1.5; margin-top: 12px;">

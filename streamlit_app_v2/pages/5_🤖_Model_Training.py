@@ -29,7 +29,7 @@ def show_plot(directory, filename, caption=''):
 # --- HEADER ---
 st.title("🤖 Model Training & Evaluation")
 st.markdown("""
-After preprocessing and feature selection, we evaluate **16 distinct machine learning models** — spanning classical sklearn classifiers, 
+After preprocessing and feature selection, we evaluate **13 distinct machine learning models** — spanning classical sklearn classifiers, 
 gradient boosting frameworks, and custom PyTorch deep learning architectures — to establish comprehensive baselines and push performance boundaries.
 """)
 st.markdown("---")

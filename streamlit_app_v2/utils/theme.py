@@ -478,7 +478,7 @@ def render_sidebar():
         st.caption("ML Pipeline Dashboard")
         st.markdown("---")
         st.markdown("**Dataset:** Extended (50k × 25)")
-        st.markdown("**Models:** 16+ classifiers & deep nets")
+        st.markdown("**Models:** 13+ classifiers & deep nets")
         st.markdown("**Task:** Binary classification")
         st.markdown("---")
         st.markdown(

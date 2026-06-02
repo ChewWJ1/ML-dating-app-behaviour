@@ -60,7 +60,7 @@ with tab1:
           <div class="kpi-label">Models Trained</div>
           <div class="kpi-icon">🤖</div>
         </div>
-        <div class="kpi-value">16+</div>
+        <div class="kpi-value">13+</div>
         <div class="kpi-footer">
           <span class="badge-up">+ 4 PyTorch</span>
           <span class="kpi-sub">sklearn + deep learning</span>

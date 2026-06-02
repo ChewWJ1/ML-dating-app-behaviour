@@ -321,7 +321,7 @@ st.markdown("""
     <div class="hero-title">💘 Tying the (Data) Knot</div>
     <div class="hero-subtitle">Love, Life & Likes — SwipeIQ App</div>
     <p class="hero-desc">
-        Welcome to the official <b>SwipeIQ V2 Interactive Analytics Hub</b>. Developed as an academic capstone showcase, this platform hosts a <b>state of the art 15-stage machine learning pipeline</b> exploring <b>16+ baseline and advanced models</b>. By incorporating <b>Causal Discovery (DAGs)</b>, <b>Double Machine Learning (DML)</b>, <b>Graph Attention Networks (GNN)</b>, <b>Self-Supervised SCARF pre-training</b>, <b>TabPFN Zero-Shot Transformers</b>, and <b>Algorithmic Recourse (DiCE)</b>, we stress-test and visualize the mathematical predictability boundaries of programmatic human behavioral distributions.
+        Welcome to the official <b>SwipeIQ V2 Interactive Analytics Hub</b>. Developed as an academic capstone showcase, this platform hosts a <b>state of the art 15-stage machine learning pipeline</b> exploring <b>13+ baseline and advanced models</b>. By incorporating <b>Causal Discovery (DAGs)</b>, <b>Double Machine Learning (DML)</b>, <b>Graph Attention Networks (GNN)</b>, <b>Self-Supervised SCARF pre-training</b>, <b>TabPFN Zero-Shot Transformers</b>, and <b>Algorithmic Recourse (DiCE)</b>, we stress-test and visualize the mathematical predictability boundaries of programmatic human behavioral distributions.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -342,7 +342,7 @@ st.markdown("""
         <div class="metric-pill-sub">Nominal, Ordinal & Multi-hot Spaces</div>
     </div>
     <div class="metric-pill-card pink">
-        <div class="metric-pill-val">16+</div>
+        <div class="metric-pill-val">13+</div>
         <div class="metric-pill-lbl">Classifiers Evaluated</div>
         <div class="metric-pill-sub">Traditional, Deep Tabular & GNNs</div>
     </div>
@@ -409,7 +409,7 @@ with col_exec2:
     <div class="academic-box" style="border-left: 4px solid #ec4899;">
         <h4 style="color: #f472b6; margin-top:0; font-family:'Outfit', sans-serif; font-size:18px;">💡 Key Scientific Breakthroughs & Production Paths</h4>
         <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 12px;">
-            <b>The Predictability Limit:</b> While our 15-stage pipeline exhibits complete structural integrity, all 16 evaluated classifiers (including GAT GNNs, SCARF self-supervised contrastive nets, and TabPFN Zero-Shot Transformers) converge directly at the majority class baseline of <b>60.30% accuracy (ROC-AUC ≈ 0.50)</b>.
+            <b>The Predictability Limit:</b> While our 15-stage pipeline exhibits complete structural integrity, all 13 evaluated classifiers (including GAT GNNs, SCARF self-supervised contrastive nets, and TabPFN Zero-Shot Transformers) converge directly at the majority class baseline of <b>60.30% accuracy (ROC-AUC ≈ 0.50)</b>.
         </p>
         <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 12px;">
             This convergence represents a crucial, mathematically honest research finding. It mathematically proves the <b>absence of predictive signal</b> within typical structured profile attributes (such as zodiac sign, swipe ratio, or demographic variables). 
@@ -743,7 +743,7 @@ with tab_journey:
             <div class="pipeline-card">
                 <div class="pipeline-card-num">Stage 04</div>
                 <div class="pipeline-card-title">🤖 Model Training</div>
-                <div class="pipeline-card-desc">AutoML base-line validations, 16 distinct classifiers, and interactive decision boundary contours.</div>
+                <div class="pipeline-card-desc">AutoML base-line validations, 13 distinct classifiers, and interactive decision boundary contours.</div>
                 <span class="pipeline-card-tag tag-core">Core</span>
             </div>
         </a>

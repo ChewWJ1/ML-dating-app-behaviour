@@ -98,7 +98,7 @@ Out of 50,000 records, the target variable consists of 19,850 positive connectio
 **4.0 Methodology and Preprocessing**
 
 **4.1 Causal Structure Discovery**
-We map a Directed Acyclic Graph (DAG) using the PC algorithm (with kci test) to discover confounding loops, ensuring models are robust to spurious associations.
+We mapped a Directed Acyclic Graph (DAG) using the PC algorithm (with a non-linear KCI conditional independence test) to discover the underlying data generation process and identify confounding loops. The resulting DAG and adjacency matrix are notably sparse, revealing only a direct causal link between profile picture count and age, alongside undirected associations with target and messaging behaviors. Crucially, no direct causal pathways exist from standard app engagement metrics (e.g., app usage time, likes received) to the target match outcome. This structural sparseness mathematically confirms our hypothesis that superficial demographic and behavioural features lack the causal signal necessary to deterministically drive matchmaking success, validating the models' convergence to the baseline accuracy.
 
 ![Causal Structure Discovery DAG](assets/v8 plots/figure_009.png)
 *Figure 9: Directed Acyclic Graph (DAG) Recovered via PC Algorithm.*
@@ -185,8 +185,8 @@ We trained models with strict $(\epsilon, \delta)$ privacy guarantees.
 ![SCARF Embeddings t-SNE](assets/v8 plots/figure_028.png)
 *Figure 28: SCARF Pre-trained Embeddings t-SNE Projection.*
 
-![TabPFN Zero-Shot Decision Boundaries](assets/v8 plots/figure_029.png)
-*Figure 29: TabPFN Zero-Shot Prior-Data Fitted Network Boundaries.*
+  ![All Models Ranked by ROC-AUC Score](assets/v8 plots/figure_029.png)
+  *Figure 29: All Models Ranked by ROC-AUC Score (Green = Tuned, Gray = Baseline).*
 
 ---
 
