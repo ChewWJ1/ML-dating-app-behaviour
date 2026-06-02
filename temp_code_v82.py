@@ -1,29 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # 💘 Tying the Data Knot: Predicting Meaningful Connections (V5 Pipeline)
-# ### WIA1006/WID3006 Machine Learning — Group Assignment
-# **Sem 2, Session 2025/2026 | FCSIT, Universiti Malaya**
-# 
-# ---
-# **Project Goal:** Predict whether a dating app user will achieve a **meaningful connection** based on demographic profile and in-app behaviour.
-# This notebook implements an advanced machine learning pipeline, incorporating robust feature engineering, conformal prediction, causality, and adversarial testing.
-
-# ## 📦 Section 1: Environment Setup & Library Installation
-# Installing required libraries, setting up the computing environment, and configuring GPU acceleration.
-# 
-# ### ⚡ AMD Radeon GPU Acceleration Setup
-# *Activating AMD CPU + Radeon GPU acceleration using DirectML.*
-
-# In[1]:
-
-
 # Install required packages (run once in Colab)
-get_ipython().system('pip install -q pandas numpy matplotlib seaborn scikit-learn xgboost imbalanced-learn mapie category-encoders boruta causal-learn opacus lime fairlearn shap optuna statsmodels matplotlib-venn torch_geometric tabpfn dice-ml shap')
-
-
-# In[2]:
-
+!pip install -q pandas numpy matplotlib seaborn scikit-learn xgboost imbalanced-learn mapie category-encoders boruta causal-learn opacus lime fairlearn shap optuna statsmodels matplotlib-venn torch_geometric tabpfn dice-ml shap
 
 def check_cuda_working():
     import torch
@@ -44,7 +20,7 @@ def get_best_pytorch_device():
     if check_cuda_working():
         print("🚀 [Hardware Active]: NVIDIA GPU via CUDA")
         return torch.device("cuda:0")
-
+    
     # 2. AMD Radeon GPU Acceleration (via DirectML)
     try: 
         import torch_directml
@@ -53,12 +29,12 @@ def get_best_pytorch_device():
         return dml_device
     except ImportError:
         pass
-
+        
     # 3. Apple Silicon GPU Acceleration
     if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
         print("🚀 [Hardware Active]: Apple Silicon GPU via MPS")
         return torch.device("mps")
-
+        
     # 4. Standard Multi-Threaded CPU Fallback
     print("💻 [Hardware Active]: Standard CPU Fallback")
     return torch.device("cpu")
@@ -87,10 +63,6 @@ def get_tree_acceleration_config():
 
 TREE_CONFIG = get_tree_acceleration_config()
 
-
-# In[3]:
-
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -111,14 +83,6 @@ plt.rcParams['font.family'] = 'DejaVu Sans'
 
 RANDOM_STATE = 42
 print('Libraries loaded successfully')
-
-
-# ## 📂 Section 2: Data Loading & Schema Verification
-# Importing the raw dating app behaviour dataset and examining its structure.
-
-# In[4]:
-
-
 # ------------------------------------------------------------------
 # Dataset Path Setup (Local)
 # ------------------------------------------------------------------
@@ -127,55 +91,18 @@ DATA_PATH = '../data/dating_app_behavior_dataset_extended1.csv'
 df_raw = pd.read_csv(DATA_PATH)
 print(f'Dataset loaded: {df_raw.shape[0]:,} rows x {df_raw.shape[1]} columns')
 df_raw.head()
-
-
-# In[5]:
-
-
 # Quick column overview
 print('Column names and dtypes:')
 for col in df_raw.columns:
     print(f'  {col:<30} dtype={df_raw[col].dtype}')
-
-
-# ## 🔍 Section 3: Exploratory Data Analysis (EDA)
-# Investigating distributions, identifying anomalies, and analyzing feature interactions.
-
-# ### 3.1 Basic Info & Statistics
-# *Inspecting dataset shape, column names, data types, and general descriptive statistics.*
-
-# In[6]:
-
-
 df_raw.info()
-
-
-# In[7]:
-
-
 df_raw.describe(include='all').T
-
-
-# ### 3.2 Missing Values & Duplicates
-# *Identifying null values and duplicate rows in the dataset.*
-
-# In[8]:
-
-
 missing = df_raw.isnull().sum()
 print('Missing values per column:')
 print(missing[missing > 0] if missing.any() else 'No missing values found')
 
 dups = df_raw.duplicated().sum()
 print(f'\nDuplicate rows: {dups}')
-
-
-# ### 3.3 Target Variable Distribution (match_outcome)
-# *Analyzing the class distribution of match outcomes in the raw data.*
-
-# In[9]:
-
-
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 # All 10 classes
@@ -203,14 +130,6 @@ plt.show()
 
 print(f'Positive (meaningful connection):    {binary_counts["Positive"]:,} ({binary_counts["Positive"]/len(df_raw)*100:.1f}%)')
 print(f'Negative (no meaningful connection): {binary_counts["Negative"]:,} ({binary_counts["Negative"]/len(df_raw)*100:.1f}%)')
-
-
-# ### 3.4 Categorical Feature Distributions
-# *Visualizing the frequencies and proportions of categorical attributes.*
-
-# In[10]:
-
-
 cat_cols_eda = ['gender', 'sexual_orientation', 'location_type',
                 'income_bracket', 'education_level', 'body_type',
                 'relationship_intent', 'swipe_time_of_day', 'zodiac_sign']
@@ -228,14 +147,6 @@ for i, col in enumerate(cat_cols_eda):
 plt.suptitle('Categorical Feature Distributions', fontsize=16, fontweight='bold', y=1.01)
 plt.tight_layout()
 plt.show()
-
-
-# ### 3.5 Numerical Feature Distributions
-# *Checking the distributions and skewness of continuous behavioral features.*
-
-# In[11]:
-
-
 num_cols_eda = ['age', 'height_cm', 'weight_kg', 'app_usage_time_min',
                 'swipe_right_ratio', 'likes_received',
                 'profile_pics_count', 'bio_length', 'message_sent_count',
@@ -254,14 +165,6 @@ for i, col in enumerate(num_cols_eda):
 plt.suptitle('Numerical Feature Distributions', fontsize=16, fontweight='bold', y=1.01)
 plt.tight_layout()
 plt.show()
-
-
-# ### 3.6 Outlier Detection via Boxplots
-# *Identifying extreme values and outliers in numerical columns.*
-
-# In[12]:
-
-
 fig, axes = plt.subplots(3, 4, figsize=(20, 12))
 axes = axes.flatten()
 
@@ -275,14 +178,6 @@ for i, col in enumerate(num_cols_eda):
 plt.suptitle('Outlier Detection — Boxplots', fontsize=16, fontweight='bold', y=1.01)
 plt.tight_layout()
 plt.show()
-
-
-# ### 3.7 Feature vs Target: Numerical Columns by Outcome
-# *Analyzing how numerical user attributes vary across different match outcomes.*
-
-# In[13]:
-
-
 # Create temporary EDA dataframe with binary outcome label
 positive_outcomes_eda = {'Mutual Match', 'Instant Match', 'Date Happened', 'Relationship Formed'}
 df_eda = df_raw.copy()
@@ -305,14 +200,6 @@ for i, col in enumerate(num_cols_eda):
 plt.suptitle('Numerical Features by Match Outcome', fontsize=16, fontweight='bold', y=1.01)
 plt.tight_layout()
 plt.show()
-
-
-# ### 3.8 Feature vs Target: Categorical Columns by Outcome
-# *Evaluating positive match rates across different levels of categorical attributes.*
-
-# In[14]:
-
-
 # Stacked percentage bar charts — shows positive rate per category
 cat_subset = ['gender', 'sexual_orientation', 'location_type',
               'income_bracket', 'relationship_intent', 'body_type']
@@ -339,14 +226,6 @@ for i, col in enumerate(cat_subset):
 plt.suptitle('Positive Match Rate by Categorical Feature', fontsize=16, fontweight='bold', y=1.01)
 plt.tight_layout()
 plt.show()
-
-
-# ### 3.9 Correlation Heatmap (Numerical Features)
-# *Visualizing linear correlations between continuous behavioural features.*
-
-# In[15]:
-
-
 corr_matrix = df_raw[num_cols_eda].corr()
 
 plt.figure(figsize=(12, 9))
@@ -358,14 +237,6 @@ plt.xticks(rotation=45, ha='right', fontsize=9)
 plt.yticks(fontsize=9)
 plt.tight_layout()
 plt.show()
-
-
-# ### 3.10 Interest Tags Analysis
-# *Extracting and analyzing the frequencies of user interest tags.*
-
-# In[16]:
-
-
 # Flatten all interest tags and count frequency
 all_tags = [tag.strip() for tags in df_raw['interest_tags'].dropna() for tag in tags.split(',')]
 tag_counts = Counter(all_tags)
@@ -380,20 +251,6 @@ plt.gca().invert_yaxis()
 plt.tight_layout()
 plt.show()
 print(f'Total unique interest tags: {len(tag_counts)}')
-
-
-# ## 🧹 Section 4: Data Preprocessing & Feature Engineering
-# Cleaning raw data, performing causal discovery, encoding categorical features, and engineering new predictive indicators.
-
-# ### 4.1 Causal Structure Discovery
-# *Applying the PC algorithm for constraint-based causal structure discovery to infer directed relationships.*
-
-# ### 🔍 Causal Discovery — Going Beyond Correlation
-# *Using constraint-based causal discovery to map out the underlying Directed Acyclic Graph (DAG) among user behavior features.*
-
-# In[17]:
-
-
 import os
 # pip install causal-learn
 from causallearn.search.ConstraintBased.PC import pc
@@ -472,10 +329,10 @@ def draw_custom_dag(adj_matrix, labels, save_path):
     angles = np.linspace(0, 2*np.pi, n, endpoint=False) + np.pi/2
     x = np.cos(angles)
     y = np.sin(angles)
-
+    
     fig, ax = plt.subplots(figsize=(10, 10))
     ax.set_aspect('equal')
-
+    
     # Draw edges
     for i in range(n):
         for j in range(n):
@@ -490,7 +347,7 @@ def draw_custom_dag(adj_matrix, labels, save_path):
                 y_start = y[i] + (dy/dist) * shorten
                 x_end = x[j] - (dx/dist) * shorten
                 y_end = y[j] - (dy/dist) * shorten
-
+                
                 ax.annotate(
                     "", xy=(x_end, y_end), xytext=(x_start, y_start),
                     arrowprops=dict(arrowstyle="->", color="#3b82f6", lw=2.5, mutation_scale=20)
@@ -506,7 +363,7 @@ def draw_custom_dag(adj_matrix, labels, save_path):
                     y_start = y[i] + (dy/dist) * shorten
                     x_end = x[j] - (dx/dist) * shorten
                     y_end = y[j] - (dy/dist) * shorten
-
+                    
                     ax.plot([x_start, x_end], [y_start, y_end], color="#6b7280", lw=2, linestyle="--")
             elif val == 1 and adj_matrix[j, i] == 1:
                 # Bidirected edge i <-> j
@@ -519,12 +376,12 @@ def draw_custom_dag(adj_matrix, labels, save_path):
                     y_start = y[i] + (dy/dist) * shorten
                     x_end = x[j] - (dx/dist) * shorten
                     y_end = y[j] - (dy/dist) * shorten
-
+                    
                     ax.annotate(
                         "", xy=(x_end, y_end), xytext=(x_start, y_start),
                         arrowprops=dict(arrowstyle="<->", color="#ef4444", lw=2, mutation_scale=15)
                     )
-
+    
     # Draw nodes
     for i in range(n):
         ax.text(
@@ -533,7 +390,7 @@ def draw_custom_dag(adj_matrix, labels, save_path):
             bbox=dict(boxstyle="round,pad=0.5", fc="#f3f4f6", ec="#9ca3af", lw=1.5),
             fontsize=9, fontweight="bold", color="#1f2937"
         )
-
+        
     ax.axis('off')
     plt.tight_layout()
     plt.savefig(save_path, dpi=150, bbox_inches='tight')
@@ -558,25 +415,6 @@ plt.title('Causal Discovery: Inferred Directed Relationships (PC Algorithm)',
 plt.tight_layout()
 plt.savefig(os.path.join(reports_dir, 'causal_adjacency.png'), dpi=150, bbox_inches='tight')
 plt.show()
-
-
-# ### 4.2 Causal Inference via Double Machine Learning (DML)
-# *Estimating the Average Treatment Effect (ATE) of profile pictures on matching probability with Selection Bias control.*
-# 
-# While the PC Algorithm allows us to discover the qualitative causal directed acyclic graph (DAG), it does not quantify the **causal treatment effect** of our actions. In dating platforms, understanding whether profile effort (e.g. uploading more profile pictures) *causes* more matches is essential.
-# 
-# To estimate this, we implement **Double Machine Learning (DML)**. Simple regressions suffer from selection bias because location and income are confounders. DML solves this via a two-stage residual estimation:
-# 1. Residual out confounders from treatment using a classifier: $\tilde{T} = T - P(T|W)$
-# 2. Residual out confounders from outcome using a classifier: $\tilde{Y} = Y - E(Y|W)$
-# 3. Regress outcome residuals on treatment residuals: $\tilde{Y} = \theta \tilde{T}$ to isolate the **Average Treatment Effect (ATE)**.
-# 
-# We calculate the p-value and estimate the **95% Bootstrap Confidence Interval** to establish causal significance with PhD-level statistical rigor.
-# 
-# > [!NOTE]  
-# > **Performance Optimization:** This causal modeling block runs 100 bootstrap iterations. It is protected by a high-speed `joblib` caching layer (`../models_v8/dml_causal.joblib`). Subsequent runs skip model fitting and bootstrap estimation entirely, loading the ATE coefficient, bootstrap standard errors, and p-values instantly in **0.01 seconds**.
-
-# In[18]:
-
 
 # --- V5.1 CAUSAL TREATMENT EFFECTS: DOUBLE MACHINE LEARNING (DML) ---
 import numpy as np
@@ -651,13 +489,13 @@ else:
         boot_Y_res = Y_res[idx]
         bm = LinearRegression(fit_intercept=False).fit(boot_T_res.reshape(-1, 1), boot_Y_res)
         boot_ates.append(bm.coef_[0])
-
+        
     se = np.std(boot_ates)
     ci_low = ate - 1.96 * se
     ci_high = ate + 1.96 * se
     z_score = ate / se
     p_val = 2 * (1 - norm.cdf(abs(z_score)))
-
+    
     # Save cache
     joblib.dump({
         'ate': ate,
@@ -680,16 +518,6 @@ else:
     print("⚠️ Conclusion: Causal effect is not statistically distinct from zero after controlling for location/income brackets.")
 print("========================================================")
 
-
-# > [!TIP]
-# > **Report Insights:** Discuss how the causal DAG reveals that `mutual_matches` may be a **collider** variable (caused by both user behaviour and match outcomes), making it problematic as a predictor. This shows deep causal reasoning.
-
-# ### 4.3 Create Working Copy & Drop Redundant Columns
-# *Creating a processing dataframe and removing redundant categorical columns.*
-
-# In[19]:
-
-
 df = df_raw.copy()
 
 # Drop label/string versions of numeric columns (they add no new information)
@@ -699,14 +527,6 @@ df.drop(columns=['app_usage_time_label', 'swipe_right_label'], inplace=True)
 
 print(f'Shape after dropping redundant columns: {df.shape}')
 print('Remaining columns:', df.columns.tolist())
-
-
-# ### 4.4 Create Binary Target Variable
-# *Mapping the multi-class match outcome into a binary label (0 = No Match, 1 = Meaningful Connection).*
-
-# In[20]:
-
-
 # Define positive outcome = any form of meaningful connection
 positive_outcomes = {'Mutual Match', 'Instant Match', 'Date Happened', 'Relationship Formed'}
 
@@ -720,14 +540,6 @@ for k, v in vc.items():
 
 # Drop the original string target — no longer needed for modeling
 df.drop(columns=['match_outcome'], inplace=True)
-
-
-# ### 4.5 Encode Ordinal Feature — income_bracket
-# *Mapping income brackets (7 levels) into a simplified 3-tier ordinal encoding.*
-
-# In[21]:
-
-
 print('income_bracket unique values:', df['income_bracket'].unique())
 
 # Consolidate 7 granular levels into 3 interpretable tiers
@@ -747,14 +559,6 @@ print('After mapping:', df['income_bracket'].value_counts().to_dict())
 df['income_enc'] = OrdinalEncoder(categories=[['Low', 'Middle', 'High']]).fit_transform(df[['income_bracket']])
 df.drop(columns=['income_bracket'], inplace=True)
 print('income_enc values:', sorted(df['income_enc'].unique()))
-
-
-# ### 4.6 Encode Ordinal Feature — education_level
-# *Mapping education levels (9 levels) into a simplified 3-tier ordinal encoding.*
-
-# In[22]:
-
-
 print('education_level unique values:', df['education_level'].unique())
 
 # Note: CSV contains curly apostrophes (e.g. Bachelor\u2019s), so we match by keywords
@@ -775,14 +579,6 @@ print('After mapping:', df['education_level'].value_counts().to_dict())
 df['education_enc'] = OrdinalEncoder(categories=[['Low', 'Middle', 'High']]).fit_transform(df[['education_level']])
 df.drop(columns=['education_level'], inplace=True)
 print('education_enc values:', sorted(df['education_enc'].unique()))
-
-
-# ### 4.7 One-Hot Encode Nominal Categorical Features
-# *Encoding unordered nominal features into dummy variables.*
-
-# In[23]:
-
-
 # These features have no natural order — use one-hot encoding
 nominal_cols = [
     'gender',
@@ -799,14 +595,6 @@ df = pd.get_dummies(df, columns=nominal_cols, drop_first=False, dtype=int)
 ohe_cols = [c for c in df.columns if any(c.startswith(n + '_') for n in nominal_cols)]
 print(f'Shape after one-hot encoding: {df.shape}')
 print(f'One-hot encoded columns added: {len(ohe_cols)}')
-
-
-# ### 4.8 Multi-Hot Encode Interest Tags
-# *Transforming comma-separated interest lists into a multi-hot binary matrix.*
-
-# In[24]:
-
-
 # Each user has 3 interests (comma-separated) — create binary columns per unique tag
 mlb = MultiLabelBinarizer()
 interests_split = df['interest_tags'].str.split(', ')
@@ -820,14 +608,6 @@ df.drop(columns=['interest_tags'], inplace=True)
 
 print(f'Interest tags encoded: {len(mlb.classes_)} unique tags')
 print(f'Shape after interest encoding: {df.shape}')
-
-
-# ### 4.9 Advanced Feature Engineering (V5 Pipeline)
-# *Creating interaction terms, activity ratios, and log transforms for behavioral metrics.*
-
-# In[25]:
-
-
 df['engagement_score'] = df['likes_received'] * df['swipe_right_ratio'] * df['message_sent_count']
 df['profile_completeness'] = df['profile_pics_count'] * df['bio_length']
 df['activity_intensity'] = df['app_usage_time_min'] * df['emoji_usage_rate']
@@ -836,13 +616,6 @@ df['late_night_user'] = ((df['last_active_hour'] >= 22) | (df['last_active_hour'
 
 for col in ['likes_received', 'message_sent_count', 'bio_length', 'app_usage_time_min']:
     df[f'{col}_log'] = np.log1p(df[col])
-
-
-# ### 4.10 Normalize Numerical Features with RobustScaler
-# *Scaling continuous variables using RobustScaler to minimize the influence of outliers.*
-
-# In[26]:
-
 
 from sklearn.preprocessing import RobustScaler
 numeric_cols = [
@@ -863,39 +636,12 @@ print('Scaling deferred to Section 5.1 to prevent data leakage.')
 # NOTE: Actual RobustScaler fitting is deferred to Section 5.1 (post-split) to prevent data leakage.
 # print('\nPost-normalization stats (mean~0, std~1):')
 
-
-# ### 4.11 Out-of-Distribution (OOD) Rejection Guardrail
-# *Implementing an unsupervised Isolation Forest input guardrail to detect and reject anomalous profiles.*
-# 
-# In high-stakes, human-centric systems like dating recommendations, deploying a machine learning model without an input guardrail is risky. Adversarial, corrupted, or highly anomalous profile data can lead to unpredictable predictions. 
-# 
-# To solve this, we implement a **production-grade Out-of-Distribution (OOD) Rejection Guardrail** using an **Isolation Forest**. This unsupervised algorithm isolates observations by randomly selecting a feature and then randomly selecting a split value between the maximum and minimum values of the selected feature. Recursive partitioning can be represented by a tree structure, where the number of splittings required to isolate a sample is equivalent to the path length from the root node to the terminating node. Anomalous profiles require much fewer splits to isolate, resulting in shorter path lengths.
-# 
-# If an incoming user profile has an anomaly score below the dynamic threshold (offset), the system rejects the input and flags it for manual review or default recommendations, rather than serving a potentially erroneous model prediction.
-
-# ### 4.12 Final Preprocessed Dataset Overview
-# *Reviewing the dimensions and structure of the fully preprocessed dataset.*
-
-# In[27]:
-
-
 print(f'Final dataset shape: {df.shape}')
 print(f'Total features: {df.shape[1] - 1}  |  Target column: target')
 print(f'\nMissing values after preprocessing: {df.isnull().sum().sum()}')
 print(f'\nData types:')
 print(df.dtypes.value_counts())
 df.head(3)
-
-
-# ## 🎯 Section 5: Feature Selection
-# Identifying and selecting the most predictive features using univariate and wrapper methods.
-
-# ### 5.1 Prepare Feature Matrix & Target Vector
-# *Separating features from the target label and verifying shapes.*
-
-# In[28]:
-
-
 X = df.drop(columns=['target'])
 y = df['target']
 
@@ -913,11 +659,6 @@ print(f'\nClass balance:')
 print(y.value_counts().rename({0: 'Negative', 1: 'Positive'}))
 print(f"\n✅ Split data into Train ({X_train.shape}) and Test ({X_test.shape})")
 print("✅ Scaled numeric columns strictly after splitting")
-
-
-# In[29]:
-
-
 # --- V5 METHODOLOGY 1: OUT-OF-DISTRIBUTION (OOD) REJECTION GUARDRAIL ---
 from sklearn.ensemble import IsolationForest
 import numpy as np
@@ -975,13 +716,6 @@ plt.legend(fontsize=11, loc='upper left')
 plt.tight_layout()
 plt.show()
 
-
-# ### 5.2 ANOVA F-Score Feature Selection (SelectKBest)
-# *Selecting features based on univariate linear correlation with the target variable.*
-
-# In[30]:
-
-
 selector_f = SelectKBest(score_func=f_classif, k='all')
 selector_f.fit(X_train, y_train)
 
@@ -993,11 +727,6 @@ f_scores = pd.DataFrame({
 
 print('Top 25 features by ANOVA F-Score:')
 print(f_scores.head(25).to_string(index=False))
-
-
-# In[31]:
-
-
 top25_f = f_scores.head(25)
 
 plt.figure(figsize=(12, 8))
@@ -1007,14 +736,6 @@ plt.xlabel('ANOVA F-Score', fontsize=11)
 plt.title('Top 25 Features — ANOVA F-Score (vs match_outcome)', fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.show()
-
-
-# ### 5.3 Boruta Feature Selection
-# *Running all-relevant feature selection using shadow features and random forests.*
-
-# In[32]:
-
-
 import os, joblib
 os.makedirs('../models_v8', exist_ok=True)
 cache_file_boruta = '../models_v8/boruta_support.joblib'
@@ -1022,7 +743,7 @@ cache_file_boruta = '../models_v8/boruta_support.joblib'
 try:
     from boruta import BorutaPy
     from sklearn.ensemble import RandomForestClassifier
-
+    
     if os.path.exists(cache_file_boruta):
         print("⏭️  Loading cached Boruta feature selection...")
         boruta_support = joblib.load(cache_file_boruta)
@@ -1033,17 +754,10 @@ try:
         feat_selector.fit(X_train.values, y_train.values)
         boruta_support = feat_selector.support_
         joblib.dump(boruta_support, cache_file_boruta)
-
+        
     print("Boruta confirmed features:", X.columns[boruta_support].tolist())
 except Exception as e:
     print(f"Boruta skipped: {e}")
-
-
-# ### 5.4 Mutual Information Feature Selection
-# *Measuring non-linear dependency between features and the target variable.*
-
-# In[33]:
-
 
 mi_scores = mutual_info_classif(X_train, y_train, random_state=RANDOM_STATE)
 
@@ -1054,11 +768,6 @@ mi_df = pd.DataFrame({
 
 print('Top 25 features by Mutual Information:')
 print(mi_df.head(25).to_string(index=False))
-
-
-# In[34]:
-
-
 top25_mi = mi_df.head(25)
 
 plt.figure(figsize=(12, 8))
@@ -1068,14 +777,6 @@ plt.xlabel('Mutual Information Score', fontsize=11)
 plt.title('Top 25 Features — Mutual Information Score (vs match_outcome)', fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.show()
-
-
-# ### 5.5 Select Final Feature Set
-# *Taking the union of top-40 features from ANOVA and Mutual Information selections.*
-
-# In[35]:
-
-
 # Keep union of top-40 features from both F-score and Mutual Information rankings
 top_f_features  = set(f_scores.head(40)['feature'])
 top_mi_features = set(mi_df.head(40)['feature'])
@@ -1087,17 +788,6 @@ print(selected_features)
 X_train_selected = X_train[selected_features]
 X_test_selected = X_test[selected_features]
 print(f'\nX_train_selected shape: {X_train_selected.shape}')
-
-
-# ## 📐 Section 6: Dimensionality Reduction — PCA
-# Reducing feature space dimensions while preserving maximum variance.
-
-# ### 6.1 Explained Variance Analysis
-# *Evaluating how many components are required to capture the dataset's variance.*
-
-# In[36]:
-
-
 pca_full = PCA(random_state=RANDOM_STATE)
 pca_full.fit(X_train_selected)
 
@@ -1137,14 +827,6 @@ plt.show()
 print(f'Components needed for 90% variance: {n_components_90}')
 print(f'Components needed for 95% variance: {n_components_95}')
 print(f'Total features before PCA:          {X_train_selected.shape[1]}')
-
-
-# ### 6.2 Apply PCA (Retain 95% Explained Variance)
-# *Projecting selected features onto a lower-dimensional principal component space.*
-
-# In[37]:
-
-
 # We keep BOTH feature sets to compare models with and without PCA
 N_COMPONENTS = n_components_95
 
@@ -1158,16 +840,8 @@ X_test_pca = pd.DataFrame(X_test_pca, columns=[f'PC{i+1}' for i in range(N_COMPO
 print(f'X_train_selected shape (original features): {X_train_selected.shape}')
 print(f'X_train_pca shape      (PCA-reduced):       {X_train_pca.shape}')
 print(f'Variance retained: {pca.explained_variance_ratio_.sum()*100:.2f}%')
-
-
-# ### 6.3 PCA Biplot — First Two Principal Components
-# *Visualizing user distribution and feature loadings along the first two principal components.*
-
-# In[38]:
-
-
 plt.figure(figsize=(9, 6))
-sample_idx = np.random.default_rng(RANDOM_STATE).choice(len(X_train_pca), size=3000, replace=False)
+sample_idx = np.arange(len(X_train_pca))
 colors_map = {1: '#4CAF50', 0: '#F44336'}
 
 for label, grp_label in [(1, 'Positive'), (0, 'Negative')]:
@@ -1184,14 +858,6 @@ plt.title('PCA Biplot — PC1 vs PC2 (3,000 sample points)', fontsize=13, fontwe
 plt.legend(fontsize=10)
 plt.tight_layout()
 plt.show()
-
-
-# ## ✂️ Section 7: Train / Test Split & Class Resampling
-# Splitting the dataset into train/test sets and applying SMOTE to balance the target classes.
-
-# In[39]:
-
-
 # --- Overwrite X_train with selected features for downstream modeling ---
 X_train = X_train_selected.copy()
 X_test = X_test_selected.copy()
@@ -1208,11 +874,6 @@ print(f'\nClass balance in y_train:')
 print(y_train.value_counts().rename({0: 'Negative', 1: 'Positive'}))
 print(f'\nClass balance in y_test:')
 print(y_test.value_counts().rename({0: 'Negative', 1: 'Positive'}))
-
-
-# In[40]:
-
-
 # Visualise class balance in train and test sets
 fig, axes = plt.subplots(1, 2, figsize=(10, 4))
 
@@ -1226,39 +887,6 @@ for ax, split_y, title in zip(axes, [y_train, y_test], ['Training Set', 'Test Se
 plt.suptitle('Class Distribution — Train & Test Sets', fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.show()
-
-
-# ## 📋 Section 8: Pre-Training Checklist
-# Verifying all preprocessing, feature selection, and partition steps before launching model training.
-# 
-# Confirm all preprocessing steps completed before model training:
-# 
-# | Step | Detail | Status |
-# |---|---|---|
-# | Dataset loaded | 50,000 rows × 25 features | Done |
-# | Redundant columns dropped | `app_usage_time_label`, `swipe_right_label` | Done |
-# | Binary target created | `target`: 0=Negative, 1=Positive (39.7% positive) | Done |
-# | Ordinal encoding | `income_bracket` (3 tiers), `education_level` (3 tiers) | Done |
-# | One-hot encoding | gender, orientation, location, body_type, etc. | Done |
-# | Multi-hot encoding | `interest_tags` (49 unique tags) | Done |
-# | Numerical normalization | RobustScaler on 12 numeric columns | Done |
-# | Feature selection | ANOVA F-Score + Mutual Information (top-40 union) | Done |
-# | PCA | 95% variance retained | Done |
-# | Train/Test split | 80/20, stratified | Done |
-# | Class balancing (SMOTE) | Natively balanced training set (50/50 split) | Done |
-# | Missing values | None | Done |
-# 
-# ### Objects available for model training:
-# | Variable | Description |
-# |---|---|
-# | `X_train`, `X_test` | Original selected features (40k/10k rows) |
-# | `y_train`, `y_test` | Binary target labels |
-# | `X_train_pca`, `X_test_pca` | PCA-reduced features |
-# | `RANDOM_STATE` | 42 — use in all models for reproducibility |
-
-# In[41]:
-
-
 # Apply SMOTE to perfectly balance training set (50/50 split) natively in the pipeline
 from imblearn.over_sampling import SMOTE
 print("🔄 Applying SMOTE to balance class distribution in training set...")
@@ -1270,32 +898,6 @@ smote = SMOTE(random_state=RANDOM_STATE)
 X_train_smote, y_train_smote = smote.fit_resample(X_train_raw, y_train_raw)
 X_train, y_train = X_train_raw, y_train_raw  # Keep unsmoted globally for CV
 print(f"Balanced Training Set: {X_train.shape} (target match ratio: {y_train.mean():.2%})")
-
-
-# ## 🤖 Section 9: Model Training & Baseline Benchmarking
-# Training traditional baselines, deep learning models, and similarity-based classifiers to establish performance benchmarks.
-# 
-# We train **16 models** on the balanced selected features, then compare performance.
-# 
-# | # | Model | Type | Key Characteristics |
-# |---|---|---|---|
-# | 1 | Logistic Regression | Linear | Baseline, interpretable, fast |
-# | 2 | K-Nearest Neighbors | Instance-based | Distance-based, non-parametric |
-# | 3 | Decision Tree | Tree-based | Fully interpretable |
-# | 4 | Random Forest | Ensemble (Bagging) | Robust, handles high dimensions |
-# | 5 | XGBoost | Ensemble (Boosting) | Usually best on tabular data |
-# | 6 | Support Vector Machine (SVM) | Kernel-based | Bypassed, loaded from pre-trained weights |
-# | 7 | LightGBM | Ensemble (Boosting) | High-speed gradient boosting, handles categorical well |
-# | 8 | CatBoost | Ensemble (Boosting) | Advanced categorical-handling gradient boosting |
-# | 9 | Multi-Layer Perceptron (MLP) | Neural Network | Deep learning feedforward network for non-linear patterns |
-# | 10 | Balanced Random Forest | Ensemble (Bagging) | Imbalance-aware forest classifier |
-# | 11 | Cosine KNN CF | Similarity | Cosine-similarity collaborative filtering matching logic |
-# | 12 | FT-Transformer | Deep Learning | Feature Tokenizer Transformer for tabular data (PyTorch) |
-# | 13 | SAINT | Deep Learning | Column-wise self-attention feature interaction network (PyTorch) |
-# | 14 | NODE | Deep Learning | Differentiable oblivious decision forest running on GPU (PyTorch) |
-
-# In[42]:
-
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
@@ -1322,20 +924,6 @@ except ImportError:
     print('xgboost not installed, using sklearn GradientBoostingClassifier instead')
 
 print('Model libraries loaded')
-
-
-# ### 9.1 Baseline Establishment via AutoML
-# *Setting up FLAML and PyCaret pipelines as automated benchmarking baselines.*
-
-# ## 🧠 Section 10: Model Evaluation & Performance Comparisons
-# Evaluating all models on metrics, learning curves, and statistical significance to choose the champion model.
-
-# ### 10.1 Define & Train All Models
-# *Instantiating, training, and caching all baseline, ensemble, and neural models.*
-
-# In[43]:
-
-
 import xgboost as xgb
 
 # Detect best available device for XGBoost
@@ -1349,11 +937,6 @@ except Exception:
     XGB_DEVICE = "cpu"
 
 print(f"XGB_DEVICE: {XGB_DEVICE}")
-
-
-# In[44]:
-
-
 # --- ADVANCED DIFFERENTIAL NEURAL ARCHITECTURES & SKLEARN WRAPPER ---
 import torch.nn as nn
 import torch.optim as optim
@@ -1364,24 +947,26 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 class FeatureTokenizer(nn.Module):
     def __init__(self, num_numeric, cat_vocab_sizes, d_token):
         super().__init__()
+        self.d_token = d_token
         self.cat_embeddings = nn.ModuleList([
             nn.Embedding(vocab_size, d_token) for vocab_size in cat_vocab_sizes
         ])
         self.num_projections = nn.ModuleList([
             nn.Linear(1, d_token) for _ in range(num_numeric)
         ])
-
+        
     def forward(self, x_num, x_cat):
         tokens = []
         for i, emb in enumerate(self.cat_embeddings):
             tokens.append(emb(x_cat[:, i]).unsqueeze(1))
         for i, proj in enumerate(self.num_projections):
             tokens.append(proj(x_num[:, i].unsqueeze(1)).unsqueeze(1))
-        return torch.cat(tokens, dim=1) if tokens else torch.zeros(x_num.size(0), 0, d_token, device=x_num.device)
+        return torch.cat(tokens, dim=1) if tokens else torch.zeros(x_num.size(0), 0, self.d_token, device=x_num.device)
 
 class FTTransformer(nn.Module):
     def __init__(self, num_numeric, cat_vocab_sizes, d_token=32, n_layers=2, n_heads=4, d_ff=64):
         super().__init__()
+        self.d_token = d_token
         self.tokenizer = FeatureTokenizer(num_numeric, cat_vocab_sizes, d_token)
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=d_token, nhead=n_heads, dim_feedforward=d_ff,
@@ -1393,7 +978,7 @@ class FTTransformer(nn.Module):
             nn.ReLU(),
             nn.Linear(d_token, 1)
         )
-
+        
     def forward(self, x_num, x_cat):
         tokens = self.tokenizer(x_num, x_cat)
         encoded = self.transformer(tokens)
@@ -1404,6 +989,7 @@ class FTTransformer(nn.Module):
 class SAINT(nn.Module):
     def __init__(self, num_numeric, cat_vocab_sizes, d_token=32, n_layers=2, n_heads=4):
         super().__init__()
+        self.d_token = d_token
         self.tokenizer = FeatureTokenizer(num_numeric, cat_vocab_sizes, d_token)
         self.attn_layers = nn.ModuleList([
             nn.MultiheadAttention(embed_dim=d_token, num_heads=n_heads, batch_first=True)
@@ -1416,7 +1002,7 @@ class SAINT(nn.Module):
             nn.Linear(d_token, d_token)
         )
         self.head = nn.Linear(d_token, 1)
-
+        
     def forward(self, x_num, x_cat):
         x = self.tokenizer(x_num, x_cat)
         for attn, norm in zip(self.attn_layers, self.norms):
@@ -1434,7 +1020,7 @@ class ObliviousDecisionTree(nn.Module):
         self.thresholds = nn.Parameter(torch.randn(depth))
         self.feature_weights = nn.Parameter(torch.randn(depth, in_features))
         self.leaf_weights = nn.Parameter(torch.randn(2**depth, d_out))
-
+        
     def forward(self, x):
         splits = []
         for i in range(self.depth):
@@ -1442,7 +1028,7 @@ class ObliviousDecisionTree(nn.Module):
             split = torch.sigmoid(proj - self.thresholds[i])
             splits.append(split.unsqueeze(-1))
         splits = torch.cat(splits, dim=-1)
-
+        
         probs = torch.ones(x.size(0), 1, device=x.device)
         for i in range(self.depth):
             p_right = splits[:, i].unsqueeze(-1)
@@ -1457,7 +1043,7 @@ class NODE(nn.Module):
             ObliviousDecisionTree(in_features=num_numeric, depth=depth)
             for _ in range(n_trees)
         ])
-
+        
     def forward(self, x_num, x_cat):
         preds = [tree(x_num) for tree in self.trees]
         return torch.stack(preds, dim=1).mean(dim=1)
@@ -1473,58 +1059,58 @@ class PyTorchSklearnClassifier(BaseEstimator, ClassifierMixin):
         self.kwargs = kwargs
         self.model = None
         self.classes_ = np.array([0, 1])
-
+        
     def fit(self, X, y):
         if hasattr(X, "values"): X_arr = X.values
         else: X_arr = np.array(X)
         if hasattr(y, "values"): y_arr = y.values
         else: y_arr = np.array(y)
-
+        
         num_numeric = X_arr.shape[1]
         self.model = self.model_class(num_numeric=num_numeric, cat_vocab_sizes=[], **self.kwargs).to(self.device)
-
+        
         X_tensor = torch.tensor(X_arr, dtype=torch.float32).to(self.device)
         y_tensor = torch.tensor(y_arr, dtype=torch.float32).to(self.device)
-
+        
         dataset = TensorDataset(X_tensor, y_tensor)
         loader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
-
+        
         optimizer = optim.AdamW(self.model.parameters(), lr=self.lr, weight_decay=1e-4)
         criterion = nn.BCEWithLogitsLoss()
-
+        
         # --- V5 METHODOLOGY 3: LABEL SMOOTHING & MIXUP REGULARIZATION ---
         alpha = 0.2  # Mixup interpolation parameter
-
+        
         self.model.train()
         for epoch in range(self.epochs):
             for batch_X, batch_y in loader:
                 optimizer.zero_grad()
-
+                
                 # Apply Label Smoothing to prevent neural networks from becoming overly confident
                 # Smooth labels: 0 -> 0.1, 1 -> 0.9
                 batch_y_smoothed = batch_y * 0.8 + 0.1
-
+                
                 if alpha > 0 and len(batch_X) > 1:
                     # Sample lambda from Beta distribution
                     lam = np.random.beta(alpha, alpha)
                     # Create shuffled index mapping for mixup pairing
                     shuffled_idx = torch.randperm(batch_X.size(0)).to(self.device)
-
+                    
                     # Compute mixed features and mixed labels
                     mixed_X = lam * batch_X + (1 - lam) * batch_X[shuffled_idx]
                     mixed_y = lam * batch_y_smoothed + (1 - lam) * batch_y_smoothed[shuffled_idx]
-
+                    
                     # Forward pass with mixed inputs
                     preds = self.model(mixed_X, torch.zeros(mixed_X.size(0), 0, dtype=torch.long, device=self.device))
                     loss = criterion(preds, mixed_y)
                 else:
                     preds = self.model(batch_X, torch.zeros(batch_X.size(0), 0, dtype=torch.long, device=self.device))
                     loss = criterion(preds, batch_y_smoothed)
-
+                    
                 loss.backward()
                 optimizer.step()
         return self
-
+        
     def predict(self, X):
         self.model.eval()
         if hasattr(X, "values"): X_arr = X.values
@@ -1534,7 +1120,7 @@ class PyTorchSklearnClassifier(BaseEstimator, ClassifierMixin):
             preds = self.model(X_tensor, torch.zeros(X_tensor.size(0), 0, dtype=torch.long, device=self.device))
             probs = torch.sigmoid(preds)
             return (probs >= 0.5).cpu().numpy().astype(int)
-
+            
     def predict_proba(self, X):
         self.model.eval()
         if hasattr(X, "values"): X_arr = X.values
@@ -1565,19 +1151,9 @@ models = {
     'NODE': PyTorchSklearnClassifier(model_class=NODE, epochs=100, lr=0.005),
     'Balanced Random Forest': BalancedRandomForestClassifier(n_estimators=500, max_depth=8, min_samples_leaf=10, random_state=RANDOM_STATE, n_jobs=-1),  # Depth-constrained
     'KNN (Cosine Metric)': KNeighborsClassifier(n_neighbors=5, metric='cosine', n_jobs=-1),
-    'SVM': BaggingClassifier(
-        estimator=SVC(class_weight='balanced', kernel='rbf', probability=True, random_state=RANDOM_STATE, cache_size=1000, tol=1e-3),
-        n_estimators=num_threads, max_samples=0.20, n_jobs=-1, random_state=RANDOM_STATE
-    ),
+    'SVM': SVC(class_weight='balanced', kernel='rbf', probability=True, random_state=RANDOM_STATE, cache_size=2000, tol=1e-3),
 }
 print(f'Models defined: {list(models.keys())}')
-
-
-# ### 10.2 Label Smoothing & Mixup Regularization Analysis (V5.1)
-# *Evaluating the convergence curves of PyTorch models using mixup and label smoothing regularizations.*
-
-# In[45]:
-
 
 # --- V5.1 COMPARATIVE VALIDATION: LABEL SMOOTHING & MIXUP ---
 import matplotlib.pyplot as plt
@@ -1617,10 +1193,6 @@ plt.grid(True, alpha=0.3)
 plt.suptitle('🛡️ Regularization Analysis: Preventing Deep Learning Overconfidence (Illustrative Simulation)', fontsize=13, fontweight='bold', y=1.02)
 plt.tight_layout()
 plt.show()
-
-
-# In[46]:
-
 
 # Train all models and collect results (With smart SVM bypass and selector)
 import joblib
@@ -1671,7 +1243,7 @@ if not loaded_from_advanced:
             results['SVM'] = temp_results['SVM']
             print(f'  Loaded SVM — Test Acc: {results["SVM"]["test_acc"]:.4f} | F1: {results["SVM"]["f1"]:.4f}')
             continue
-
+            
         print(f'\n{"="*60}')
         print(f'Training: {name}')
         print(f'{"="*60}')
@@ -1720,13 +1292,6 @@ if not loaded_from_advanced:
     joblib.dump(results, checkpoint_path)
     print(f'\n💾 Baseline models saved successfully to: {checkpoint_path}')
 
-
-# ### 10.3 Model Comparison Table
-# *Comparing precision, recall, F1-score, and ROC AUC metrics across all 16 models.*
-
-# In[47]:
-
-
 # Build comparison dataframe
 if results:
     comparison = pd.DataFrame({
@@ -1748,11 +1313,6 @@ if results:
     print(comparison.round(4).to_string())
 else:
     print('⚠️ No baseline results found to compare. Please ensure Cell 37 trained successfully.')
-
-
-# In[48]:
-
-
 # Visual comparison — bar chart of key metrics
 metrics_to_plot = ['Test Accuracy', 'Precision', 'Recall', 'F1 Score', 'ROC-AUC']
 
@@ -1770,14 +1330,6 @@ for i, metric in enumerate(metrics_to_plot):
 plt.suptitle('Model Performance Comparison', fontsize=15, fontweight='bold')
 plt.tight_layout()
 plt.show()
-
-
-# ### 10.4 Confusion Matrices
-# *Visualizing classification error distributions and rates for all models.*
-
-# In[49]:
-
-
 num_models = len(results)
 n_cols = 4
 n_rows = (num_models + n_cols - 1) // n_cols
@@ -1801,14 +1353,6 @@ for j in range(i + 1, len(axes)):
 plt.suptitle('Confusion Matrices — All Models', fontsize=15, fontweight='bold')
 plt.tight_layout()
 plt.show()
-
-
-# ### 10.5 ROC Curves
-# *Plotting the true positive vs. false positive rate curves across different classification thresholds.*
-
-# In[50]:
-
-
 plt.figure(figsize=(10, 7))
 colors = sns.color_palette('husl', len(results))
 
@@ -1827,28 +1371,12 @@ plt.legend(loc='lower right', fontsize=9)
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
-
-
-# ### 10.6 Classification Reports
-# *Printing precision, recall, and f1-score reports per model.*
-
-# In[51]:
-
-
 for name, r in results.items():
     print(f'\n{"="*60}')
     print(f'{name}')
     print(f'{"="*60}')
     print(classification_report(y_test, r['y_pred'],
           target_names=['Negative', 'Positive']))
-
-
-# ### 10.7 Cross-Validation Scores & Significance (5-Fold)
-# *Performing 5-fold cross-validation and evaluating statistical stability.*
-
-# In[52]:
-
-
 import os
 import joblib
 from sklearn.model_selection import cross_val_score, RepeatedStratifiedKFold
@@ -1891,32 +1419,28 @@ else:
             print(f'{name:<25} {cv_scores.mean():>10.4f} {cv_scores.std():>8.4f} '
                   f'{cv_scores.min():>8.4f} {cv_scores.max():>8.4f}')
             continue
-
+            
         model = model_info['model']
         original_n_jobs = getattr(model, 'n_jobs', None)
         if original_n_jobs is not None:
             model.n_jobs = 1
-
+            
         from imblearn.pipeline import Pipeline as ImbPipeline
         from imblearn.over_sampling import SMOTE
         cv_pipeline = ImbPipeline([('smote', SMOTE(random_state=RANDOM_STATE)), ('clf', model)])
         cv_scores = cross_val_score(cv_pipeline, X_train_raw, y_train_raw, cv=10,
                                     scoring='roc_auc', n_jobs=1)
-
+        
         if original_n_jobs is not None:
             model.n_jobs = original_n_jobs
-
+            
         cv_results[name] = cv_scores
         print(f'{name:<25} {cv_scores.mean():>10.4f} {cv_scores.std():>8.4f} '
               f'{cv_scores.min():>8.4f} {cv_scores.max():>8.4f}')
-
+              
     # Save scores to bypass disk
     joblib.dump(cv_results, cv_checkpoint_path)
     print(f'\n💾 Cross-validation scores saved successfully to: {cv_checkpoint_path}')
-
-
-# In[53]:
-
 
 # 9.6 Statistical Significance Testing
 from scipy.stats import friedmanchisquare
@@ -1939,10 +1463,6 @@ else:
     print('Result: The performance differences are NOT statistically significant (p >= 0.05).')
 print('-' * 60)
 
-
-# In[54]:
-
-
 # Boxplot of cross-validation scores
 fig, ax = plt.subplots(figsize=(12, 5))
 cv_df = pd.DataFrame(cv_results)
@@ -1955,14 +1475,6 @@ ax.set_xlabel('')
 ax.tick_params(axis='x', rotation=20)
 plt.tight_layout()
 plt.show()
-
-
-# ### 10.8 Learning Curves — Top 3 Models
-# *Analyzing training vs validation scores to diagnose model bias and variance.*
-
-# In[55]:
-
-
 # Identify top 3 models by test accuracy
 # Select top 3 pipeline-compatible models for tuning (by ROC-AUC)
 # Pipeline compatibility: SHAP TreeExplainer + DiCE + CalibratedClassifierCV
@@ -1998,7 +1510,7 @@ if os.path.exists(original_lc_path):
 if os.path.exists(lc_checkpoint_path):
     print(f'⚡ Loading computed learning curve data from {lc_checkpoint_path}  instantly!...')
     lc_data = joblib.load(lc_checkpoint_path)
-
+    
     # DYNAMIC FALLBACK: Compute any missing curves for new models (like XGBoost)
     missing = [name for name in top3 if name not in lc_data]
     if missing:
@@ -2020,7 +1532,7 @@ else:
             print(f'⚡ Reusing pre-computed SVM learning curve data from original checkpoint...')
             lc_data['SVM'] = temp_lc['SVM']
             continue
-
+            
         model = results[name]['model']
         print(f'  Computing learning curve for: {name}')
         lc_pipeline = ImbPipeline([('smote', SMOTE(random_state=RANDOM_STATE)), ('clf', model)])
@@ -2066,30 +1578,10 @@ plt.suptitle('Learning Curves — Top 3 Models', fontsize=15, fontweight='bold')
 plt.tight_layout()
 plt.show()
 
-
-# ## 🔒 Section 11: Privacy, Representation & Advanced Architectures
-# Exploring advanced machine learning paradigms, including differential privacy, graph neural networks, contrastive learning, and zero-shot tabular modeling.
-
-# In[56]:
-
-
-from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 from scipy.stats import randint, uniform
 
 print('Hyperparameter tuning libraries loaded')
-
-
-# ### 11.1 Differential Privacy Training (Opacus)
-# *Applying differential privacy guarantees to the neural network during training.*
-
-# ### 🔒 Differential Privacy Training (Opacus Details)
-# *Training our PyTorch Multi-Layer Perceptron (MLP) with Opacus to guarantee differential privacy $(\epsilon, \delta)$ on user profiles.*
-# 
-# Given that dating app data is inherently sensitive (sexual orientation, relationship intent, personal demographics), we trained our neural network with differential privacy guarantees using Opacus.
-
-# In[57]:
-
-
 import os
 reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
 os.makedirs(reports_dir, exist_ok=True)
@@ -2136,16 +1628,16 @@ else:
     from opacus.validators import ModuleValidator
     import numpy as np
     import matplotlib.pyplot as plt
-
+    
     model_dp = DPModel(X_train.shape[1]).to(DEVICE)
     model_dp = ModuleValidator.fix(model_dp)  # Auto-fix DP incompatibilities
-
+    
     optimizer = torch.optim.Adam(model_dp.parameters(), lr=1e-3)
     train_loader = DataLoader(TensorDataset(
         torch.tensor(X_train.values if hasattr(X_train, "values") else X_train, dtype=torch.float32),
         torch.tensor(y_train.values if hasattr(y_train, "values") else y_train, dtype=torch.float32)
     ), batch_size=256, shuffle=True)
-
+    
     # Attach Opacus PrivacyEngine
     privacy_engine = PrivacyEngine()
     model_dp, optimizer, train_loader = privacy_engine.make_private_with_epsilon(
@@ -2157,7 +1649,7 @@ else:
         target_delta=1e-5,      # Probability of privacy breach
         max_grad_norm=1.0       # Gradient clipping bound
     )
-
+    
     # Train with privacy
     epsilon_history = []
     dp_losses = []
@@ -2166,25 +1658,25 @@ else:
         for batch_X, batch_y in train_loader:
             batch_X = batch_X.to(DEVICE)
             batch_y = batch_y.to(DEVICE)
-
+            
             preds = model_dp(batch_X)
             loss = nn.BCEWithLogitsLoss()(preds, batch_y)
-
+            
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
             epoch_loss += loss.item()
-
+            
         avg_loss = epoch_loss / len(train_loader)
         dp_losses.append(avg_loss)
         eps = privacy_engine.get_epsilon(delta=1e-5)
         epsilon_history.append(eps)
         if (epoch + 1) % 5 == 0:
             print(f"  Epoch {epoch+1}/30 | Loss: {avg_loss:.4f} | ε: {eps:.2f}")
-
+            
     dp_model = model_dp
     epsilon = eps
-
+    
     # Generate predictions on test set
     model_dp.eval()
     X_test_tensor = torch.tensor(X_test.values if hasattr(X_test, "values") else X_test, dtype=torch.float32).to(DEVICE)
@@ -2192,7 +1684,7 @@ else:
         logits = model_dp(X_test_tensor)
         probs = torch.sigmoid(logits)
         y_pred_dp = (probs >= 0.5).cpu().numpy().astype(int)
-
+        
     dp_predictions = y_pred_dp
     joblib.dump({'model': dp_model, 'epsilon': epsilon, 'losses': dp_losses, 'y_pred': y_pred_dp}, cache_dp)
 
@@ -2240,25 +1732,6 @@ plt.tight_layout()
 plt.savefig(os.path.join(reports_dir, 'differential_privacy.png'), dpi=150, bbox_inches='tight')
 plt.show()
 
-
-# ### 11.2 Graph Neural Network (Node Classification)
-# *Constructing a user-similarity graph and performing semi-supervised user matchmaking.*
-
-# ### 🕸️ Instance-Wise Feature Selection (Attentive Tabular Network)
-# *Building a custom PyTorch Attentive Tabular Network to perform instance-wise feature selection via soft-mask attention.*
-# 
-# While standard explainability methods (like SHAP or Permutation Importance) calculate a static **global** importance score or feature dependencies, modern neural architectures like Google's **TabNet** introduce **instance-wise feature selection**. The network dynamically shifts its attention to different features depending on the specific profile input.
-# 
-# We code a custom PyTorch **Attentive Tabular Network** utilizing a sequential selection head:
-# 1. An `AttentiveTransformer` computes dynamic selection scores per column using a Softmax layer.
-# 2. The input is masked dynamically using this attentive matrix: $X_{\text{masked}} = X \odot M(X)$
-# 3. The prediction head reasons purely over the masked active columns.
-# 
-# We train this custom network and extract the attention masks for our test users, generating an **Attentive Feature Selection Heatmap** showing exactly which columns the network prioritized for different individual queries.
-
-# In[58]:
-
-
 # --- V5.1 ATTENTIVE TABULAR NETWORK: TABNET-STYLE INSTANCE FEATURE SELECTION ---
 import torch
 import torch.nn as nn
@@ -2283,15 +1756,15 @@ class AttentiveTabularNet(nn.Module):
         # Prediction network
         self.fc1 = nn.Linear(in_features, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, 1)
-
+        
     def forward(self, x):
         # 1. Output a sparse mask using Softmax over columns
         mask_logits = self.attentive_transformer(x)
         mask = F.softmax(mask_logits, dim=-1) # shape: (batch, in_features)
-
+        
         # 2. Apply mask (element-wise multiplication) to extract active features
         x_masked = x * mask
-
+        
         # 3. Predict outcome
         h = F.relu(self.fc1(x_masked))
         preds = self.fc2(h).squeeze(-1)
@@ -2312,7 +1785,7 @@ for epoch in range(15): # 15 fast epochs
     loss = criterion(preds, y_tr_tensor)
     loss.backward()
     optimizer.step()
-
+    
 print("✅ Attentive Neural Network trained successfully.")
 
 # Evaluate on test profiles and extract instance selection masks
@@ -2321,7 +1794,7 @@ X_te_tensor = torch.tensor(X_test.values[:100] if hasattr(X_test, 'values') else
 with torch.no_grad():
     _, test_masks = model_att(X_te_tensor)
     test_masks = test_masks.cpu().numpy()
-
+    
 # Plot instance-wise selection heatmap for 15 users over the top 10 features
 mean_mask = np.mean(test_masks, axis=0)
 top_10_idx = np.argsort(mean_mask)[-10:]
@@ -2337,18 +1810,6 @@ plt.xlabel('Features Selected dynamically by the Attentive Layer')
 plt.ylabel('Individual Query Users')
 plt.tight_layout()
 plt.show()
-
-
-# ### 🕸️ Graph Neural Network — Users as a Social Network
-# *Applying a Graph Attention Network (GAT) over a profile-similarity graph for matchmaking classification.*
-# 
-# We constructed a k-nearest-neighbor similarity graph over user profiles and applied a Graph Attention Network (GAT) for semi-supervised node classification.
-# 
-# > [!NOTE]  
-# > **Performance Optimization:** Constructing the similarity graph and training the PyTorch GAT model for 200 epochs from scratch is computationally heavy. We wrapped this block in an intelligent `joblib` cache (`../models_v8/gnn_gat.joblib`). It maps PyTorch tensor weights to the CPU for device-agnostic safety, reloading GAT connections and evaluation metrics instantly on subsequent runs.
-
-# In[59]:
-
 
 # Reconstruct the full dataset for transductive Graph/Self-Supervised learning.
 # NOTE (Methodological Disclosure): Including test set *features* (not labels) in self-supervised
@@ -2374,7 +1835,7 @@ class DatingGAT(torch.nn.Module):
         self.conv1 = GATConv(n_features, hidden, heads=heads, dropout=0.3)
         self.conv2 = GATConv(hidden * heads, hidden, heads=1, concat=False, dropout=0.3)
         self.classifier = torch.nn.Linear(hidden, 2)
-
+    
     def forward(self, data):
         x, edge_index = data.x, data.edge_index
         x = F.dropout(x, p=0.3, training=self.training)
@@ -2391,7 +1852,7 @@ if os.path.exists(cache_file):
     cache_data = joblib.load(cache_file)
     edge_index = cache_data['edge_index']
     test_acc = cache_data['test_acc']
-
+    
     # Rebuild PyG Data object
     data = Data(
         x=torch.tensor(X_selected.values, dtype=torch.float32),
@@ -2409,7 +1870,7 @@ if os.path.exists(cache_file):
     data.train_mask = train_mask
     data.test_mask = test_mask
     data = data.to(DEVICE)
-
+    
     model = DatingGAT(n_features=X_selected.shape[1]).to(DEVICE)
     model.load_state_dict(cache_data['model_state'])
     print(f"GAT Test Accuracy: {test_acc:.4f}")
@@ -2457,28 +1918,13 @@ else:
     pred = model(data).argmax(dim=1)
     test_acc = (pred[data.test_mask] == data.y[data.test_mask]).float().mean().item()
     print(f"GAT Test Accuracy: {test_acc:.4f}")
-
+    
     # Save cache (ensure device is CPU to prevent GPU mapping errors on reload)
     joblib.dump({
         'edge_index': edge_index,
         'model_state': {k: v.cpu() for k, v in model.state_dict().items()},
         'test_acc': test_acc
     }, cache_file)
-
-
-# ---
-# 
-
-# ### 11.3 Self-Supervised Contrastive Learning (SCARF)
-# *Pre-training model embeddings on corrupted tabular data to learn robust user profile representations.*
-
-# ### 🧪 Self-Supervised Contrastive Pre-Training (SCARF Details)
-# *Implementing SCARF ( Bahri et al. ) to pre-train representation embeddings using contrastive loss on tabular profiles.*
-# 
-# We implemented SCARF, a self-supervised contrastive pre-training framework specifically designed for tabular data (Bahri et al.).
-
-# In[60]:
-
 
 import os
 reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
@@ -2502,18 +1948,18 @@ if os.path.exists(cache_scarf):
         pretrain_losses = scarf_data.get('pretrain_losses', None)
         raw_2d = scarf_data.get('raw_2d', None)
         embed_2d = scarf_data.get('embed_2d', None)
-
+        
         if X_train_embed is not None and X_test_embed is not None and pretrain_losses is not None and len(pretrain_losses) > 0:
             print("⏭️  Loading cached SCARF representations and t-SNE coordinates...")
             cache_valid = True
-
+            
             # Dynamically compute and save t-SNE coordinates if they are missing from an older cache version
             if raw_2d is None or embed_2d is None:
                 print("👉 Pre-computing t-SNE coordinates once for caching...")
                 from sklearn.manifold import TSNE
                 tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_jobs=-1)
-                raw_2d = tsne.fit_transform(X_test.values[:500])
-                embed_2d = tsne.fit_transform(X_test_embed[:500])
+                raw_2d = tsne.fit_transform(X_test.values)
+                embed_2d = tsne.fit_transform(X_test_embed)
                 scarf_data['raw_2d'] = raw_2d
                 scarf_data['embed_2d'] = embed_2d
                 joblib.dump(scarf_data, cache_scarf)
@@ -2529,7 +1975,7 @@ if not cache_valid:
     import torch.nn.functional as F
     from torch.utils.data import DataLoader, TensorDataset
     import numpy as np
-
+    
     class ScarfEncoder(nn.Module):
         """Encoder network for SCARF contrastive learning"""
         def __init__(self, n_features, d_hidden=128, d_embed=64):
@@ -2546,7 +1992,7 @@ if not cache_valid:
             )
         def forward(self, x):
             return self.encoder(x)
-
+    
     class ScarfProjector(nn.Module):
         """Projection head (discarded after pre-training)"""
         def __init__(self, d_embed=64, d_proj=32):
@@ -2558,7 +2004,7 @@ if not cache_valid:
             )
         def forward(self, x):
             return self.proj(x)
-
+    
     def scarf_corrupt(X_batch, X_all, corruption_rate=0.6):
         """Corrupt features by replacing with random values from marginal distributions"""
         mask = torch.bernoulli(torch.full_like(X_batch, corruption_rate))
@@ -2566,75 +2012,75 @@ if not cache_valid:
         X_random = X_all[random_indices]
         X_corrupted = X_batch * (1 - mask) + X_random * mask
         return X_corrupted
-
+    
     def nt_xent_loss(z1, z2, temperature=0.5):
         """Normalized Temperature-scaled Cross-Entropy Loss (NT-Xent)"""
         z1 = F.normalize(z1, dim=1)
         z2 = F.normalize(z2, dim=1)
         batch_size = z1.shape[0]
-
+        
         representations = torch.cat([z1, z2], dim=0)
         similarity_matrix = torch.mm(representations, representations.t()) / temperature
-
+        
         # Mask out self-similarity
         mask = ~torch.eye(2 * batch_size, dtype=torch.bool, device=z1.device)
         similarity_matrix = similarity_matrix.masked_fill(~mask, -1e9)
-
+        
         # Positive pairs: (i, i+batch_size) and (i+batch_size, i)
         labels = torch.cat([torch.arange(batch_size, 2*batch_size),
                             torch.arange(0, batch_size)]).to(z1.device)
-
+        
         return F.cross_entropy(similarity_matrix, labels)
-
+    
     # === PRE-TRAINING PHASE (unsupervised — uses ALL data, no labels) ===
     # Check if GPU is available, fallback to CPU
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     X_tensor = torch.tensor(X_selected.values, dtype=torch.float32)
     dataset = TensorDataset(X_tensor)
     loader = DataLoader(dataset, batch_size=512, shuffle=True)
-
+    
     encoder = ScarfEncoder(n_features=X_selected.shape[1]).to(DEVICE)
     projector = ScarfProjector().to(DEVICE)
     optimizer = torch.optim.AdamW(
         list(encoder.parameters()) + list(projector.parameters()),
         lr=1e-3, weight_decay=1e-4
     )
-
+    
     pretrain_losses = []
     for epoch in range(50):
         epoch_loss = 0
         for (batch_X,) in loader:
             batch_X = batch_X.to(DEVICE)
-
+            
             # Anchor view (original) and corrupted view
             z_anchor = projector(encoder(batch_X))
             X_corrupt = scarf_corrupt(batch_X, X_tensor.to(DEVICE), corruption_rate=0.6)
             z_corrupt = projector(encoder(X_corrupt))
-
+            
             loss = nt_xent_loss(z_anchor, z_corrupt, temperature=0.5)
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
             epoch_loss += loss.item()
-
+        
         avg_loss = epoch_loss / len(loader)
         pretrain_losses.append(avg_loss)
         if (epoch + 1) % 10 == 0:
             print(f"  [SCARF Pre-train] Epoch {epoch+1}/50 | NT-Xent Loss: {avg_loss:.4f}")
-
+    
     # === FINE-TUNING PHASE: Freeze encoder, train classifier head ===
     encoder.eval()
     with torch.no_grad():
         X_train_embed = encoder(torch.tensor(X_train.values, dtype=torch.float32).to(DEVICE)).cpu().numpy()
         X_test_embed = encoder(torch.tensor(X_test.values, dtype=torch.float32).to(DEVICE)).cpu().numpy()
-
+        
         # Calculate t-SNE coordinates for caching
         from sklearn.manifold import TSNE
         print("👉 Pre-computing t-SNE coordinates for caching...")
         tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_jobs=-1)
-        raw_2d = tsne.fit_transform(X_test.values[:500])
-        embed_2d = tsne.fit_transform(X_test_embed[:500])
-
+        raw_2d = tsne.fit_transform(X_test.values)
+        embed_2d = tsne.fit_transform(X_test_embed)
+        
         joblib.dump({
             'X_train_embed': X_train_embed, 
             'X_test_embed': X_test_embed,
@@ -2680,11 +2126,11 @@ axes[0].set_ylabel('NT-Xent Contrastive Loss')
 axes[0].grid(alpha=0.3)
 
 # Instant plots from pre-computed t-SNE cache coordinates!
-scatter1 = axes[1].scatter(raw_2d[:, 0], raw_2d[:, 1], c=y_test.values[:500],
+scatter1 = axes[1].scatter(raw_2d[:, 0], raw_2d[:, 1], c=y_test.values,
                            cmap='RdYlGn', alpha=0.4, s=8)
 axes[1].set_title('t-SNE: Raw Features')
 
-scatter2 = axes[2].scatter(embed_2d[:, 0], embed_2d[:, 1], c=y_test.values[:500],
+scatter2 = axes[2].scatter(embed_2d[:, 0], embed_2d[:, 1], c=y_test.values,
                            cmap='RdYlGn', alpha=0.4, s=8)
 axes[2].set_title('t-SNE: SCARF Learned Embeddings')
 
@@ -2693,19 +2139,6 @@ plt.suptitle('Self-Supervised Contrastive Learning (SCARF): Representation Quali
 plt.tight_layout()
 plt.savefig(os.path.join(reports_dir, 'scarf_embeddings.png'), dpi=150, bbox_inches='tight')
 plt.show()
-
-
-
-# ### ⚡ Zero-Shot Tabular Transformers (TabPFN)
-# *Evaluating dating app matchmaking predictions in a zero-shot pass using the pre-trained TabPFN Bayesian model.*
-# 
-# Traditional tabular models (like Random Forests or XGBoost) require training on the target dataset to learn splits and weights. In contrast, **TabPFN (Tabular Prior-Data Fitted Network)** is a revolutionary **zero-shot deep transformer model** pre-trained on millions of synthetic tabular datasets (using causal structures and prior distributions).
-# 
-# TabPFN approximates the true Bayesian posterior distribution in a single forward pass, without requiring standard gradient descent or hyperparameter tuning on the downstream dataset! However, due to its transformer nature, its computational complexity scales cubically $O(N^3)$ with training size, limiting it to $N \le 1000$ samples.
-# 
-# We feed a downsampled subsample (1,000 profiles) of our balanced training set as the "prior support context" and perform zero-shot evaluation on the test set.
-
-# In[61]:
 
 
 # --- V5 METHODOLOGY 2: ZERO-SHOT TABULAR TRANSFORMERS (TabPFN) ---
@@ -2738,42 +2171,42 @@ if y_pred_tab is None:
     np.random.seed(RANDOM_STATE)
     X_train_arr = X_train.values if hasattr(X_train, 'values') else X_train
     y_train_arr = y_train.values if hasattr(y_train, 'values') else y_train
-    sub_indices = np.random.choice(len(X_train_arr), size=min(1000, len(X_train_arr)), replace=False)
+    sub_indices = np.arange(len(X_train_arr))
     X_train_sub = X_train_arr[sub_indices]
     y_train_sub = y_train_arr[sub_indices]
-
+    
     # 2. To prevent TabPFN's O(N*M) inference complexity from hanging for 15+ minutes on 10,000 test samples,
     # we downsample the test query set to a representative 1,000 samples for the zero-shot calculation,
     # then fill the remaining test predictions with a SOTA LightGBM fallback model.
     X_test_arr = X_test.values if hasattr(X_test, 'values') else X_test
     test_limit = min(1000, len(X_test_arr))
     X_test_sub = X_test_arr[:test_limit]
-
+    
     try:
         from tabpfn import TabPFNClassifier
         # Initialize TabPFN with n_estimators=4 (highly optimized inference speed)
         tabpfn = TabPFNClassifier(device=DEVICE, n_estimators=4)
         print("⏳ Running zero-shot inference on 1000 test samples (~15-30s)... ")
         tabpfn.fit(X_train_sub, y_train_sub)
-
+        
         # Make zero-shot predictions on the test subset
         y_pred_sub = tabpfn.predict(X_test_sub)
         y_prob_sub = tabpfn.predict_proba(X_test_sub)[:, 1]
-
+        
         # Train SOTA LightGBM to fill the remaining predictions
         from lightgbm import LGBMClassifier
         fill_clf = LGBMClassifier(n_estimators=100, max_depth=6, random_state=RANDOM_STATE, verbose=-1)
         fill_clf.fit(X_train, y_train)
-
+        
         y_pred_full = fill_clf.predict(X_test)
         y_prob_full = fill_clf.predict_proba(X_test)[:, 1]
-
+        
         # Combine predictions
         y_pred_tab = np.copy(y_pred_full)
         y_prob_tab = np.copy(y_prob_full)
         y_pred_tab[:test_limit] = y_pred_sub
         y_prob_tab[:test_limit] = y_prob_sub
-
+        
         # Cache predictions
         joblib.dump({'pred': y_pred_tab, 'prob': y_prob_tab}, cache_tabpfn)
         print("💾 TabPFN predictions cached successfully.")
@@ -2784,7 +2217,7 @@ if y_pred_tab is None:
         print("="*80)
         print("\n🔄 [PIPELINE SAFETY] Falling back to a SOTA LightGBM classifier on the downsampled data...")
         print("="*80 + "\n")
-
+        
         from lightgbm import LGBMClassifier
         fallback_clf = LGBMClassifier(n_estimators=100, max_depth=6, random_state=RANDOM_STATE, verbose=-1)
         fallback_clf.fit(X_train_sub, y_train_sub)
@@ -2818,19 +2251,6 @@ if 'results' in globals():
         'y_pred': y_pred_tab,
         'y_prob': y_prob_tab
     }
-
-
-# ---
-# 
-
-# ## 🎛️ Section 12: Hyperparameter Optimization
-# Fine-tuning top-performing models using randomized grid searches and Optuna multi-objective tuning.
-
-# ### 12.1 Define Search Spaces
-# *Configuring hyperparameter tuning grids and search spaces for the top-3 models.*
-
-# In[62]:
-
 
 # Define parameter grids for top models
 param_grids = {
@@ -2904,13 +2324,6 @@ param_grids = {
 
 print('Parameter search spaces defined for:', list(param_grids.keys()))
 
-
-# ### 12.2 Run Hyperparameter Search (Top 3 Models)
-# *Executing GPU-accelerated RandomizedSearchCV on selected estimators.*
-
-# In[63]:
-
-
 # --- GPU-ACCELERATED OPTUNA HYPERPARAMETER SEARCH ENGINE ---
 import optuna
 from sklearn.neural_network import MLPClassifier
@@ -2931,7 +2344,7 @@ def run_optuna_search(X_tr, y_tr, X_te, y_te):
             'n_jobs': -1,
             **TREE_CONFIG['xgb'] # Dynamic CUDA/OpenCL GPU assignment
         }
-
+        
         clf = XGBClassifier(**params)
         clf.fit(X_tr, y_tr)
         preds = clf.predict(X_te)
@@ -2950,7 +2363,7 @@ def run_optuna_search(X_tr, y_tr, X_te, y_te):
     # Runs 1000 trials. Under GPU acceleration, each trial fits in ~0.2s, completing in under 3-4 minutes!
     study.optimize(objective, n_trials=1000, n_jobs=1) 
     search_time = time.time() - start_time
-
+    
     print(f"🎉 Optuna search completed in {search_time:.1f}s!")
     joblib.dump(study, cache_optuna)
     print(f"  Best MCC score: {study.best_value:.4f}")
@@ -2964,7 +2377,7 @@ def run_optuna_search(X_tr, y_tr, X_te, y_te):
 import os
 import joblib
 import time
-from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 
 # -----------------------------------------------------------------
 # SELECTOR: Set RETUNE_MODELS = True to retune top models from scratch.
@@ -3041,16 +2454,13 @@ if not loaded_tuned_from_cache:
                 ],
                 final_estimator=LogisticRegression(class_weight='balanced', max_iter=1000, random_state=RANDOM_STATE, n_jobs=1),
                 n_jobs=1,
-                cv=3
+                cv=10
             ),
             'Multi-Layer Perceptron': MLPClassifier(hidden_layer_sizes=(128, 64), max_iter=500, random_state=RANDOM_STATE),
             'Balanced Random Forest': BalancedRandomForestClassifier(n_estimators=500, random_state=RANDOM_STATE, n_jobs=1),
             'KNN (Cosine Metric)': KNeighborsClassifier(n_neighbors=5, metric='cosine', n_jobs=1),
             'TabNet Deep Learning': TabNetClassifier(verbose=0) if HAS_TABNET else LogisticRegression(random_state=RANDOM_STATE),
-            'SVM': BaggingClassifier(
-                estimator=SVC(class_weight='balanced', probability=True, random_state=RANDOM_STATE, cache_size=500, tol=1e-3),
-                n_estimators=16, max_samples=0.20, n_jobs=1, random_state=RANDOM_STATE
-            ),
+            'SVM': SVC(class_weight='balanced', kernel='rbf', probability=True, random_state=RANDOM_STATE, cache_size=2000, tol=1e-3),
         }
 
         from imblearn.pipeline import Pipeline as ImbPipeline
@@ -3058,13 +2468,11 @@ if not loaded_tuned_from_cache:
         cv_pipeline = ImbPipeline([('smote', SMOTE(random_state=RANDOM_STATE)), ('clf', base_models[name])])
         grid = {'clf__' + k: v for k, v in param_grids[name].items()}
 
-        search = RandomizedSearchCV(
+        search = GridSearchCV(
             estimator=cv_pipeline,
-            param_distributions=grid,
-            n_iter=30,
+            param_grid=grid,
             cv=10,
             scoring='matthews_corrcoef',
-            random_state=RANDOM_STATE,
             n_jobs=1,
             verbose=1
         )
@@ -3112,13 +2520,6 @@ if not loaded_tuned_from_cache:
     print(f'\n💾 Tuned models saved successfully to: {checkpoint_tuned_path}')
 
 
-
-# ### 12.3 Before vs After Tuning Comparison
-# *Comparing the metric scores of baseline models against their fine-tuned versions.*
-
-# In[64]:
-
-
 # Compare baseline vs tuned for the top 3
 print(f'{"Model":<25} {"Metric":<12} {"Baseline":>10} {"Tuned":>10} {"Change":>10}')
 print('-' * 70)
@@ -3136,11 +2537,6 @@ for name in top3:
         arrow = '+' if change >= 0 else ''
         print(f'{name:<25} {label:<12} {b_val:>10.4f} {t_val:>10.4f} {arrow}{change:>9.4f}')
     print()
-
-
-# In[65]:
-
-
 # Visual comparison — baseline vs tuned
 fig, axes = plt.subplots(1, 3, figsize=(16, 5))
 
@@ -3168,14 +2564,6 @@ for i, metric in enumerate(['test_acc', 'f1', 'roc_auc']):
 plt.suptitle('Baseline vs Tuned — Top 3 Models', fontsize=14, fontweight='bold')
 plt.tight_layout()
 plt.show()
-
-
-# ### 12.4 Best Tuned Model — Detailed Results
-# *Evaluating the final selected tuned champion model with confusion matrices and classification reports.*
-
-# In[66]:
-
-
 # Select best overall model
 # Criterion: ROC-AUC (only metric not gameable by threshold choice)
 # Filter: pipeline-compatible models only (SHAP + DiCE + calibration support)
@@ -3209,10 +2597,6 @@ if best:
     print(classification_report(y_test, best['y_pred'],
           target_names=['Negative', 'Positive']))
 
-
-# In[67]:
-
-
 # Confusion matrix for best model
 if best:
     suffix = ' (Tuned)' if tuned_results else ' (Baseline)'
@@ -3242,13 +2626,6 @@ if best:
     plt.show()
 else:
     print('❌ Error: No best model defined to plot. Please run Cell 88 successfully first.')
-
-
-# ## 📊 Section 13: Feature Importance & Ethical Considerations
-# Analyzing feature attribution, measuring model fairness, and benchmarking against FLAML AutoML.
-
-# In[68]:
-
 
 # Feature importance from the best tree-based model
 # Try: Random Forest, XGBoost, or Decision Tree
@@ -3285,33 +2662,6 @@ if importance_model and hasattr(importance_model, 'feature_importances_'):
     plt.show()
 else:
     print('No tree-based model available for feature importance.')
-
-
-# ### 13.1 Ethical Considerations in Dating App ML
-# *Evaluating demographic parity and privacy risk issues in matching algorithms.*
-# 
-# Machine learning models deployed in human-centric domains like dating apps raise critical ethical concerns that must be addressed:
-# 
-# 1. **Demographic Bias:** Does the model perform equally well across all gender identities and sexual orientations, or does it implicitly penalize minority groups?
-# 2. **Privacy Implications:** Predicting relationship intent and match outcomes based on deep behavioral profiling (e.g., swipe times, emoji usage) borders on invasive surveillance.
-# 3. **Homogeneity Risk:** Algorithmic matchmaking can create echo chambers, continually recommending the same "types" of people and reinforcing societal biases or segregation.
-# 
-# Below, we test for **Demographic Parity** by checking if our baseline model's accuracy remains consistent across different gender identities.
-
-# ---
-# ## ⚖️ Ethical Considerations in Dating App ML
-# 
-# Machine learning models deployed in human-centric domains like dating apps raise critical ethical concerns that must be addressed:
-# 
-# 1. **Demographic Bias:** Does the model perform equally well across all gender identities and sexual orientations, or does it implicitly penalize minority groups?
-# 2. **Privacy Implications:** Predicting relationship intent and match outcomes based on deep behavioral profiling (e.g., swipe times, emoji usage) borders on invasive surveillance.
-# 3. **Homogeneity Risk:** Algorithmic matchmaking can create echo chambers, continually recommending the same "types" of people and reinforcing societal biases or segregation.
-# 
-# Below, we test for **Demographic Parity** by checking if our baseline model's accuracy remains consistent across different gender identities.
-
-# In[69]:
-
-
 # Per-group accuracy breakdown (Testing for Demographic Parity)
 from fairlearn.metrics import MetricFrame, true_positive_rate, false_positive_rate
 from sklearn.metrics import roc_auc_score
@@ -3336,13 +2686,6 @@ for attr in ['gender', 'sexual_orientation']:
         sensitive_features=sensitive_col
     )
     print(mf.by_group)
-
-
-# ### 13.2 Final Model Summary
-# *Consolidating evaluation results across all traditional, deep, and tuned estimators.*
-
-# In[70]:
-
 
 # Final comprehensive comparison: all baseline + all tuned
 print('=' * 80)
@@ -3370,11 +2713,6 @@ print(f'\nBest overall model: {final_df.index[0]}')
 print(f'  F1 Score:  {final_df.iloc[0]["F1"]:.4f}')
 print(f'  ROC-AUC:   {final_df.iloc[0]["ROC-AUC"]:.4f}')
 print(f'  Accuracy:  {final_df.iloc[0]["Accuracy"]:.4f}')
-
-
-# In[71]:
-
-
 # Final bar chart — all models ranked by ROC-AUC
 plt.figure(figsize=(14, 7))
 colors_final = ['#4CAF50' if 'Tuned' in name else '#90A4AE' for name in final_df.index]
@@ -3388,14 +2726,6 @@ plt.title('All Models Ranked by ROC-AUC Score (Green = Tuned, Gray = Baseline)',
           fontsize=13, fontweight='bold')
 plt.tight_layout()
 plt.show()
-
-
-# ### 13.3 AutoML Comparison (FLAML & PyCaret)
-# *Comparing the manually built models against state-of-the-art automated machine learning baselines.*
-
-# In[72]:
-
-
 from flaml import AutoML
 import sklearn.metrics
 import joblib
@@ -3441,10 +2771,6 @@ try:
 except Exception as e:
     print(f"FLAML Error: {e}")
 
-
-# In[73]:
-
-
 import pandas as pd
 import os, joblib
 
@@ -3463,53 +2789,38 @@ try:
     else:
         from pycaret.classification import setup, compare_models, pull
         print("\n--- Starting PyCaret ---")
-
+        
         # PyCaret works best with pandas DataFrames containing both features and the target label
         if isinstance(X_train_raw, pd.DataFrame):
             train_df = X_train_raw.copy()
         else:
             # If X_train is a numpy array (e.g. from StandardScaler), convert it back to DF
             train_df = pd.DataFrame(X_train_raw)
-
+            
         # Add the target column
         train_df['target'] = list(y_train_raw)
-
+        
         # Initialize setup
         # We disable html so it prints nicely in the standard colab output instead of taking over the cell UI
         clf1 = setup(data=train_df, target='target', session_id=123, verbose=False, html=False, use_gpu=False, n_jobs=-1, fix_imbalance=True)
-
+        
         # Compare all standard models and return the best one
         print("Comparing models...")
         best_pycaret_model = compare_models(exclude=['svm'], sort='AUC') # Exclude SVM as it hangs for 40+ mins on 50k rows # No budget, run exhaustively
-
+        
         print("\nBest PyCaret Model:", best_pycaret_model)
-
+        
         # Show the results grid
         results_grid = pull()
         print("\nPyCaret Leaderboard:")
         display(results_grid.head(5))
-
+        
         # Cache the results
         joblib.dump({'best_model': best_pycaret_model, 'leaderboard': results_grid}, cache_pycaret)
         print("💾 PyCaret results cached successfully.")
-
+        
 except Exception as e:
     print(f"PyCaret Error: {e}")
-
-
-# ## 🔍 Section 14: Feature Importance & Interaction Analysis
-# Extracting global feature attribution scores and calculating pair-wise non-linear interaction statistics.
-
-# ### 14.1 Permutation Feature Interaction (H-Statistic)
-# *Quantifying second-order feature interactions using Friedman's H-statistic.*
-
-# ### 🔬 Permutation Feature Interaction Detection Details
-# *Computing Friedman's H-statistic to identify synergistic predictive effects between feature pairs.*
-# 
-# We computed Friedman's H-statistic to quantify second-order feature interactions, revealing which feature pairs exhibit synergistic predictive effects beyond their individual contributions.
-
-# In[74]:
-
 
 import os, joblib
 reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
@@ -3525,18 +2836,18 @@ def h_statistic(model, X, feature_i, feature_j, grid_resolution=20):
     pd_i = partial_dependence(model, X, features=[feature_i], grid_resolution=grid_resolution)
     pd_j = partial_dependence(model, X, features=[feature_j], grid_resolution=grid_resolution)
     pd_ij = partial_dependence(model, X, features=[feature_i, feature_j], grid_resolution=grid_resolution)
-
+    
     # H = variance of joint PD not explained by sum of individual PDs
     pd_ij_vals = pd_ij['average'][0]
     pd_i_vals = pd_i['average'][0]
     pd_j_vals = pd_j['average'][0]
-
+    
     # Reshape for broadcasting
     joint_mean = pd_ij_vals.mean()
     interaction_var = np.var(pd_ij_vals - np.add.outer(pd_i_vals - pd_i_vals.mean(),
                                                         pd_j_vals - pd_j_vals.mean()) - joint_mean)
     total_var = np.var(pd_ij_vals)
-
+    
     return np.sqrt(interaction_var / (total_var + 1e-10))
 
 # Ensure models_v8 exists
@@ -3559,7 +2870,7 @@ else:
     # Compute interactions for top feature pairs
     top_features_idx = [0, 1, 2, 3, 4, 5, 6, 7]  # indices of top 8 features
     top_feature_names = [feature_names[i] for i in top_features_idx]
-
+    
     if os.path.exists(cache_hstat):
         print("⏭️  Loading cached Friedman's H-statistic matrix...")
         h_scores = joblib.load(cache_hstat)
@@ -3573,7 +2884,7 @@ else:
             h_scores[(top_feature_names[i], top_feature_names[j])] = h
         joblib.dump(h_scores, cache_hstat)
         print("💾 H-statistic results cached successfully.")
-
+        
     # === REPORT VISUAL: Interaction heatmap ===
     n = len(top_feature_names)
     h_matrix = np.zeros((n, n))
@@ -3582,7 +2893,7 @@ else:
         j = top_feature_names.index(fj)
         h_matrix[i, j] = h
         h_matrix[j, i] = h
-
+    
     fig, ax = plt.subplots(figsize=(10, 8))
     im = ax.imshow(h_matrix, cmap='YlOrRd', vmin=0)
     ax.set_xticks(range(n))
@@ -3600,17 +2911,6 @@ else:
     plt.tight_layout()
     plt.savefig(os.path.join(reports_dir, 'feature_interactions.png'), dpi=150, bbox_inches='tight')
     plt.show()
-
-
-# ### 🌌 SHAP Interaction Values (Attribution of Synergies)
-# *Computing SHAP interaction matrices to allocate local synergy predictions across feature pairs.*
-# 
-# While standard feature importance techniques (like permutation importance or standard SHAP values) assign a single score to each feature, they fail to capture **joint feature attributions**. In other words, they don't show how the combination of two features shifts the model's predictions beyond their individual effects.
-# 
-# To uncover these deep statistical synergies, we compute **SHAP Interaction Values**. Based on the game-theoretic concept of the *Shapley Interaction Index*, these values allocate prediction shifts among all pairs of features. This allows us to map the precise mathematical interactions (e.g., how the combination of high swipe ratios and high mutual match rates dynamically affects a user's likelihood of matching).
-
-# In[76]:
-
 
 # --- V5 METHODOLOGY 4: SHAP INTERACTION VALUES ---
 import shap
@@ -3632,11 +2932,11 @@ if best_tree_name:
     print(f"👉 Selected tree model for SHAP: {best_tree_name}")
     r_entry = results.get(best_tree_name) or results.get(best_tree_name.replace(' (Tuned)', ''))
     tree_model = r_entry.get('model')
-
+    
     if tree_model:
         # Use an optimized sample subset of 50 instances for rapid execution of interaction calculations
-        X_sample = X_test.iloc[:500] if hasattr(X_test, 'iloc') else pd.DataFrame(X_test[:500], columns=X.columns)
-
+        X_sample = X_test if hasattr(X_test, 'copy') else pd.DataFrame(X_test, columns=X.columns)
+        
         if os.path.exists(cache_shap):
             print("⏭️  Loading cached SHAP interaction values...")
             shap_data = joblib.load(cache_shap)
@@ -3676,10 +2976,10 @@ if best_tree_name:
                     shap_interaction_values = explainer.shap_interaction_values(X_sample)
                 else:
                     raise e
-
+            
             # Cache arrays to prevent slow execution on subsequent runs
             print("💾 SHAP interaction values cached successfully.")
-
+        
         # Ensure SHAP values are 2D for binary classification
         if isinstance(shap_values_obj.values, list):
             sv_2d = shap_values_obj.values[1]
@@ -3705,10 +3005,10 @@ if best_tree_name:
         feat1_idx, feat2_idx = top_indices[1], top_indices[0]
         feat1_name = X_sample.columns[feat1_idx]
         feat2_name = X_sample.columns[feat2_idx]
-
+        
         print(f"👉 Primary Top Feature: {feat1_name}")
         print(f"👉 Secondary Interacting Feature: {feat2_name}")
-
+        
         # Draw a beautiful 2D SHAP dependence plot mapping the interaction
         plt.figure(figsize=(10, 6))
         shap.dependence_plot(
@@ -3721,45 +3021,24 @@ if best_tree_name:
         plt.title(f"🌌 SHAP Interaction Analysis: {feat1_name} × {feat2_name}", fontsize=13, fontweight='bold', pad=15)
         plt.tight_layout()
         plt.show()
-
+        
         # Plot 2D Interaction matrix for the first instance
         plt.figure(figsize=(10, 8))
         # Take interactions for the top 8 features
         top_8_indices = np.argsort(mean_abs_shap)[-8:]
         top_8_names = [X_sample.columns[i] for i in top_8_indices]
         sample_interaction_matrix = shap_inter_2d[0][top_8_indices][:, top_8_indices]
-
+        
         sns.heatmap(sample_interaction_matrix, xticklabels=top_8_names, yticklabels=top_8_names,
                     annot=True, fmt=".4f", cmap="coolwarm", center=0, cbar_kws={'label': 'Interaction Value'})
         plt.title("🔬 SHAP Interaction Matrix (Sample Instance — Top 8 Features)", fontsize=13, fontweight='bold', pad=15)
         plt.tight_layout()
         plt.show()
-
+        
     else:
         print("⚠️ Fit model object not found in results entry.")
 else:
     print("⚠️ No tree-based model found to compute SHAP Interaction Values.")
-
-
-
-# ---
-# 
-
-# ## 🛡️ Section 15: Advanced Model Robustness & Uncertainty
-# Testing prediction reliability via conformal bands, approximate Bayesian dropout, adversarial inputs, and model calibration curves.
-
-# ### 15.1 Conformal Prediction
-# *Constructing statistically guaranteed prediction intervals with finite-sample coverage.*
-
-# ### 🎯 Conformal Prediction — Guaranteed Uncertainty Bands Details
-# *Implementing inductive conformal prediction to establish 95% coverage uncertainty sets on outcomes.*
-# 
-# Rather than outputting point predictions, we implemented conformal prediction to provide statistically valid prediction sets with guaranteed finite-sample coverage.
-# 
-# > [!TIP]
-# > **Report Insights:** Include a table showing that your empirical coverage matches the theoretical guarantee (e.g., 95% target → 95.2% actual). This proves the method works even when accuracy is low.
-
-# In[77]:
 
 
 import os
@@ -3818,9 +3097,9 @@ else:
         from mapie.metrics.classification import classification_coverage_score
     import matplotlib.pyplot as plt
     import numpy as np
-
+    
     alpha_levels = [0.05, 0.10, 0.20]  # 95%, 90%, 80% confidence
-
+    
     try:
         # 1. Legacy MAPIE version (0.8.x and older)
         from mapie.classification import MapieClassifier
@@ -3847,7 +3126,7 @@ else:
         )
         mapie.conformalize(X_calib, y_calib)  # calibrate on a held-out calibration set
         y_pred, y_sets = mapie.predict_set(X_test_conformal)
-
+        
     # Cache arrays to prevent slow execution on subsequent runs
     joblib.dump({
         'mapie': mapie,
@@ -3868,7 +3147,7 @@ for i, alpha in enumerate(alpha_levels):
     coverage = np.mean(classification_coverage_score(y_test_conformal, y_sets[:, :, i]))
     set_sizes = y_sets[:, :, i].sum(axis=1)
     avg_size = set_sizes.mean()
-
+    
     n, bins, patches = axes[i].hist(set_sizes, bins=[0.5, 1.5, 2.5], rwidth=0.6,
                                      color='#4ecdc4', edgecolor='white')
     colors = ['#4ecdc4', '#ff6b6b']
@@ -3884,24 +3163,6 @@ plt.suptitle('Conformal Prediction: Coverage Guarantees at Different Confidence 
 plt.tight_layout()
 plt.savefig(os.path.join(reports_dir, 'conformal_prediction.png'), dpi=150, bbox_inches='tight')
 plt.show()
-
-
-
-# > [!TIP]
-# > **Report flex:** Include a table showing that your empirical coverage matches the theoretical guarantee (e.g., 95% target → 95.2% actual). This proves the method works even when accuracy is low.
-# 
-# ---
-# 
-
-# ### 15.2 Bayesian Uncertainty (MC Dropout)
-# *Approximating epistemic uncertainty using Monte Carlo dropout forward passes.*
-
-# ### 🌊 Bayesian Uncertainty Quantification (MC Dropout Details)
-# *Leveraging MC Dropout within the neural network to approximate prediction variance and confidence.*
-# 
-# We implemented Monte Carlo Dropout as an approximate Bayesian inference technique to quantify epistemic uncertainty in our predictions.
-
-# In[78]:
 
 
 import os, joblib
@@ -3955,13 +3216,13 @@ else:
     print("⏳ Training BayesianMLP model from scratch (~5-10s)...")
     X_train_t = torch.tensor(X_train_arr, dtype=torch.float32)
     y_train_t = torch.tensor(y_train_arr, dtype=torch.float32)
-
+    
     dataset = TensorDataset(X_train_t, y_train_t)
     loader = DataLoader(dataset, batch_size=256, shuffle=True)
-
+    
     criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(bayesian_model.parameters(), lr=0.001, weight_decay=1e-5)
-
+    
     bayesian_model.train()
     for epoch in range(15):
         for batch_x, batch_y in loader:
@@ -3971,7 +3232,7 @@ else:
             loss = criterion(out, batch_y)
             loss.backward()
             optimizer.step()
-
+            
     # Save model weights to cache (moving state dict parameters to CPU for safety)
     cpu_state_dict = {k: v.cpu() for k, v in bayesian_model.state_dict().items()}
     joblib.dump(cpu_state_dict, cache_bayesian)
@@ -3982,21 +3243,21 @@ def mc_dropout_predict(model, X, n_forward=100):
     """Run T stochastic forward passes to get predictive distribution"""
     model.train()  # KEEP dropout ON — this is the key trick
     X_tensor = torch.tensor(X, dtype=torch.float32).to(DEVICE)
-
+    
     predictions = []
     with torch.no_grad():
         for _ in range(n_forward):
             logits = model(X_tensor)
             probs = torch.sigmoid(logits).cpu().numpy()
             predictions.append(probs)
-
+    
     predictions = np.array(predictions)  # Shape: (T, n_samples)
-
+    
     mean_pred = predictions.mean(axis=0)        # Point estimate
     std_pred = predictions.std(axis=0)           # Epistemic uncertainty
     entropy = -(mean_pred * np.log(mean_pred + 1e-8) + 
                 (1-mean_pred) * np.log(1-mean_pred + 1e-8))  # Predictive entropy
-
+    
     return mean_pred, std_pred, entropy
 
 mean_preds, uncertainties, entropies = mc_dropout_predict(bayesian_model, X_test_arr, n_forward=100)
@@ -4059,21 +3320,6 @@ print(f"  High-confidence accuracy: {high_conf_acc:.4f}")
 print(f"  Low-confidence accuracy:  {low_conf_acc:.4f}")
 
 
-
-# ---
-# 
-
-# ### 15.3 Adversarial Robustness (FGSM)
-# *Testing model vulnerability against Fast Gradient Sign Method (FGSM) input perturbations.*
-
-# ### ⚔️ Adversarial Robustness Testing Details
-# *Evaluating accuracy degradation under direct adversarial attacks on user profiles.*
-# 
-# We evaluated model robustness against adversarial perturbations using the Fast Gradient Sign Method (FGSM).
-
-# In[79]:
-
-
 import os
 reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
 os.makedirs(reports_dir, exist_ok=True)
@@ -4094,15 +3340,15 @@ def fgsm_attack(model, X, y, epsilon, device):
     X_adv.requires_grad = True
     model.zero_grad()
     y_tensor = torch.tensor(y, dtype=torch.float32).to(device)
-
+    
     logits = model(X_adv)
     loss = nn.BCEWithLogitsLoss()(logits, y_tensor)
     loss.backward()
-
+    
     # Perturb in the direction of the gradient sign
     perturbation = epsilon * X_adv.grad.sign()
     X_adversarial = X_adv + perturbation
-
+    
     return X_adversarial.detach().cpu().numpy()
 
 # Test robustness at multiple perturbation strengths
@@ -4115,7 +3361,7 @@ for eps in epsilons:
         X_adv = X_test.values
     else:
         X_adv = fgsm_attack(bayesian_model, X_test.values, y_test.values, eps, DEVICE)
-
+    
     # Evaluate on adversarial examples
     with torch.no_grad():
         preds = torch.sigmoid(bayesian_model(
@@ -4151,19 +3397,6 @@ plt.tight_layout()
 plt.savefig(os.path.join(reports_dir, 'adversarial_robustness.png'), dpi=150, bbox_inches='tight')
 plt.show()
 
-
-# ### 📈 Model Calibration & Reliability Diagrams Details
-# *Calibrating raw output probabilities using Isotonic Regression and plotting Reliability Diagrams.*
-# 
-# For downstream applications (such as matching algorithms or dynamic monetization), the raw confidence score of a classifier needs to represent a **true probability**. For example, if a model predicts a matchmaking probability of 80% for a user profile, 80 out of 100 such profiles should indeed match.
-# 
-# However, complex non-linear models (especially Deep Neural Networks or heavily boosted trees) are notorious for producing **uncalibrated probabilities** (e.g. overconfident predictions). 
-# 
-# To ensure probabilistic reliability, we wrap our champion model in `CalibratedClassifierCV` using **Isotonic Regression**. We then evaluate prediction reliability before and after calibration using a **Reliability Diagram (Calibration Curve)**, validating our model's uncertainty with mathematical rigor.
-
-# In[80]:
-
-
 # --- V5 METHODOLOGY 5: MODEL CALIBRATION & RELIABILITY CURVES ---
 from sklearn.calibration import CalibratedClassifierCV, calibration_curve
 import numpy as np
@@ -4178,7 +3411,7 @@ if champion_name:
     print(f"👉 Champion model selected for calibration: {champion_name}")
     r_entry = tuned_results.get(champion_name) or results.get(champion_name)
     base_model = r_entry.get('model')
-
+    
     if base_model:
         # Fit Isotonic Calibration on balanced training data
         # With cv='prefit', we calibrate on held-out data that the model has not seen during training.
@@ -4189,21 +3422,21 @@ if champion_name:
 
         calibrated_clf.fit(X_calib, y_calib)
 
-
+        
         # Generate probabilities
         probs_raw = base_model.predict_proba(X_eval)[:, 1] if hasattr(base_model, 'predict_proba') else base_model.decision_function(X_eval)
         probs_cal = calibrated_clf.predict_proba(X_eval)[:, 1]
-
+        
         # Calculate reliability curves (10 bins)
         prob_true_raw, prob_pred_raw = calibration_curve(y_eval, probs_raw, n_bins=10)
         prob_true_cal, prob_pred_cal = calibration_curve(y_eval, probs_cal, n_bins=10)
-
+        
         # Plot reliability diagram
         plt.figure(figsize=(10, 6))
         plt.plot([0, 1], [0, 1], linestyle='--', color='gray', label='Perfect Calibration (Oracle)')
         plt.plot(prob_pred_raw, prob_true_raw, marker='s', color='#FF9800', label=f'Uncalibrated Champion ({champion_name})')
         plt.plot(prob_pred_cal, prob_true_cal, marker='o', color='#4CAF50', label='Calibrated Champion (Isotonic Regression)')
-
+        
         plt.title('📈 Probability Calibration Curve (Reliability Diagram)', fontsize=14, fontweight='bold', pad=15)
         plt.xlabel('Mean Predicted Probability (Confidence)', fontsize=12)
         plt.ylabel('Fraction of Positive Outcomes (Actual matches)', fontsize=12)
@@ -4211,14 +3444,14 @@ if champion_name:
         plt.legend(fontsize=11, loc='upper left')
         plt.tight_layout()
         plt.show()
-
+        
         # Display Brier Scores (lower is better)
         from sklearn.metrics import brier_score_loss
         brier_raw = brier_score_loss(y_eval, probs_raw)
         brier_cal = brier_score_loss(y_eval, probs_cal)
         print(f"👉 Uncalibrated Brier Score: {brier_raw:.4f}")
         print(f"👉 Calibrated Brier Score  : {brier_cal:.4f} ({(brier_raw-brier_cal)/brier_raw*100:.1f}% error reduction)")
-
+        
     else:
         print("⚠️ Champion model object not found in results.")
 else:
@@ -4247,24 +3480,6 @@ if champion_name:
     target_dict[champion_name]['f1'] = cal_f1
     target_dict[champion_name]['roc_auc'] = cal_auc
     print(f"   Calibrated Accuracy: {cal_acc:.4f} | F1: {cal_f1:.4f} | AUC: {cal_auc:.4f}")
-
-
-# ---
-# 
-
-# ## 🚀 Section 16: Model Compression & Deployment Strategies
-# Compressing ensemble weights into lightweight students, and deploying prescriptive recourse and causal uplift recommenders.
-
-# ### 16.1 Knowledge Distillation
-# *Training a lightweight logistic regression student model using soft labels from the ensemble teacher.*
-
-# ### 🎓 Knowledge Distillation — Complex → Simple Details
-# *Compressing teacher ensemble knowledge into a fast, interpretable student classifier using KL-divergence loss.*
-# 
-# We applied Hinton-style knowledge distillation to compress the knowledge of our best-performing ensemble (teacher) into a lightweight logistic regression model (student).
-
-# In[81]:
-
 
 import os
 reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
@@ -4322,18 +3537,18 @@ distill_losses = []
 for epoch in range(100):
     student.train()
     logits = student(X_train_t)
-
+    
     # Distillation loss: KL divergence between soft teacher and student outputs
     student_soft = torch.sigmoid(logits / temperature)
     teacher_soft_scaled = y_soft  # teacher probs already soft
     distill_loss = F.binary_cross_entropy(student_soft, teacher_soft_scaled)
-
+    
     # Hard label loss: standard BCE
     hard_loss = F.binary_cross_entropy_with_logits(logits, y_hard)
-
+    
     # Combined loss
     loss = alpha * (temperature ** 2) * distill_loss + (1 - alpha) * hard_loss
-
+    
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
@@ -4404,22 +3619,6 @@ print(f"\n📊 Model Compression Report:")
 print(f"  Teacher: {teacher_params}")
 print(f"  Student: {student_params:,} parameters ({student_params * 4 / 1024:.1f} KB)")
 
-
-# ### ⚖️ Algorithmic Recourse & Counterfactual Explanations (DiCE Details)
-# *Generating diverse counterfactual profiles to provide actionable feedback for negative predictions.*
-# 
-# In ethical AI, providing a negative prediction (e.g. "Ghosted") without explanation is insufficient. The principle of **Algorithmic Recourse** dictates that we must provide users with concrete, actionable steps they can take to change their outcome from negative to positive.
-# 
-# Using Microsoft's **DiCE (Diverse Counterfactual Explanations)** framework, we generate counterfactual profiles. These are synthetic but realistic profiles that are minimally different from a target user's profile, but are classified as "Matched" (1) by the model. 
-# 
-# For a user predicted to be "Ghosted", we show the exact minimal changes (e.g., increasing engagement or profile completeness by a specific amount) required to reverse the prediction, putting transparency and agency back into the hands of the user.
-# 
-# > [!NOTE]  
-# > **Performance Optimization:** Algorithmic recourse searches high-dimensional continuous and categorical feature spaces using randomized search, which takes substantial processing time. We wrapped this recourse search in a dynamic `joblib` cache (`../models_v8/dice_recourse.joblib`), which reloads and renders the diverse counterfactual recourse dataframes instantly on subsequent runs.
-
-# In[82]:
-
-
 # --- V5 METHODOLOGY 6: ALGORITHMIC RECOURSE (DiCE COUNTERFACTUALS) ---
 import dice_ml
 import pandas as pd
@@ -4449,7 +3648,7 @@ else:
     if best_recourse_name:
         r_entry = results[best_recourse_name]
         model_obj = r_entry.get('model')
-
+        
         if model_obj:
             # Create a combined dataframe for DiCE data mapping
             # Ensure X_train is a dataframe with correct active columns
@@ -4458,18 +3657,18 @@ else:
             else:
                 cols = feature_names if 'feature_names' in globals() else X.columns
                 X_train_df = pd.DataFrame(X_train, columns=cols)
-
+                
             train_df = X_train_df.copy()
             train_df['target'] = y_train.values if hasattr(y_train, 'values') else y_train
-
+            
             # Filter continuous_features to only those still present after feature selection
             valid_numeric_cols = [c for c in numeric_cols if c in train_df.columns]
-
+            
             # Map features
             d_dice = dice_ml.Data(dataframe=train_df, 
                                   continuous_features=valid_numeric_cols, 
                                   outcome_name='target')
-
+                                  
             # Wrap classifier in a dtype-safe wrapper for XGBoost compatibility.
             # DiCE internally creates perturbed DataFrames with 'object' dtypes,
             # which XGBoost rejects. This wrapper casts all columns to float before prediction.
@@ -4489,17 +3688,17 @@ else:
 
             safe_model = DTypeSafeClassifier(model_obj)
             m_dice = dice_ml.Model(model=safe_model, backend="sklearn")
-
+            
             # Explainer setup using randomized method
             exp_dice = dice_ml.Dice(d_dice, m_dice, method="random")
-
+            
             # Find a test instance predicted to be "Ghosted" (0)
             y_pred = r_entry['y_pred']
             ghosted_indices = np.where(y_pred == 0)[0]
-
+            
             if len(ghosted_indices) > 0:
                 target_idx = ghosted_indices[0]
-
+                
                 # Extract target instance
                 if isinstance(X_test, pd.DataFrame):
                     X_test_df = X_test.copy()
@@ -4507,15 +3706,15 @@ else:
                     cols = feature_names if 'feature_names' in globals() else X.columns
                     X_test_df = pd.DataFrame(X_test, columns=cols)
                 query_instance = X_test_df.iloc[[target_idx]]
-
+                
                 print(f"👉 Target user index {target_idx} predicted to be 'Ghosted'. Generating 3 diverse counterfactuals for recourse...")
-
+                
                 # Generate recourse paths
                 cf_results = exp_dice.generate_counterfactuals(query_instance, total_CFs=3, desired_class=1)
-
+                
                 # Visualize the recourse options
                 cf_results.visualize_as_dataframe(show_only_changes=True)
-
+                
                 # Dump cache
                 joblib.dump({'cf_results': cf_results, 'target_idx': target_idx}, cache_file)
             else:
@@ -4524,27 +3723,6 @@ else:
             print("⚠️ Fitted model object not found in results.")
     else:
         print("⚠️ No compatible tree-based champion model found to generate recourse.")
-
-
-# ### 🎯 Causal Uplift Modeling (T-Learner Meta-Classifier Details)
-# *Deploying a T-Learner meta-classifier to estimate treatment uplift and isolate persuadable users.*
-# 
-# Traditional machine learning focuses purely on **prediction** (e.g. *will this user match?*). In contrast, **Uplift Modeling (Causal ML)** focuses on **prescriptive intervention**—estimating the *incremental impact* of a treatment (e.g., placing a profile highlight or push notification) on the target outcome.
-# 
-# We construct a **T-Learner (Two-Learner)** meta-learning framework. We fit separate classifiers on the Treated ($M_1$) and Control ($M_0$) populations:
-# $$\text{Uplift}(X) = M_1.\text{predict\_proba}(X)[:, 1] - M_0.\text{predict\_proba}(X)[:, 1]$$
-# 
-# This allows us to segment app users into four causal quadrants:
-# 1. **Persuadables:** Users who match *only if* treated (high positive uplift). **This is our target group!**
-# 2. **Sure Things:** Users who match regardless of treatment.
-# 3. **Lost Causes:** Users who never match regardless of treatment.
-# 4. **Sleeping Dogs (Do Not Disturb):** Users who match *unless* treated (negative uplift).
-# 
-# > [!NOTE]  
-# > **Performance Optimization:** Uplift modeling requires training separate treatment and control response estimators. We wrapped this meta-classifier in a high-speed `joblib` cache (`../models_v8/causal_uplift.joblib`), storing the estimators and individual treatment effect scores to render downstream segment charts instantly.
-
-# In[83]:
-
 
 # --- V5.1 UPLIFT MODELING: T-LEARNER META-CLASSIFIER ---
 import numpy as np
@@ -4605,9 +3783,9 @@ else:
     prob_treat = model_treat.predict_proba(X_test)[:, 1]
     prob_ctrl = model_ctrl.predict_proba(X_test)[:, 1]
     uplift_scores = prob_treat - prob_ctrl
-
+    
     print(f"✅ Uplift estimation complete. Mean Uplift: {np.mean(uplift_scores):.4f}")
-
+    
     # Save cache
     joblib.dump({
         'model_treat': model_treat,
@@ -4624,7 +3802,7 @@ for u, c in zip(uplift_scores, prob_ctrl):
     elif c > 0.60: segments.append('Sure Thing (No action)')
     elif u < -0.05: segments.append('Sleeping Dog (Do not disturb)')
     else: segments.append('Lost Cause (Ignore)')
-
+    
 segments = np.array(segments)
 seg_counts = pd.Series(segments).value_counts()
 
@@ -4648,58 +3826,3 @@ plt.xticks(rotation=15)
 plt.suptitle('🎯 Causal Uplift Modeling: Going from Predictive to Prescriptive Recommendations', fontsize=14, fontweight='bold', y=1.02)
 plt.tight_layout()
 plt.show()
-
-
-# ---
-# 
-
-# ## ✅ Section 17: Final Pipeline Summary & Hardware Optimisations
-# Consolidated summary of findings, optimizations, and caching checkpoint systems.
-# 
-# ### 🏆 Key Findings & Accomplishments:
-# 
-# 1. **All 16 models** (Logistic Regression, KNN, Decision Tree, Random Forest, XGBoost, SVM, LightGBM, CatBoost, Multi-Layer Perceptron, Balanced Random Forest, Cosine KNN CF, FT-Transformer, SAINT, and NODE) were trained, evaluated, and cross-validated on the balanced dating app behaviour dataset.
-# 2. Since all 16 evaluated models converge at ROC-AUC ≈ 0.50, no single metric meaningfully separates their predictive capability. The dynamically selected **Champion Model** was chosen on the basis of **pipeline compatibility**: it simultaneously supports SHAP TreeExplainer, DiCE counterfactual recourse, and isotonic probability calibration. Among pipeline-compatible models, it achieves the highest ROC-AUC.
-# 3. **Feature Importance** analysis from our best tree-based ensemble reveals which user attributes and in-app behaviors most strongly predict meaningful connections.
-# 4. **Cross-Validation (5-Fold)** confirms that model performance is highly stable across different data splits.
-# 5. **Learning Curves** were plotted to diagnose and ensure no models are suffering from overfitting or underfitting.
-# 
-# ---
-# 
-# ### ⚡ Hardware Acceleration & Speed Optimisations:
-# 
-# To maximize hardware utilization and bypass typical single-threaded python bottlenecks, the following enhancements were implemented:
-# 
-# * **16-Thread SVM Bagging Ensemble:** Upgraded standard single-threaded SVM to a parallelized **16-estimator Bagging Classifier** (`BaggingClassifier` wrapping `SVC`). This leverages **16GB of system RAM cache** in parallel, force-spikes your CPU thread utilization to **100%**, and slashes baseline and tuning training times from 40 minutes down to **less than 15-20 seconds** while actually improving generalization!
-# * **Dynamic GPU Auto-Detection:** Programmed a CUDA auto-detection block that offloads XGBoost training and tuning calculations directly to your **NVIDIA GPU**, accelerating training times down to a few seconds.
-# * **Sequential Outer Loop to Prevent GPU Deadlocks:** Set `n_jobs=1` for outer parallel loops (`cross_val_score`, `learning_curve`, and `RandomizedSearchCV`) on Windows. This prevents concurrent GPU context initializations (under CUDA/DirectML/OpenCL) which deadlock the Windows GPU driver at 100% utilization, while still allowing models to leverage CPU/GPU parallelism internally.
-# * **Max-RAM Tree Scaling:** Baseline and grid search parameters for **Random Forest** and **XGBoost** were scaled up to **1000 trees** and deep tree depths of **12** to build highly robust, accurate model architectures in RAM.
-# * **Double-Path Routing:** Dedicated dual-path directory routing has been implemented, reading the computationally heavy pre-trained SVM from `../models/` while saving the new training runs dynamically to `../models_v8/`, ensuring 100% thread-safety and protecting original files.
-# 
-# ---
-# 
-# ### 💾 Smart Checkpointing & Caching:
-# 
-# To ensure teammates don't have to wait or run the heavy training algorithms repeatedly, the notebook implements automatic `.joblib` checkpointing:
-# - **`models_v8/baseline_results.joblib`**: Stores all trained baseline models and prediction variables.
-# - **`models_v8/cv_results.joblib`**: Stores all 5-fold cross-validation scores.
-# - **`models_v8/learning_curve_data.joblib`**: Stores pre-computed learning curve coordinates.
-# - **`models_v8/tuned_results.joblib`**: Stores all tuned estimators and grid search parameters.
-# - **`models_v8/flaml_results.joblib`**: Stores the trained FLAML AutoML estimator.
-# 
-# **How it works:** When a teammate opens this notebook and clicks **"Run All"**, the code automatically detects these `.joblib` files on disk. For the baseline training, a **`RETRAIN_BASELINE` selector variable** (defaulting to `False`) allows loading the full baseline results dynamically in 0.1 seconds, completing the entire notebook in **less than 15 seconds!** Set `RETRAIN_BASELINE = True` to force-retrain the baseline models from scratch.
-
-# ---
-# 
-# ### 🏆 Final Best Model Selection
-# 
-# Based on the comprehensive evaluation of all 16 architectures, **Random Forest** is selected as the final best model for the following reasons:
-# 
-# 1. **Mathematical Convergence:** The champion model achieves predictive capabilities matching the mathematical ceiling of the dataset.
-# 2. **Full SHAP Explainability:** As a tree-based pipeline, the champion model provides native compatibility with SHAP TreeExplainer.
-# 3. **Successful Isotonic Calibration:** The model was calibrated via Isotonic Regression, reducing the Brier Score from 0.2412 to 0.2381 and aligning raw confidence scores with true empirical matchmaking probabilities.
-# 4. **Microsoft DiCE Counterfactual Recourse:** The calibrated champion model powers the DiCE algorithmic recourse engine, generating actionable profile change recommendations for users predicted to be 'Ghosted'.
-# 5. **Scientific Validation:** Its convergence at the majority baseline (~60.3%) across all cross-validation folds confirms that the performance ceiling is a property of the dataset's lack of predictive signal, not a limitation of the model architecture.
-# 
-# # > **Note:** The Champion Stacking Ensemble was also developed as an advanced meta-learning architecture. However, the dynamically selected champion is prioritized because it provides direct TreeExplainer compatibility, enabling the full SHAP, calibration, and recourse pipeline.
-# 
