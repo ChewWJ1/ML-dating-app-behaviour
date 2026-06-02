@@ -731,7 +731,7 @@ with tab_journey:
             <div class="pipeline-card" style="margin-top:20px;">
                 <div class="pipeline-card-num">Stage 11</div>
                 <div class="pipeline-card-title">💘 Love Forecaster</div>
-                <div class="pipeline-card-desc">Premium real-time matching inference engine utilizing the actual trained XGBoost champion.</div>
+                <div class="pipeline-card-desc">Premium real-time matching inference engine utilizing the actual trained LightGBM champion.</div>
                 <span class="pipeline-card-tag tag-sota">SOTA</span>
             </div>
         </a>

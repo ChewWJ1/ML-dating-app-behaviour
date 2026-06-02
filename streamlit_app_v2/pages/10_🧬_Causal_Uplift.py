@@ -13,8 +13,8 @@ theme.render_sidebar()
 
 # ── Path Setup ──
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
-NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
+
 
 
 def show_plot(directory, filename, caption=''):
@@ -60,10 +60,10 @@ st.markdown("""
 
 col1, col2 = st.columns(2)
 with col1:
-    show_plot(NOTEBOOK_PLOTS, 'causal_dag.png',
+    show_plot(V8_PLOTS, '09_causal_dag.png',
               'PC Algorithm — Discovered Causal DAG Structure')
 with col2:
-    show_plot(NOTEBOOK_PLOTS, 'causal_adjacency.png',
+    show_plot(V8_PLOTS, '10_causal_adjacency_matrix.png',
               'Causal Discovery — Edge Strengths & Orientations')
 
 # Displaying discovered causal structure and orientations using V5 plots
@@ -163,7 +163,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '38_flex_16_causal_uplift_modeling_t_learner_meta_clas.png',
+show_plot(V8_PLOTS, '38_causal_uplift_targeting_segments.png',
           'T-Learner Uplift Modeling — ITE Distribution & User Segmentation')
 
 st.markdown("#### 📊 User Segmentation by Uplift")

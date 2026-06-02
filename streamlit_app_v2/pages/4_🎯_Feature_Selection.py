@@ -15,7 +15,7 @@ render_sidebar()
 
 # Base path for plots
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 BASE_PLOTS = os.path.join(ROOT_DIR, 'assets', 'plots')
 
 def show_plot(directory, filename, caption=''):
@@ -41,12 +41,12 @@ st.markdown('<div class="gradient-divider"></div>', unsafe_allow_html=True)
 # ── 1. ANOVA F-Score ────────────────────────────────────────────────────────
 st.header("1. ANOVA F-Score")
 st.markdown("ANOVA F-score tests the linear relationship between each feature and the target variable. Higher F-scores mean the feature's distribution differs more significantly between 'Match' and 'No Match' classes.")
-show_plot(V5_PLOTS, "12_2_21_anova_f_score_feature_selection_selectkbest.png")
+show_plot(V8_PLOTS, "12_anova_f_scores.png")
 
 # ── 2. Mutual Information ──────────────────────────────────────────────────
 st.header("2. Mutual Information (MI)")
 st.markdown("Mutual Information measures both linear and non-linear dependencies. It captures complex relationships that ANOVA might miss.")
-show_plot(V5_PLOTS, "13_2_22_mutual_information_feature_selection.png")
+show_plot(V8_PLOTS, "13_mutual_information_scores.png")
 
 # ── 2.5 Boruta All-Relevant Selection [V4] ─────────────────────────────────
 st.markdown('<div class="gradient-divider"></div>', unsafe_allow_html=True)
@@ -110,12 +110,12 @@ col_pca1, col_pca2 = st.columns(2)
 with col_pca1:
     st.subheader("Explained Variance")
     st.markdown("We found that **55 principal components** are required to explain 95% of the variance.")
-    show_plot(V5_PLOTS, "14_2_24_explained_variance_analysis.png")
+    show_plot(V8_PLOTS, "14_pca_explained_variance.png")
 
 with col_pca2:
     st.subheader("PCA Biplot")
     st.markdown("The first two components don't show clear class separation, confirming that our target variable has complex, non-linear relationships with the features.")
-    show_plot(V5_PLOTS, "15_2_26_pca_biplot_first_two_principal_components.png")
+    show_plot(V8_PLOTS, "15_pca_biplot.png")
 
 st.markdown('<div class="gradient-divider"></div>', unsafe_allow_html=True)
 
@@ -127,7 +127,7 @@ with col_split1:
     st.metric("Training Set (80%)", "40,000")
     st.metric("Testing Set (20%)", "10,000")
 with col_split2:
-    show_plot(V5_PLOTS, "16_section_7_train_test_split.png")
+    show_plot(V8_PLOTS, "16_train_test_class_distribution.png")
 
 
 # ── 6. Interactive PCA Playground [V5.1+] ───────────────────────────────────

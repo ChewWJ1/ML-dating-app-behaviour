@@ -13,7 +13,7 @@ inject_css()
 render_sidebar()
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 BASE_PLOTS = os.path.join(ROOT_DIR, 'assets', 'plots')
 
 def show_plot(directory, filename, caption=''):
@@ -212,7 +212,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, "11_flex_11_out_of_distribution_ood_rejection_guardrai.png",
+show_plot(V8_PLOTS, "11_ood_anomaly_score_distribution.png",
           caption="OOD Rejection Guardrail — Isolation Forest Anomaly Scores")
 
 with st.expander("Show Python Snippet: Isolation Forest OOD"):

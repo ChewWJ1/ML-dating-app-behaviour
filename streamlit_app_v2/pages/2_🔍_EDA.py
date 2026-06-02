@@ -11,7 +11,7 @@ inject_css()
 render_sidebar()
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 BASE_PLOTS = os.path.join(ROOT_DIR, 'assets', 'plots')
 
 def show_plot(directory, filename, caption=''):
@@ -43,7 +43,7 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 with tab1:
     st.markdown("### Categorical Distributions")
     st.markdown("All categorical variables exhibit near-perfect uniform distribution.")
-    show_plot(V5_PLOTS, "02_2_4_categorical_feature_distributions.png")
+    show_plot(V8_PLOTS, "02_categorical_feature_distributions.png")
 
     st.markdown("#### Interactive View (Sample)")
     if not df.empty:
@@ -60,27 +60,27 @@ with tab1:
     st.markdown("---")
     st.markdown("### Numerical Distributions")
     st.markdown("Numerical variables also follow uniform distributions with no distinct skewness.")
-    show_plot(V5_PLOTS, "03_2_5_numerical_feature_distributions.png")
+    show_plot(V8_PLOTS, "03_numerical_feature_distributions.png")
 
     st.markdown("---")
     st.markdown("### Outlier Detection")
     st.markdown("Boxplots show that no extreme outliers exist in the dataset due to its controlled synthetic generation.")
-    show_plot(V5_PLOTS, "04_2_6_numerical_features_outlier_detection_boxplots.png")
+    show_plot(V8_PLOTS, "04_outlier_detection_boxplots.png")
 
 with tab2:
     st.markdown("### Numerical Features by Target")
     st.markdown("When split by outcome, the distributions remain largely identical, showing no obvious separability.")
-    show_plot(V5_PLOTS, "05_2_7_feature_vs_target_numerical_features_by_outcom.png")
+    show_plot(V8_PLOTS, "05_numerical_features_by_match_outcome.png")
 
     st.markdown("---")
     st.markdown("### Categorical Features by Target")
     st.markdown("The proportion of outcomes is evenly distributed across all categories.")
-    show_plot(V5_PLOTS, "06_2_8_feature_vs_target_categorical_features_by_outc.png")
+    show_plot(V8_PLOTS, "06_categorical_features_by_match_outcome.png")
 
 with tab3:
     st.markdown("### Correlation Heatmap")
     st.markdown("Pearson correlation coefficients between all numerical features. Notice the absence of any strong correlation (values near 0).")
-    show_plot(V5_PLOTS, "07_2_9_correlation_heatmap_numerical_features.png")
+    show_plot(V8_PLOTS, "07_pearson_correlation_matrix.png")
 
     st.markdown("#### Interactive Correlation Heatmap")
     if not df.empty:
@@ -93,7 +93,7 @@ with tab3:
 with tab4:
     st.markdown("### Interest Tags Analysis")
     st.markdown("Frequency of the various interest tags chosen by users.")
-    show_plot(V5_PLOTS, "08_2_10_interest_tags_analysis.png")
+    show_plot(V8_PLOTS, "08_top_30_interest_tags.png")
 
     st.markdown("#### Interactive View (Top 10)")
     if 'top_interest_tags' in eda_stats:
@@ -118,10 +118,10 @@ with tab5:
 
     col1, col2 = st.columns(2)
     with col1:
-        show_plot(V5_PLOTS, "09_causal_discovery_going_beyond_correlation.png",
+        show_plot(V8_PLOTS, "09_causal_dag.png",
                   caption="Causal Discovery DAG — Structural Relationships")
     with col2:
-        show_plot(V5_PLOTS, "10_causal_discovery_going_beyond_correlation.png",
+        show_plot(V8_PLOTS, "10_causal_adjacency_matrix.png",
                   caption="Causal Discovery DAG — Edge Strength Analysis")
 
     st.markdown("""

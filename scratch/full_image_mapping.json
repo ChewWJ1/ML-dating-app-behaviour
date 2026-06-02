@@ -1,0 +1,217 @@
+{
+  "image1.png": {
+    "p_idx": 0,
+    "caption": "",
+    "target_ref": "media/image1.png"
+  },
+  "image2.png": {
+    "p_idx": 0,
+    "caption": "",
+    "target_ref": "media/image2.png"
+  },
+  "image5.png": {
+    "p_idx": 65,
+    "caption": "Figure 1: Causal Loop, Confounding Backdoor Paths, and Double ML Propensity Residualization Flowchart",
+    "target_ref": "media/image5.png"
+  },
+  "image6.png": {
+    "p_idx": 91,
+    "caption": "Figure 2: Distribution of Target Variable Match Outcomes (Balanced 10-Class Split consolidated into Binary Target)",
+    "target_ref": "media/image6.png"
+  },
+  "image7.png": {
+    "p_idx": 115,
+    "caption": "Figure 3: Categorical Feature Distributions Across the 50,000 Dating Profiles",
+    "target_ref": "media/image7.png"
+  },
+  "image8.png": {
+    "p_idx": 118,
+    "caption": "Figure 3: Categorical Feature Distributions Across the 50,000 Dating Profiles",
+    "target_ref": "media/image8.png"
+  },
+  "image9.png": {
+    "p_idx": 121,
+    "caption": "Figure 4: Numerical Feature Probability Density Distributions",
+    "target_ref": "media/image9.png"
+  },
+  "image10.png": {
+    "p_idx": 124,
+    "caption": "Figure 5: Outlier Detection Boxplots for Numerical App Engagement Metrics",
+    "target_ref": "media/image10.png"
+  },
+  "image11.png": {
+    "p_idx": 126,
+    "caption": "Figure 6: Numerical Features Distributions Split and Overlaid by Binary Target Class",
+    "target_ref": "media/image11.png"
+  },
+  "image12.png": {
+    "p_idx": 129,
+    "caption": "Figure 7: Target Success Rates Across Nominal Categorical Variables",
+    "target_ref": "media/image12.png"
+  },
+  "image13.png": {
+    "p_idx": 132,
+    "caption": "Figure 8: Pearson Correlation Heatmap of the 12 Continuous Numerical Features",
+    "target_ref": "media/image13.png"
+  },
+  "image14.png": {
+    "p_idx": 135,
+    "caption": "Figure 9: Frequency Analysis of the 49 Sparse Multi-Hot Interest Tag Columns",
+    "target_ref": "media/image14.png"
+  },
+  "image15.png": {
+    "p_idx": 138,
+    "caption": "Figure 10: Directed Acyclic Graph (DAG) Recovered via the constraint-based PC Algorithm",
+    "target_ref": "media/image15.png"
+  },
+  "image16.png": {
+    "p_idx": 141,
+    "caption": "Figure 11: Causal Adjacency Heatmap of Direct Directed Relationships",
+    "target_ref": "media/image16.png"
+  },
+  "image17.png": {
+    "p_idx": 146,
+    "caption": "Figure 13: Univariate ANOVA F-Score Feature Selection Rankings (SelectKBest)",
+    "target_ref": "media/image17.png"
+  },
+  "image18.png": {
+    "p_idx": 149,
+    "caption": "Figure 13: Univariate ANOVA F-Score Feature Selection Rankings (SelectKBest)",
+    "target_ref": "media/image18.png"
+  },
+  "image19.png": {
+    "p_idx": 152,
+    "caption": "Figure 14: Non-linear Mutual Information Feature Selection Scores",
+    "target_ref": "media/image19.png"
+  },
+  "image20.png": {
+    "p_idx": 155,
+    "caption": "Figure 15: Cumulative Explained Variance Curve for Principal Component Analysis (PCA)",
+    "target_ref": "media/image20.png"
+  },
+  "image21.png": {
+    "p_idx": 159,
+    "caption": "Figure 16: PCA Biplot Representing the First Two Principal Components (PC1 & PC2)",
+    "target_ref": "media/image21.png"
+  },
+  "image22.png": {
+    "p_idx": 162,
+    "caption": "Figure 17: Structural Comparison of Deep Tabular Architectures: FT-Transformer, SAINT, and NODE",
+    "target_ref": "media/image22.png"
+  },
+  "image23.png": {
+    "p_idx": 188,
+    "caption": "Figure 20: Train and Test Splits Class Stratification Verification Chart",
+    "target_ref": "media/image23.png"
+  },
+  "image24.png": {
+    "p_idx": 191,
+    "caption": "Figure 20: Train and Test Splits Class Stratification Verification Chart",
+    "target_ref": "media/image24.png"
+  },
+  "image25.png": {
+    "p_idx": 194,
+    "caption": "Figure 21: Baseline Performance Metrics (Accuracy and F1-Score) Comparison",
+    "target_ref": "media/image25.png"
+  },
+  "image26.png": {
+    "p_idx": 197,
+    "caption": "Figure 22: Confusion Matrices of the Baseline Classifiers Showing Predicted vs. Actual Classes",
+    "target_ref": "media/image26.png"
+  },
+  "image27.png": {
+    "p_idx": 212,
+    "caption": "Figure 24: 5-Fold Cross-Validation Scores Boxplot Comparison Across Models",
+    "target_ref": "media/image27.png"
+  },
+  "image28.png": {
+    "p_idx": 215,
+    "caption": "Figure 24: 5-Fold Cross-Validation Scores Boxplot Comparison Across Models",
+    "target_ref": "media/image28.png"
+  },
+  "image29.png": {
+    "p_idx": 232,
+    "caption": "Figure 26: Isotonic Calibration Curves and Reliability Diagrams Comparing Classifier Confidences",
+    "target_ref": "media/image29.png"
+  },
+  "image30.png": {
+    "p_idx": 236,
+    "caption": "Figure 26: Isotonic Calibration Curves and Reliability Diagrams Comparing Classifier Confidences",
+    "target_ref": "media/image30.png"
+  },
+  "image31.png": {
+    "p_idx": 239,
+    "caption": "Figure 27: Hyperparameter Tuning: Before vs. After Optimization Metrics Comparison",
+    "target_ref": "media/image31.png"
+  },
+  "image32.png": {
+    "p_idx": 285,
+    "caption": "Figure 29: Global Feature Importance Rankings (Tree-based Split Importances)",
+    "target_ref": "media/image32.png"
+  },
+  "image33.png": {
+    "p_idx": 290,
+    "caption": "Figure 29 presents the Global Feature Importance rankings extracted from our selected best model (Random Forest), calculated via mean decrease in Gini impurity across all decision trees. The chart reveals a distinct hierarchy: continuous behavioral and numerical metrics\u2014specifically\u00a0message_sent_count,\u00a0swipe_right_ratio,\u00a0height_cm,\u00a0mutual_matches, and\u00a0last_active_hour\u2014dominate the top five positions, each contributing heavily to the model's splitting criteria. Conversely, demographic and nominal categorical variables, such as specific genders (gender_Female,\u00a0gender_Non-binary), location types, and body types, are relegated to the bottom of the top 20 with near-zero importance scores.",
+    "target_ref": "media/image33.png"
+  },
+  "image34.png": {
+    "p_idx": 297,
+    "caption": "Figure 31: SHAP Main Effect / Summary Plot Visualizing Local Attributions",
+    "target_ref": "media/image34.png"
+  },
+  "image35.png": {
+    "p_idx": 300,
+    "caption": "Figure 31: SHAP Main Effect / Summary Plot Visualizing Local Attributions",
+    "target_ref": "media/image35.png"
+  },
+  "image36.png": {
+    "p_idx": 304,
+    "caption": "Figure 32: SHAP Joint Interaction 2D Scatter Curves for Top Variable Synergies",
+    "target_ref": "media/image36.png"
+  },
+  "image37.png": {
+    "p_idx": 307,
+    "caption": "Figure 33: Conformal Prediction Statistically Bounded Interval Widths (SplitConformal)",
+    "target_ref": "media/image37.png"
+  },
+  "image38.png": {
+    "p_idx": 310,
+    "caption": "Figure 34: Monte Carlo Dropout Bayesian Epistemic Uncertainty Distribution",
+    "target_ref": "media/image38.png"
+  },
+  "image39.png": {
+    "p_idx": 313,
+    "caption": "Figure 35: Adversarial Robustness Testing: FGSM Accuracy Degradation Curve",
+    "target_ref": "media/image39.png"
+  },
+  "image40.png": {
+    "p_idx": 357,
+    "caption": "Figure 37: Three-Pillar Architectural Diagram of Compute, Workflow, and Rigor Optimizations in the ML Pipeline",
+    "target_ref": "media/image40.png"
+  },
+  "image41.png": {
+    "p_idx": 411,
+    "caption": "Figure 38: Knowledge Distillation Student vs. Teacher Classifier Training Loss Curves",
+    "target_ref": "media/image41.png"
+  },
+  "image42.png": {
+    "p_idx": 414,
+    "caption": "Figure 38: Knowledge Distillation Student vs. Teacher Classifier Training Loss Curves",
+    "target_ref": "media/image42.png"
+  },
+  "image43.png": {
+    "p_idx": 417,
+    "caption": "Figure 39: Attentive TabNet-style Feature Selection Mask Heatmap showing Per-User Column Weights",
+    "target_ref": "media/image43.png"
+  },
+  "image44.png": {
+    "p_idx": 420,
+    "caption": "Figure 40: SCARF Self-Supervised Latent Embeddings t-SNE Dimensionality Projections",
+    "target_ref": "media/image44.png"
+  },
+  "image45.png": {
+    "p_idx": 423,
+    "caption": "Figure 41: PyTorch BCE Loss Comparison: Standard BCE vs. Label-Smoothed Mixup Loss Curves",
+    "target_ref": "media/image45.png"
+  }
+}

@@ -38,9 +38,9 @@ MODELS_V5_DIR = os.path.join(ROOT_DIR, 'models_v5')
 
 # ── Plot Path Helpers ──────────────────────────────────────────────────────────
 
-def get_v5_plot_path(filename):
+def get_v8_plot_path(filename):
     """Return the full path to a V5 plot image."""
-    return os.path.join(ROOT_DIR, 'assets', 'v5_plots', filename)
+    return os.path.join(ROOT_DIR, 'assets', 'v8 plots', filename)
 
 
 def get_notebook_plot_path(filename):

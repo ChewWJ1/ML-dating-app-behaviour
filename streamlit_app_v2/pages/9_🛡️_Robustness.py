@@ -12,8 +12,7 @@ theme.render_sidebar()
 
 # ── Path Setup ──
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
-NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 
 
 def show_plot(directory, filename, caption=''):
@@ -95,7 +94,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(NOTEBOOK_PLOTS, 'conformal_prediction.png',
+show_plot(V8_PLOTS, 'conformal_prediction.png',
           'MAPIE Conformal Prediction — Prediction Set Sizes & Coverage')
 
 st.markdown("""
@@ -137,7 +136,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(NOTEBOOK_PLOTS, 'bayesian_uncertainty.png',
+show_plot(V8_PLOTS, 'bayesian_uncertainty.png',
           'MC Dropout — Uncertainty Distribution Across Test Set')
 
 col1, col2 = st.columns(2)
@@ -179,7 +178,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(NOTEBOOK_PLOTS, 'adversarial_robustness.png',
+show_plot(V8_PLOTS, 'adversarial_robustness.png',
           'FGSM Attack — Accuracy vs. Perturbation Budget (ε)')
 
 st.markdown("""
@@ -228,7 +227,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '36_flex_14_model_calibration_reliability_diagrams.png',
+show_plot(V8_PLOTS, '36_probability_calibration_reliability_diagram.png',
           'Reliability Diagrams — Before & After Isotonic Calibration')
 
 col1, col2, col3 = st.columns(3)

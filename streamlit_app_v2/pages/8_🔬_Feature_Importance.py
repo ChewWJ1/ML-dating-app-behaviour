@@ -12,8 +12,7 @@ theme.inject_css()
 theme.render_sidebar()
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
-NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 BASE_PLOTS = os.path.join(ROOT_DIR, 'assets', 'plots')
 
 def show_plot(directory, filename, caption=''):
@@ -43,7 +42,7 @@ st.info("💡 **Methodology Note:** With ROC-AUC ≈ 0.50, feature importances r
 
 # ── Feature Importance Analysis Plot ────────────────────────────────────────
 st.markdown('<div class="section-label">IMPURITY-BASED IMPORTANCE</div>', unsafe_allow_html=True)
-show_plot(V5_PLOTS, "28_section_11_feature_importance_analysis.png",
+show_plot(V8_PLOTS, "28_feature_importance.png",
           caption="Feature Importance Analysis — Tree-Based Models")
 
 st.markdown("---")
@@ -174,7 +173,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(NOTEBOOK_PLOTS, "feature_interactions.png",
+show_plot(V8_PLOTS, "feature_interactions.png",
           "Permutation Feature Interaction Detection — Top Interacting Pairs")
 
 # ── SHAP Interaction Values [V5] ───────────────────────────────────────────
@@ -198,10 +197,10 @@ st.markdown("""
 
 col1, col2 = st.columns(2)
 with col1:
-    show_plot(V5_PLOTS, "31_flex_13_shap_interaction_values_attribution_of_syn.png",
+    show_plot(V8_PLOTS, "31_shap_dependence_interaction_plot.png",
               caption="SHAP Interaction Values — Synergistic Attribution (1)")
 with col2:
-    show_plot(V5_PLOTS, "32_flex_13_shap_interaction_values_attribution_of_syn.png",
+    show_plot(V8_PLOTS, "32_shap_interaction_matrix_heatmap.png",
               caption="SHAP Interaction Values — Synergistic Attribution (2)")
 
 st.markdown("""

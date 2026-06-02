@@ -17,7 +17,7 @@ theme.inject_css()
 theme.render_sidebar()
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 
 def show_plot(directory, filename, caption=''):
     path = os.path.join(directory, filename)
@@ -39,8 +39,10 @@ st.markdown('<div class="gradient-divider"></div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div style="background:rgba(236,72,153,0.06); border:1px dashed rgba(236,72,153,0.3); border-radius:8px; padding:16px; font-size:13px; color:#f472b6; line-height:1.5; margin-bottom: 24px;">
-    <strong>🤖 Scientific Findings on Model Performance:</strong><br>
-    Our pipeline trained 16 distinct classifiers including gradient boosters (LightGBM, CatBoost, XGBoost), ensemble methods (Bagging SVM, Stacking), and custom PyTorch architectures (FT-Transformer, SAINT, NODE). Strikingly, all models converged precisely at the majority class baseline (60.30% test accuracy), with ROC-AUC metrics remaining flat at ~0.50. A formal Paired t-Test (<i>scipy.stats.ttest_rel</i>) on 5-fold CV scores (p=0.0004) scientifically proves that while minor inter-model gaps are statistically significant, no algorithm can extract predictive rules from uniformly distributed synthetic features.
+    <strong>🤖 Scientific Findings on Model Performance (V8):</strong><br>
+    Our pipeline trained distinct classifiers including gradient boosters (LightGBM, CatBoost, XGBoost), ensemble methods, and custom PyTorch architectures (FT-Transformer, SAINT, NODE). 
+    With <strong>ImbPipeline</strong> isolating SMOTE exclusively within Cross-Validation folds, we scientifically prevented target leakage.
+    Strikingly, all models converge precisely at the baseline accuracy (~60%), with ROC-AUC metrics remaining flat at ~0.50. This definitively proves that no algorithm can extract meaningful predictive rules from uniformly distributed synthetic behavioural features.
 </div>
 """, unsafe_allow_html=True)
 
@@ -169,16 +171,15 @@ baseline_results = model_loader.load_baseline_models()
 if baseline_results:
     metrics_list = []
     for model_name, data in baseline_results.items():
-        metrics = data.get('metrics', {})
         metrics_list.append({
             'Model': model_name,
-            'Train Acc': metrics.get('Train Accuracy', 0),
-            'Test Acc': metrics.get('Test Accuracy', 0),
-            'Precision': metrics.get('Precision', 0),
-            'Recall': metrics.get('Recall', 0),
-            'F1 Score': metrics.get('F1 Score', 0),
-            'ROC-AUC': metrics.get('ROC-AUC', 0),
-            'Training Time (s)': data.get('training_time', 0)
+            'Train Acc': data.get('train_acc', 0),
+            'Test Acc': data.get('test_acc', 0),
+            'Precision': data.get('precision', 0),
+            'Recall': data.get('recall', 0),
+            'F1 Score': data.get('f1', 0),
+            'ROC-AUC': data.get('roc_auc', 0),
+            'Training Time (s)': data.get('train_time', 0)
         })
     
     df_metrics = pd.DataFrame(metrics_list)
@@ -198,7 +199,7 @@ if baseline_results:
         hide_index=True
     )
 else:
-    show_plot(V5_PLOTS, "18_10_2_model_comparison_table.png", "V5 Model Comparison Table")
+    show_plot(V8_PLOTS, "18_model_performance_comparison.png", "V5 Model Comparison Table")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -225,7 +226,7 @@ if cv_stats:
     fig.update_layout(theme.get_plotly_layout(height=500))
     st.plotly_chart(fig, use_container_width=True)
 else:
-    show_plot(V5_PLOTS, "21_10_6_cross_validation_scores_5_fold.png", "5-Fold CV Scores")
+    show_plot(V8_PLOTS, "21_cross_validation_accuracy.png", "5-Fold CV Scores")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -235,20 +236,86 @@ st.subheader("Diagnostic Visualizations")
 
 tab1, tab2, tab3 = st.tabs(["Confusion Matrices", "ROC Curves", "Learning Curves"])
 
+# Helper to get y_test for dynamic plotting
+@st.cache_data
+def get_y_test():
+    X, y, _, _ = data_loader.get_preprocessed_data()
+    from sklearn.model_selection import train_test_split
+    # Use .copy() to avoid Streamlit read-only array issues in sklearn
+    _, _, _, y_test = train_test_split(X.copy(), y.copy(), test_size=0.2, random_state=42, stratify=y)
+    return np.array(y_test)
+
 with tab1:
-    st.markdown("### Confusion Matrices")
-    st.markdown("Displays the True Positives, True Negatives, False Positives, and False Negatives for all models.")
-    show_plot(V5_PLOTS, "19_confusion_matrix_10_3_confusion_matrices.png", "Confusion Matrices — All Models")
+    st.markdown("### Dynamic Confusion Matrices")
+    st.markdown("Displays the True Positives, True Negatives, False Positives, and False Negatives.")
+    if baseline_results:
+        selected_model_cm = st.selectbox("Select Model for Confusion Matrix:", list(baseline_results.keys()))
+        y_test = get_y_test()
+        y_pred = baseline_results[selected_model_cm].get('y_pred')
+        
+        if y_pred is not None:
+            from sklearn.metrics import confusion_matrix
+            cm = confusion_matrix(y_test, y_pred)
+            fig_cm = px.imshow(cm, text_auto=True, color_continuous_scale='RdPu',
+                               labels=dict(x="Predicted Class", y="Actual Class"),
+                               x=['No Connection', 'Meaningful Connection'],
+                               y=['No Connection', 'Meaningful Connection'])
+            fig_cm.update_layout(theme.get_plotly_layout(height=400))
+            st.plotly_chart(fig_cm, use_container_width=True)
+        else:
+            st.warning("Predictions not found in cache.")
+    else:
+        show_plot(V8_PLOTS, "19_confusion_matrices.png", "Confusion Matrices — All Models")
 
 with tab2:
     st.markdown("### Receiver Operating Characteristic (ROC) Curves")
     st.markdown("Shows the trade-off between the True Positive Rate and False Positive Rate. An AUC of 0.5 indicates random guessing.")
-    show_plot(V5_PLOTS, "20_10_4_roc_curves.png", "ROC Curves — All Models Overlaid")
+    if baseline_results:
+        from sklearn.metrics import roc_curve
+        y_test = get_y_test()
+        fig_roc = go.Figure()
+        
+        for model_name, data in baseline_results.items():
+            y_prob = data.get('y_prob')
+            if y_prob is not None:
+                # Some models might return multi-class probas, others single array
+                if len(np.array(y_prob).shape) > 1 and np.array(y_prob).shape[1] > 1:
+                    probs = np.array(y_prob)[:, 1]
+                else:
+                    probs = np.array(y_prob)
+                    
+                fpr, tpr, _ = roc_curve(y_test, probs)
+                fig_roc.add_trace(go.Scatter(x=fpr, y=tpr, mode='lines', name=f"{model_name} (AUC: {data.get('roc_auc', 0):.2f})"))
+                
+        fig_roc.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode='lines', line=dict(dash='dash', color='gray'), showlegend=False))
+        fig_roc.update_layout(theme.get_plotly_layout(title="ROC Curves", height=600))
+        fig_roc.update_xaxes(title="False Positive Rate")
+        fig_roc.update_yaxes(title="True Positive Rate")
+        st.plotly_chart(fig_roc, use_container_width=True)
+    else:
+        show_plot(V8_PLOTS, "20_roc_curves.png", "ROC Curves — All Models Overlaid")
 
 with tab3:
     st.markdown("### Learning Curves (Top 3 Models)")
     st.markdown("Plots training and validation accuracy as the number of training examples increases. Helps diagnose bias vs. variance.")
-    show_plot(V5_PLOTS, "22_10_7_learning_curves_top_3_models.png", "Learning Curves — Top 3 Models")
+    
+    lc_data = model_loader.load_learning_curve_data()
+    if lc_data:
+        selected_model_lc = st.selectbox("Select Model for Learning Curve:", list(lc_data.keys()))
+        data = lc_data[selected_model_lc]
+        train_sizes = data['train_sizes']
+        train_scores_mean = np.mean(data['train_scores'], axis=1)
+        val_scores_mean = np.mean(data['val_scores'], axis=1)
+        
+        fig_lc = go.Figure()
+        fig_lc.add_trace(go.Scatter(x=train_sizes, y=train_scores_mean, mode='lines+markers', name='Training Score', line=dict(color=theme.PINK)))
+        fig_lc.add_trace(go.Scatter(x=train_sizes, y=val_scores_mean, mode='lines+markers', name='Cross-Validation Score', line=dict(color=theme.TEAL)))
+        fig_lc.update_layout(theme.get_plotly_layout(title=f"Learning Curve ({selected_model_lc})", height=500))
+        fig_lc.update_xaxes(title="Training Examples")
+        fig_lc.update_yaxes(title="Score")
+        st.plotly_chart(fig_lc, use_container_width=True)
+    else:
+        show_plot(V8_PLOTS, "22_learning_curves.png", "Learning Curves — Top 3 Models")
 
 st.markdown("<br>", unsafe_allow_html=True)
 

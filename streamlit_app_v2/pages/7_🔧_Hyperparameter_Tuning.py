@@ -15,7 +15,7 @@ theme.inject_css()
 theme.render_sidebar()
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 
 def show_plot(directory, filename, caption=''):
     path = os.path.join(directory, filename)
@@ -293,17 +293,59 @@ By comparing the baseline metrics to the tuned metrics side-by-side, we can see 
 Given the synthetic nature of the dataset, improvements are expected to be marginal.
 """)
 
-show_plot(V5_PLOTS, "26_11_3_before_vs_after_tuning_comparison.png", "Baseline vs Tuned Comparison")
+baseline_results = model_loader.load_baseline_models()
+if tuned_results and baseline_results:
+    comparison_data = []
+    for model_name in tuned_results.keys():
+        if model_name in baseline_results:
+            base_f1 = baseline_results[model_name].get('f1', 0)
+            tuned_f1 = tuned_results[model_name].get('f1', 0)
+            comparison_data.append({"Model": model_name, "Stage": "Baseline", "F1 Score": base_f1})
+            comparison_data.append({"Model": model_name, "Stage": "Tuned", "F1 Score": tuned_f1})
+    
+    df_comp = pd.DataFrame(comparison_data)
+    if not df_comp.empty:
+        fig_comp = px.bar(df_comp, x="Model", y="F1 Score", color="Stage", barmode="group",
+                          color_discrete_map={"Baseline": theme.TEAL, "Tuned": theme.PINK})
+        fig_comp.update_layout(theme.get_plotly_layout("Baseline vs Tuned F1 Score", height=400))
+        st.plotly_chart(fig_comp, use_container_width=True)
+else:
+    show_plot(V8_PLOTS, "26_baseline_vs_tuned_comparison.png", "Baseline vs Tuned Comparison")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
 # --- 6. CHAMPION MODEL ---
 st.markdown('<div class="section-label">CHAMPION MODEL</div>', unsafe_allow_html=True)
-st.subheader("Detailed Results: Best Tuned Model (Random Forest)")
+st.subheader("Detailed Results: Best Tuned Model")
 
-st.markdown("This is the detailed confusion matrix and classification report for the single best model found across all tuning runs.")
+st.markdown("This is the detailed confusion matrix for the single best model found across all tuning runs.")
 
-show_plot(V5_PLOTS, "27_confusion_matrix_11_4_best_tuned_model_detailed_results.png", "Best Tuned Model — Confusion Matrix")
+# Helper to get y_test for dynamic plotting
+@st.cache_data
+def get_y_test():
+    from utils import data_loader
+    X, y, _, _ = data_loader.get_preprocessed_data()
+    from sklearn.model_selection import train_test_split
+    # Use .copy() to avoid Streamlit read-only array issues in sklearn
+    _, _, _, y_test = train_test_split(X.copy(), y.copy(), test_size=0.2, random_state=42, stratify=y)
+    return np.array(y_test)
+
+if tuned_results:
+    best_model_name = max(tuned_results.keys(), key=lambda k: tuned_results[k].get('f1', 0))
+    st.markdown(f"**Champion Model:** `{best_model_name}` (F1: {tuned_results[best_model_name].get('f1', 0):.4f})")
+    y_pred = tuned_results[best_model_name].get('y_pred')
+    y_test = get_y_test()
+    if y_pred is not None:
+        from sklearn.metrics import confusion_matrix
+        cm = confusion_matrix(y_test, y_pred)
+        fig_cm = px.imshow(cm, text_auto=True, color_continuous_scale='RdPu',
+                           labels=dict(x="Predicted Class", y="Actual Class"),
+                           x=['No Connection', 'Meaningful Connection'],
+                           y=['No Connection', 'Meaningful Connection'])
+        fig_cm.update_layout(theme.get_plotly_layout(height=400))
+        st.plotly_chart(fig_cm, use_container_width=True)
+else:
+    show_plot(V8_PLOTS, "27_best_tuned_model_details.png", "Best Tuned Model — Confusion Matrix")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -313,10 +355,23 @@ st.subheader("Comprehensive Final Ranking")
 
 st.markdown("""
 A summary ranking all baseline and tuned models, sorted by their test F1 score. 
-Green bars indicate tuned models, while grey bars indicate baseline models.
+Pink bars indicate tuned models, while Teal bars indicate baseline models.
 """)
 
-show_plot(V5_PLOTS, "29_section_12_final_model_summary.png", "Final Model Ranking Summary")
+if baseline_results and tuned_results:
+    ranking_data = []
+    for model_name, data in baseline_results.items():
+        ranking_data.append({"Model": f"{model_name} (Base)", "F1 Score": data.get('f1', 0), "Type": "Baseline"})
+    for model_name, data in tuned_results.items():
+        ranking_data.append({"Model": f"{model_name} (Tuned)", "F1 Score": data.get('f1', 0), "Type": "Tuned"})
+        
+    df_rank = pd.DataFrame(ranking_data).sort_values(by="F1 Score", ascending=True)
+    fig_rank = px.bar(df_rank, x="F1 Score", y="Model", color="Type", orientation='h',
+                      color_discrete_map={"Baseline": theme.TEAL, "Tuned": theme.PINK})
+    fig_rank.update_layout(theme.get_plotly_layout("Final Model Ranking", height=600))
+    st.plotly_chart(fig_rank, use_container_width=True)
+else:
+    show_plot(V8_PLOTS, "29_all_models_roc_auc_ranking.png", "Final Model Ranking Summary")
 
 col_prev, col_next = st.columns([1, 1])
 with col_prev:

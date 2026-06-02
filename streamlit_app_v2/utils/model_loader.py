@@ -121,18 +121,18 @@ def inject_classes():
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# V5 models directory
-MODELS_V5_DIR = os.path.join(ROOT_DIR, 'models_v5')
+# V8 models directory
+MODELS_V8_DIR = os.path.join(ROOT_DIR, 'models_v8')
 
-# Baseline path: check models_v5/ first, then fallback to root
-_BASELINE_V5 = os.path.join(MODELS_V5_DIR, 'baseline_results.joblib')
+# Baseline path: check models_v8/ first, then fallback to root
+_BASELINE_V8 = os.path.join(MODELS_V8_DIR, 'baseline_results.joblib')
 _BASELINE_ROOT = os.path.join(ROOT_DIR, 'baseline_results.joblib')
-BASELINE_PATH = _BASELINE_V5 if os.path.exists(_BASELINE_V5) else _BASELINE_ROOT
+BASELINE_PATH = _BASELINE_V8 if os.path.exists(_BASELINE_V8) else _BASELINE_ROOT
 
-# Tuned path: check models_v5/ first, then fallback to root
-_TUNED_V5 = os.path.join(MODELS_V5_DIR, 'tuned_results.joblib')
+# Tuned path: check models_v8/ first, then fallback to root
+_TUNED_V8 = os.path.join(MODELS_V8_DIR, 'tuned_results.joblib')
 _TUNED_ROOT = os.path.join(ROOT_DIR, 'tuned_results.joblib')
-TUNED_PATH = _TUNED_V5 if os.path.exists(_TUNED_V5) else _TUNED_ROOT
+TUNED_PATH = _TUNED_V8 if os.path.exists(_TUNED_V8) else _TUNED_ROOT
 
 
 @st.cache_resource
@@ -169,8 +169,8 @@ def load_tuned_models():
 
 @st.cache_resource
 def load_cv_results():
-    """Load the cross-validation results from models_v5/cv_results.joblib."""
-    cv_path = os.path.join(MODELS_V5_DIR, 'cv_results.joblib')
+    """Load the cross-validation results from models_v8/cv_results.joblib."""
+    cv_path = os.path.join(MODELS_V8_DIR, 'cv_results.joblib')
     if not os.path.exists(cv_path):
         return {}
     try:
@@ -182,8 +182,8 @@ def load_cv_results():
 
 @st.cache_resource
 def load_learning_curve_data():
-    """Load the learning curve data from models_v5/learning_curve_data.joblib."""
-    lc_path = os.path.join(MODELS_V5_DIR, 'learning_curve_data.joblib')
+    """Load the learning curve data from models_v8/learning_curve_data.joblib."""
+    lc_path = os.path.join(MODELS_V8_DIR, 'learning_curve_data.joblib')
     if not os.path.exists(lc_path):
         return {}
     try:
@@ -227,6 +227,18 @@ def preprocess_single_input(input_dict, full_cols, feature_columns, scaler):
     # Create an empty dataframe with ALL preprocessed columns (113 cols) for correct scaling
     df_aligned = pd.DataFrame(0, index=[0], columns=full_cols)
     
+    # V8 Feature Engineering
+    if 'likes_received' in df.columns:
+        df['engagement_score'] = df['likes_received'] * df['swipe_right_ratio'] * df.get('message_sent_count', 0)
+        df['profile_completeness'] = df['profile_pics_count'] * df['bio_length']
+        df['activity_intensity'] = df['app_usage_time_min'] * df['emoji_usage_rate']
+        df['selectivity_ratio'] = df.get('message_sent_count', 0) / (df['likes_received'] + 1)
+        df['late_night_user'] = ((df['last_active_hour'] >= 22) | (df['last_active_hour'] <= 4)).astype(int)
+        
+        for col in ['likes_received', 'message_sent_count', 'bio_length', 'app_usage_time_min']:
+            if col in df.columns:
+                df[f'{col}_log'] = np.log1p(df[col])
+                
     # Fill in numericals and ordinals
     for col in df.columns:
         if col in df_aligned.columns and col not in nominal_cols and col != 'interest_tags':
@@ -250,10 +262,11 @@ def preprocess_single_input(input_dict, full_cols, feature_columns, scaler):
                     df_aligned[tag_col] = 1
                     
     # Scale numericals
-    numeric_cols = ['age', 'height_cm', 'weight_kg', 'app_usage_time_min',
-                    'swipe_right_ratio', 'likes_received', 'mutual_matches',
-                    'profile_pics_count', 'bio_length', 'message_sent_count',
-                    'emoji_usage_rate', 'last_active_hour']
+    numeric_cols = ['age', 'height_cm', 'weight_kg', 'app_usage_time_min', 'swipe_right_ratio',
+                    'likes_received', 'profile_pics_count', 'bio_length',
+                    'message_sent_count', 'emoji_usage_rate', 'last_active_hour',
+                    'engagement_score', 'profile_completeness', 'activity_intensity', 'selectivity_ratio',
+                    'likes_received_log', 'message_sent_count_log', 'bio_length_log', 'app_usage_time_min_log']
     numeric_cols = [c for c in numeric_cols if c in df_aligned.columns]
     
     # We must scale using the fitted scaler (which expects all 12 columns)

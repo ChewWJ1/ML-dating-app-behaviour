@@ -1,0 +1,806 @@
+==================================================
+FIGURE 001 (Cell Index 15, Output Index 0)
+Heading: ### 3.3 Target Variable Distribution (match_outcome)
+Code Snippet (First 15 lines):
+  fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+  
+  # All 10 classes
+  counts = df_raw['match_outcome'].value_counts()
+  colors = sns.color_palette('husl', len(counts))
+  axes[0].barh(counts.index, counts.values, color=colors)
+  axes[0].set_title('Distribution of All 10 Match Outcomes', fontsize=13, fontweight='bold')
+  axes[0].set_xlabel('Count')
+  for i, v in enumerate(counts.values):
+      axes[0].text(v + 30, i, f'{v:,}', va='center', fontsize=9)
+  
+  # Binary target
+  positive_outcomes_eda = {'Mutual Match', 'Instant Match', 'Date Happened', 'Relationship Formed'}
+  binary_labels = df_raw['match_outcome'].apply(
+      lambda x: 'Positive' if x in positive_outcomes_eda else 'Negative'
+  ...
+==================================================
+
+==================================================
+FIGURE 002 (Cell Index 17, Output Index 0)
+Heading: ### 3.4 Categorical Feature Distributions
+Code Snippet (First 15 lines):
+  cat_cols_eda = ['gender', 'sexual_orientation', 'location_type',
+                  'income_bracket', 'education_level', 'body_type',
+                  'relationship_intent', 'swipe_time_of_day', 'zodiac_sign']
+  
+  fig, axes = plt.subplots(3, 3, figsize=(18, 14))
+  axes = axes.flatten()
+  
+  for i, col in enumerate(cat_cols_eda):
+      vc = df_raw[col].value_counts()
+      axes[i].barh(vc.index, vc.values, color=sns.color_palette('husl', len(vc)))
+      axes[i].set_title(col.replace('_', ' ').title(), fontweight='bold')
+      axes[i].set_xlabel('Count')
+      axes[i].tick_params(labelsize=8)
+  
+  plt.suptitle('Categorical Feature Distributions', fontsize=16, fontweight='bold', y=1.01)
+  ...
+==================================================
+
+==================================================
+FIGURE 003 (Cell Index 19, Output Index 0)
+Heading: ### 3.5 Numerical Feature Distributions
+Code Snippet (First 15 lines):
+  num_cols_eda = ['age', 'height_cm', 'weight_kg', 'app_usage_time_min',
+                  'swipe_right_ratio', 'likes_received',
+                  'profile_pics_count', 'bio_length', 'message_sent_count',
+                  'emoji_usage_rate', 'last_active_hour']
+  
+  fig, axes = plt.subplots(3, 4, figsize=(20, 12))
+  axes = axes.flatten()
+  
+  for i, col in enumerate(num_cols_eda):
+      axes[i].hist(df_raw[col], bins=40,
+                   color=sns.color_palette('husl', 12)[i], edgecolor='white', linewidth=0.3)
+      axes[i].set_title(col.replace('_', ' ').title(), fontweight='bold')
+      axes[i].set_ylabel('Frequency')
+      axes[i].tick_params(labelsize=8)
+  
+  ...
+==================================================
+
+==================================================
+FIGURE 004 (Cell Index 21, Output Index 0)
+Heading: ### 3.6 Outlier Detection via Boxplots
+Code Snippet (First 15 lines):
+  fig, axes = plt.subplots(3, 4, figsize=(20, 12))
+  axes = axes.flatten()
+  
+  for i, col in enumerate(num_cols_eda):
+      axes[i].boxplot(df_raw[col].dropna(), patch_artist=True,
+                      boxprops=dict(facecolor=sns.color_palette('husl', 12)[i], alpha=0.7),
+                      medianprops=dict(color='white', linewidth=2))
+      axes[i].set_title(col.replace('_', ' ').title(), fontweight='bold')
+      axes[i].tick_params(labelsize=8)
+  
+  plt.suptitle('Outlier Detection — Boxplots', fontsize=16, fontweight='bold', y=1.01)
+  plt.tight_layout()
+  plt.show()
+==================================================
+
+==================================================
+FIGURE 005 (Cell Index 23, Output Index 0)
+Heading: ### 3.7 Feature vs Target: Numerical Columns by Outcome
+Code Snippet (First 15 lines):
+  # Create temporary EDA dataframe with binary outcome label
+  positive_outcomes_eda = {'Mutual Match', 'Instant Match', 'Date Happened', 'Relationship Formed'}
+  df_eda = df_raw.copy()
+  df_eda['outcome_label'] = df_eda['match_outcome'].apply(
+      lambda x: 'Positive' if x in positive_outcomes_eda else 'Negative'
+  )
+  
+  fig, axes = plt.subplots(3, 4, figsize=(20, 12))
+  axes = axes.flatten()
+  
+  for i, col in enumerate(num_cols_eda):
+      pos_vals = df_eda[df_eda['outcome_label'] == 'Positive'][col]
+      neg_vals = df_eda[df_eda['outcome_label'] == 'Negative'][col]
+      axes[i].hist(neg_vals, bins=30, alpha=0.6, label='Negative', color='#F44336', edgecolor='none')
+      axes[i].hist(pos_vals, bins=30, alpha=0.6, label='Positive', color='#4CAF50', edgecolor='none')
+  ...
+==================================================
+
+==================================================
+FIGURE 006 (Cell Index 25, Output Index 0)
+Heading: ### 3.8 Feature vs Target: Categorical Columns by Outcome
+Code Snippet (First 15 lines):
+  # Stacked percentage bar charts — shows positive rate per category
+  cat_subset = ['gender', 'sexual_orientation', 'location_type',
+                'income_bracket', 'relationship_intent', 'body_type']
+  
+  fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+  axes = axes.flatten()
+  
+  for i, col in enumerate(cat_subset):
+      ct = pd.crosstab(df_eda[col], df_eda['outcome_label'], normalize='index') * 100
+      # Ensure both columns exist
+      for c in ['Negative', 'Positive']:
+          if c not in ct.columns:
+              ct[c] = 0
+      ct[['Negative', 'Positive']].plot(
+          kind='barh', ax=axes[i], stacked=True,
+  ...
+==================================================
+
+==================================================
+FIGURE 007 (Cell Index 27, Output Index 0)
+Heading: ### 3.9 Correlation Heatmap (Numerical Features)
+Code Snippet (First 15 lines):
+  corr_matrix = df_raw[num_cols_eda].corr()
+  
+  plt.figure(figsize=(12, 9))
+  mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
+  sns.heatmap(corr_matrix, mask=mask, annot=True, fmt='.2f', cmap='coolwarm',
+              center=0, linewidths=0.5, cbar_kws={'shrink': 0.8}, annot_kws={'size': 8})
+  plt.title('Pearson Correlation — Numerical Features', fontsize=14, fontweight='bold', pad=15)
+  plt.xticks(rotation=45, ha='right', fontsize=9)
+  plt.yticks(fontsize=9)
+  plt.tight_layout()
+  plt.show()
+==================================================
+
+==================================================
+FIGURE 008 (Cell Index 29, Output Index 0)
+Heading: ### 3.10 Interest Tags Analysis
+Code Snippet (First 15 lines):
+  # Flatten all interest tags and count frequency
+  all_tags = [tag.strip() for tags in df_raw['interest_tags'].dropna() for tag in tags.split(',')]
+  tag_counts = Counter(all_tags)
+  tag_df = pd.DataFrame(tag_counts.most_common(30), columns=['interest', 'count'])
+  
+  plt.figure(figsize=(12, 7))
+  colors = sns.color_palette('husl', len(tag_df))
+  plt.barh(tag_df['interest'], tag_df['count'], color=colors)
+  plt.title('Top 30 Interest Tags Among Users', fontsize=14, fontweight='bold')
+  plt.xlabel('Frequency')
+  plt.gca().invert_yaxis()
+  plt.tight_layout()
+  plt.show()
+  print(f'Total unique interest tags: {len(tag_counts)}')
+==================================================
+
+==================================================
+FIGURE 009 (Cell Index 33, Output Index 1)
+Heading: ### 🔍 Causal Discovery — Going Beyond Correlation
+Code Snippet (First 15 lines):
+  import os
+  # pip install causal-learn
+  from causallearn.search.ConstraintBased.PC import pc
+  from causallearn.utils.GraphUtils import GraphUtils
+  import matplotlib.pyplot as plt
+  import numpy as np
+  import os
+  import pandas as pd
+  from sklearn.preprocessing import OrdinalEncoder, RobustScaler, MultiLabelBinarizer
+  
+  # --- self-contained preprocessing for causal cells ---
+  df_temp = df_raw.copy()
+  df_temp.drop(columns=['app_usage_time_label', 'swipe_right_label'], inplace=True, errors='ignore')
+  positive_outcomes = {'Mutual Match', 'Instant Match', 'Date Happened', 'Relationship Formed'}
+  df_temp['target'] = df_temp['match_outcome'].apply(lambda x: 1 if x in positive_outcomes else 0)
+  ...
+==================================================
+
+==================================================
+FIGURE 010 (Cell Index 33, Output Index 2)
+Heading: ### 🔍 Causal Discovery — Going Beyond Correlation
+Code Snippet (First 15 lines):
+  import os
+  # pip install causal-learn
+  from causallearn.search.ConstraintBased.PC import pc
+  from causallearn.utils.GraphUtils import GraphUtils
+  import matplotlib.pyplot as plt
+  import numpy as np
+  import os
+  import pandas as pd
+  from sklearn.preprocessing import OrdinalEncoder, RobustScaler, MultiLabelBinarizer
+  
+  # --- self-contained preprocessing for causal cells ---
+  df_temp = df_raw.copy()
+  df_temp.drop(columns=['app_usage_time_label', 'swipe_right_label'], inplace=True, errors='ignore')
+  positive_outcomes = {'Mutual Match', 'Instant Match', 'Date Happened', 'Relationship Formed'}
+  df_temp['target'] = df_temp['match_outcome'].apply(lambda x: 1 if x in positive_outcomes else 0)
+  ...
+==================================================
+
+==================================================
+FIGURE 011 (Cell Index 59, Output Index 1)
+Heading: ### 5.1 Prepare Feature Matrix & Target Vector
+Code Snippet (First 15 lines):
+  # --- V5 METHODOLOGY 1: OUT-OF-DISTRIBUTION (OOD) REJECTION GUARDRAIL ---
+  from sklearn.ensemble import IsolationForest
+  import numpy as np
+  import pandas as pd
+  import matplotlib.pyplot as plt
+  import seaborn as sns
+  
+  print("🚨 Initializing Out-of-Distribution (OOD) Rejection Guardrail...")
+  
+  # --- Fallback split if cell is executed before Section 7 ---
+  if 'X_train' not in globals() or 'X_test' not in globals():
+      from sklearn.model_selection import train_test_split
+      X_full = df.drop(columns=['target'])
+      y_full = df['target']
+      X_train, X_test, y_train, y_test = train_test_split(
+  ...
+==================================================
+
+==================================================
+FIGURE 012 (Cell Index 62, Output Index 0)
+Heading: ### 5.2 ANOVA F-Score Feature Selection (SelectKBest)
+Code Snippet (First 15 lines):
+  top25_f = f_scores.head(25)
+  
+  plt.figure(figsize=(12, 8))
+  colors_f = ['#4CAF50' if s > f_scores['f_score'].median() else '#90A4AE' for s in top25_f['f_score']]
+  plt.barh(top25_f['feature'][::-1], top25_f['f_score'][::-1], color=colors_f[::-1])
+  plt.xlabel('ANOVA F-Score', fontsize=11)
+  plt.title('Top 25 Features — ANOVA F-Score (vs match_outcome)', fontsize=13, fontweight='bold')
+  plt.tight_layout()
+  plt.show()
+==================================================
+
+==================================================
+FIGURE 013 (Cell Index 67, Output Index 0)
+Heading: ### 5.4 Mutual Information Feature Selection
+Code Snippet (First 15 lines):
+  top25_mi = mi_df.head(25)
+  
+  plt.figure(figsize=(12, 8))
+  colors_mi = sns.color_palette('viridis', len(top25_mi))
+  plt.barh(top25_mi['feature'][::-1], top25_mi['mi_score'][::-1], color=colors_mi[::-1])
+  plt.xlabel('Mutual Information Score', fontsize=11)
+  plt.title('Top 25 Features — Mutual Information Score (vs match_outcome)', fontsize=13, fontweight='bold')
+  plt.tight_layout()
+  plt.show()
+==================================================
+
+==================================================
+FIGURE 014 (Cell Index 72, Output Index 0)
+Heading: ### 6.1 Explained Variance Analysis
+Code Snippet (First 15 lines):
+  pca_full = PCA(random_state=RANDOM_STATE)
+  pca_full.fit(X_train_selected)
+  
+  cumvar = np.cumsum(pca_full.explained_variance_ratio_) * 100
+  n_components_90 = int(np.argmax(cumvar >= 90) + 1)
+  n_components_95 = int(np.argmax(cumvar >= 95) + 1)
+  
+  fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+  
+  # Scree plot — individual variance per component
+  axes[0].bar(
+      range(1, min(31, len(pca_full.explained_variance_ratio_) + 1)),
+      pca_full.explained_variance_ratio_[:30] * 100,
+      color=sns.color_palette('husl', 30), edgecolor='white', linewidth=0.3
+  )
+  ...
+==================================================
+
+==================================================
+FIGURE 015 (Cell Index 76, Output Index 0)
+Heading: ### 6.3 PCA Biplot — First Two Principal Components
+Code Snippet (First 15 lines):
+  plt.figure(figsize=(9, 6))
+  sample_idx = np.random.default_rng(RANDOM_STATE).choice(len(X_train_pca), size=3000, replace=False)
+  colors_map = {1: '#4CAF50', 0: '#F44336'}
+  
+  for label, grp_label in [(1, 'Positive'), (0, 'Negative')]:
+      mask = y.values[sample_idx] == label
+      plt.scatter(
+          X_train_pca.values[sample_idx][mask, 0],
+          X_train_pca.values[sample_idx][mask, 1],
+          c=colors_map[label], label=grp_label, alpha=0.35, s=10, edgecolors='none'
+      )
+  
+  plt.xlabel(f'PC1 ({pca.explained_variance_ratio_[0]*100:.1f}% var)', fontsize=11)
+  plt.ylabel(f'PC2 ({pca.explained_variance_ratio_[1]*100:.1f}% var)', fontsize=11)
+  plt.title('PCA Biplot — PC1 vs PC2 (3,000 sample points)', fontsize=13, fontweight='bold')
+  ...
+==================================================
+
+==================================================
+FIGURE 016 (Cell Index 79, Output Index 0)
+Heading: ## ✂️ Section 7: Train / Test Split & Class Resampling
+Code Snippet (First 15 lines):
+  # Visualise class balance in train and test sets
+  fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+  
+  for ax, split_y, title in zip(axes, [y_train, y_test], ['Training Set', 'Test Set']):
+      vc = split_y.value_counts()
+      ax.pie(vc.values, labels=['Negative', 'Positive'],
+             autopct='%1.1f%%', colors=['#F44336', '#4CAF50'],
+             startangle=90, wedgeprops=dict(edgecolor='white', linewidth=2))
+      ax.set_title(f'{title} ({len(split_y):,} samples)', fontweight='bold')
+  
+  plt.suptitle('Class Distribution — Train & Test Sets', fontsize=13, fontweight='bold')
+  plt.tight_layout()
+  plt.show()
+==================================================
+
+==================================================
+FIGURE 017 (Cell Index 90, Output Index 1)
+Heading: ### 10.2 Label Smoothing & Mixup Regularization Analysis (V8 Pipeline)
+Code Snippet (First 15 lines):
+  # --- V5.1 COMPARATIVE VALIDATION: LABEL SMOOTHING & MIXUP ---
+  import matplotlib.pyplot as plt
+  import numpy as np
+  import torch
+  import torch.nn as nn
+  import torch.optim as optim
+  from torch.utils.data import TensorDataset, DataLoader
+  
+  print("⏳ Training SimpleMLP to generate real loss curves...")
+  
+  class SimpleMLP(nn.Module):
+      def __init__(self, in_features):
+          super().__init__()
+          self.net = nn.Sequential(nn.Linear(in_features, 64), nn.ReLU(), nn.Linear(64, 1))
+      def forward(self, x):
+  ...
+==================================================
+
+==================================================
+FIGURE 018 (Cell Index 94, Output Index 0)
+Heading: ### 10.3 Model Comparison Table
+Code Snippet (First 15 lines):
+  # Visual comparison — bar chart of key metrics
+  metrics_to_plot = ['Test Accuracy', 'Precision', 'Recall', 'F1 Score', 'ROC-AUC']
+  
+  fig, axes = plt.subplots(1, len(metrics_to_plot), figsize=(22, 5))
+  
+  for i, metric in enumerate(metrics_to_plot):
+      values = comparison[metric].sort_values(ascending=True)
+      colors = sns.color_palette('husl', len(values))
+      axes[i].barh(values.index, values.values, color=colors)
+      axes[i].set_title(metric, fontweight='bold', fontsize=11)
+      axes[i].set_xlim([0, max(values.values.max() * 1.1, 1.0)])
+      for j, v in enumerate(values.values):
+          axes[i].text(v + 0.005, j, f'{v:.3f}', va='center', fontsize=8)
+  
+  plt.suptitle('Model Performance Comparison', fontsize=15, fontweight='bold')
+  ...
+==================================================
+
+==================================================
+FIGURE 019 (Cell Index 96, Output Index 0)
+Heading: ### 10.4 Confusion Matrices
+Code Snippet (First 15 lines):
+  num_models = len(results)
+  n_cols = 4
+  n_rows = (num_models + n_cols - 1) // n_cols
+  
+  fig, axes = plt.subplots(n_rows, n_cols, figsize=(5 * n_cols, 4.5 * n_rows))
+  axes = axes.flatten()
+  
+  for i, (name, r) in enumerate(results.items()):
+      cm = confusion_matrix(y_test, r['y_pred'])
+      sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[i],
+                  xticklabels=['Negative', 'Positive'],
+                  yticklabels=['Negative', 'Positive'])
+      axes[i].set_title(f'{name}\nAcc={r["test_acc"]:.3f} | F1={r["f1"]:.3f}',
+                        fontweight='bold', fontsize=10)
+      axes[i].set_ylabel('Actual')
+  ...
+==================================================
+
+==================================================
+FIGURE 020 (Cell Index 98, Output Index 0)
+Heading: ### 10.5 ROC & Precision-Recall Curves (Optimal F1 Thresholding)
+Code Snippet (First 15 lines):
+  plt.figure(figsize=(10, 7))
+  colors = sns.color_palette('husl', len(results))
+  
+  for i, (name, r) in enumerate(results.items()):
+      RocCurveDisplay.from_predictions(
+          y_test, r['y_prob'],
+          name=f"{name} (AUC={r['roc_auc']:.3f})",
+          ax=plt.gca(), color=colors[i], linewidth=2
+      )
+  
+  plt.plot([0, 1], [0, 1], 'k--', linewidth=1, label='Random (AUC=0.500)')
+  plt.title('ROC Curves — All Models', fontsize=14, fontweight='bold')
+  plt.xlabel('False Positive Rate', fontsize=11)
+  plt.ylabel('True Positive Rate', fontsize=11)
+  plt.legend(loc='lower right', fontsize=9)
+  ...
+==================================================
+
+==================================================
+FIGURE 021 (Cell Index 105, Output Index 0)
+Heading: ### 10.7 Cross-Validation & Statistical Significance (Friedman Test & Nemenyi Post-Hoc)
+Code Snippet (First 15 lines):
+  # Boxplot of cross-validation scores
+  fig, ax = plt.subplots(figsize=(12, 5))
+  
+  # --- FIX: Ensure all arrays have the exact same length for Pandas DataFrame ---
+  min_len = min(len(cv_results[m]) for m in cv_results)
+  cv_results_trimmed = {m: cv_results[m][:min_len] for m in cv_results}
+  cv_df = pd.DataFrame(cv_results_trimmed)
+  # ------------------------------------------------------------------------------
+  
+  cv_df_melted = cv_df.melt(var_name='Model', value_name='Accuracy')
+  
+  sns.boxplot(data=cv_df_melted, x='Model', y='Accuracy', palette='husl', ax=ax)
+  ax.set_title('Cross-Validation Accuracy Distribution', fontweight='bold', fontsize=13)
+  ax.set_ylabel('Accuracy')
+  ax.set_xlabel('')
+  ...
+==================================================
+
+==================================================
+FIGURE 022 (Cell Index 107, Output Index 1)
+Heading: ### 10.8 Learning Curves — Top 3 Models
+Code Snippet (First 15 lines):
+  # Identify top 3 models by test accuracy
+  # Select top 3 pipeline-compatible models for tuning (by ROC-AUC)
+  # Pipeline compatibility: SHAP TreeExplainer + DiCE + CalibratedClassifierCV
+  PIPELINE_COMPATIBLE = {'Random Forest', 'XGBoost', 'LightGBM', 'CatBoost', 'Decision Tree'}
+  valid_for_tuning = comparison[comparison.index.isin(PIPELINE_COMPATIBLE)]
+  top3 = valid_for_tuning.sort_values('ROC-AUC', ascending=False).head(3).index.tolist()
+  print(f'Top 3 pipeline-compatible models (by ROC-AUC): {top3}')
+  
+  import joblib
+  import os
+  from sklearn.model_selection import learning_curve
+  from imblearn.pipeline import Pipeline as ImbPipeline
+  from imblearn.over_sampling import SMOTE
+  
+  # Load pre-computed SVM from original checkpoint to skip 30+ minutes of SVM learning curve
+  ...
+==================================================
+
+==================================================
+FIGURE 023 (Cell Index 112, Output Index 1)
+Heading: ### 🔒 Differential Privacy Training (Opacus Details)
+Code Snippet (First 15 lines):
+  import os
+  reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+  os.makedirs(reports_dir, exist_ok=True)
+  import os, joblib
+  import torch
+  import torch.nn as nn
+  from torch.utils.data import DataLoader, TensorDataset
+  
+  # Define DP-compatible model (BatchNorm -> GroupNorm)
+  # Must be defined outside else block to allow joblib to unpickle cached model instances
+  class DPModel(nn.Module):
+      def __init__(self, n_features, hidden=128):
+          super().__init__()
+          self.net = nn.Sequential(
+              nn.Linear(n_features, hidden),
+  ...
+==================================================
+
+==================================================
+FIGURE 024 (Cell Index 115, Output Index 1)
+Heading: ### 🕸️ Instance-Wise Feature Selection (Attentive Tabular Network)
+Code Snippet (First 15 lines):
+  # --- V5.1 ATTENTIVE TABULAR NETWORK: TABNET-STYLE INSTANCE FEATURE SELECTION ---
+  import torch
+  import torch.nn as nn
+  import torch.nn.functional as F
+  import numpy as np
+  import pandas as pd
+  import matplotlib.pyplot as plt
+  import seaborn as sns
+  
+  print("🕸️ Constructing Attentive Tabular Network (TabNet-style)...")
+  
+  # Attentive Tabular Network Architecture
+  class AttentiveTabularNet(nn.Module):
+      def __init__(self, in_features, hidden_dim=32):
+          super().__init__()
+  ...
+==================================================
+
+==================================================
+FIGURE 025 (Cell Index 121, Output Index 1)
+Heading: ### 🧪 Self-Supervised Contrastive Pre-Training (SCARF Details)
+Code Snippet (First 15 lines):
+  import os
+  reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+  os.makedirs(reports_dir, exist_ok=True)
+  import os, joblib
+  os.makedirs('../models_v8', exist_ok=True)
+  cache_scarf = '../models_v8/scarf.joblib'
+  
+  # Validate that preceding split variables are defined in the interactive session
+  if 'y_train' not in globals() or 'X_train' not in globals() or 'X_test' not in globals() or 'y_test' not in globals():
+      raise NameError("❌ Required variables (X_train, y_train, X_test, y_test) are not defined in the active session.\n"
+                      "👉 Please run the preceding cells first (specifically Cell 78: 'Train / Test Split') to populate these variables in memory.")
+  
+  # Self-healing cache checker: Validate that embeddings AND pre-training loss history are complete
+  cache_valid = False
+  if os.path.exists(cache_scarf):
+  ...
+==================================================
+
+==================================================
+FIGURE 026 (Cell Index 132, Output Index 0)
+Heading: ### 12.3 Before vs After Tuning Comparison
+Code Snippet (First 15 lines):
+  # Visual comparison — baseline vs tuned
+  fig, axes = plt.subplots(1, 3, figsize=(16, 5))
+  
+  for i, metric in enumerate(['test_acc', 'f1', 'roc_auc']):
+      label = {'test_acc': 'Accuracy', 'f1': 'F1 Score', 'roc_auc': 'ROC-AUC'}[metric]
+      model_names = [n for n in top3 if n in tuned_results]
+      baseline_vals = [results[n][metric] for n in model_names]
+      tuned_vals = [tuned_results[n][metric] for n in model_names]
+  
+      x = np.arange(len(model_names))
+      w = 0.35
+      axes[i].bar(x - w/2, baseline_vals, w, label='Baseline', color='#90A4AE', edgecolor='white')
+      axes[i].bar(x + w/2, tuned_vals, w, label='Tuned', color='#4CAF50', edgecolor='white')
+      axes[i].set_xticks(x)
+      axes[i].set_xticklabels(model_names, fontsize=8, rotation=10)
+  ...
+==================================================
+
+==================================================
+FIGURE 027 (Cell Index 135, Output Index 0)
+Heading: ### 12.4 Best Tuned Model — Detailed Results
+Code Snippet (First 15 lines):
+  # Confusion matrix for best model
+  if best:
+      suffix = ' (Tuned)' if tuned_results else ' (Baseline)'
+      fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+  
+      # Confusion matrix
+      cm = confusion_matrix(y_test, best['y_pred'])
+      sns.heatmap(cm, annot=True, fmt='d', cmap='Greens', ax=axes[0],
+                  xticklabels=['Negative', 'Positive'],
+                  yticklabels=['Negative', 'Positive'])
+      axes[0].set_title(f'Confusion Matrix — {best_name}{suffix}', fontweight='bold')
+      axes[0].set_ylabel('Actual')
+      axes[0].set_xlabel('Predicted')
+  
+      # ROC curve
+  ...
+==================================================
+
+==================================================
+FIGURE 028 (Cell Index 137, Output Index 1)
+Heading: ## 📊 Section 13: Feature Importance & Ethical Considerations
+Code Snippet (First 15 lines):
+  # Feature importance from the best tree-based model
+  # Try: Random Forest, XGBoost, or Decision Tree
+  importance_model = None
+  importance_name = ''
+  
+  for name_candidate in ['Random Forest', 'XGBoost', 'Decision Tree']:
+      if name_candidate in tuned_results:
+          importance_model = tuned_results[name_candidate]['model']
+          importance_name = name_candidate + ' (Tuned)'
+          break
+      elif name_candidate in results:
+          importance_model = results[name_candidate]['model']
+          importance_name = name_candidate + ' (Baseline)'
+          break
+  
+  ...
+==================================================
+
+==================================================
+FIGURE 029 (Cell Index 143, Output Index 0)
+Heading: ### 13.2 Final Model Summary
+Code Snippet (First 15 lines):
+  # Final bar chart — all models ranked by ROC-AUC
+  plt.figure(figsize=(14, 7))
+  colors_final = ['#4CAF50' if 'Tuned' in name else '#90A4AE' for name in final_df.index]
+  plt.barh(final_df.index[::-1], final_df['ROC-AUC'][::-1], color=colors_final[::-1], edgecolor='white')
+  
+  for i, (name, val) in enumerate(zip(final_df.index[::-1], final_df['ROC-AUC'][::-1])):
+      plt.text(val + 0.003, i, f'{val:.4f}', va='center', fontsize=9)
+  
+  plt.xlabel('ROC-AUC Score', fontsize=12)
+  plt.title('All Models Ranked by ROC-AUC Score (Green = Tuned, Gray = Baseline)',
+            fontsize=13, fontweight='bold')
+  plt.tight_layout()
+  plt.show()
+==================================================
+
+==================================================
+FIGURE 030 (Cell Index 150, Output Index 1)
+Heading: ### 🔬 Permutation Feature Interaction Detection Details
+Code Snippet (First 15 lines):
+  import os, joblib
+  reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+  os.makedirs(reports_dir, exist_ok=True)
+  from sklearn.inspection import PartialDependenceDisplay, partial_dependence
+  import itertools
+  import numpy as np
+  import matplotlib.pyplot as plt
+  
+  def h_statistic(model, X, feature_i, feature_j, grid_resolution=20):
+      """Compute Friedman's H-statistic for feature interaction strength"""
+      # Partial dependence for individual features and their joint effect
+      pd_i = partial_dependence(model, X, features=[feature_i], grid_resolution=grid_resolution)
+      pd_j = partial_dependence(model, X, features=[feature_j], grid_resolution=grid_resolution)
+      pd_ij = partial_dependence(model, X, features=[feature_i, feature_j], grid_resolution=grid_resolution)
+      
+  ...
+==================================================
+
+==================================================
+FIGURE 031 (Cell Index 152, Output Index 2)
+Heading: ### 🌌 SHAP Interaction Values (Attribution of Synergies)
+Code Snippet (First 15 lines):
+  # --- V5 METHODOLOGY 4: SHAP INTERACTION VALUES ---
+  import shap
+  import numpy as np
+  import pandas as pd
+  import matplotlib.pyplot as plt
+  import seaborn as sns
+  import os, joblib
+  
+  os.makedirs('../models_v8', exist_ok=True)
+  cache_shap = '../models_v8/shap_interactions.joblib'
+  
+  print("🌌 Computing SHAP Interaction Values for Tree-Based Champion...")
+  
+  # Prioritize LightGBM and Random Forest over XGBoost to bypass the XGBoost-specific float conversion bug in SHAP
+  best_tree_name = best_name if best_name else None
+  ...
+==================================================
+
+==================================================
+FIGURE 032 (Cell Index 152, Output Index 3)
+Heading: ### 🌌 SHAP Interaction Values (Attribution of Synergies)
+Code Snippet (First 15 lines):
+  # --- V5 METHODOLOGY 4: SHAP INTERACTION VALUES ---
+  import shap
+  import numpy as np
+  import pandas as pd
+  import matplotlib.pyplot as plt
+  import seaborn as sns
+  import os, joblib
+  
+  os.makedirs('../models_v8', exist_ok=True)
+  cache_shap = '../models_v8/shap_interactions.joblib'
+  
+  print("🌌 Computing SHAP Interaction Values for Tree-Based Champion...")
+  
+  # Prioritize LightGBM and Random Forest over XGBoost to bypass the XGBoost-specific float conversion bug in SHAP
+  best_tree_name = best_name if best_name else None
+  ...
+==================================================
+
+==================================================
+FIGURE 033 (Cell Index 157, Output Index 1)
+Heading: ### 🎯 Conformal Prediction — Guaranteed Uncertainty Bands Details
+Code Snippet (First 15 lines):
+  import os
+  reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+  os.makedirs(reports_dir, exist_ok=True)
+  import os, joblib
+  os.makedirs('../models_v8', exist_ok=True)
+  cache_mapie = '../models_v8/mapie.joblib'
+  
+  # --- DYNAMIC SELF-HEALING VARIABLE RESOLUTION ---
+  # 1. Resolve best_model
+  if 'best_model' not in globals() or best_model is None:
+      best_model = None
+      # Check tuned results first
+      t_res = globals().get('tuned_results', {})
+      b_res = globals().get('results', {})
+      if best_name in t_res:
+  ...
+==================================================
+
+==================================================
+FIGURE 034 (Cell Index 161, Output Index 1)
+Heading: ### 🌊 Bayesian Uncertainty Quantification (MC Dropout Details)
+Code Snippet (First 15 lines):
+  import os, joblib
+  reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+  os.makedirs(reports_dir, exist_ok=True)
+  import torch
+  import torch.nn as nn
+  import torch.optim as optim
+  from torch.utils.data import TensorDataset, DataLoader
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from sklearn.metrics import accuracy_score
+  
+  # Validate that preceding data variables are defined in the interactive session
+  if 'X_train' not in globals() or 'X_test' not in globals() or 'DEVICE' not in globals():
+      raise NameError("❌ Required variables (X_train, X_test, DEVICE) are not defined in the active session.\n"
+                      "👉 Please run the preceding data loading and setup cells first.")
+  ...
+==================================================
+
+==================================================
+FIGURE 035 (Cell Index 165, Output Index 0)
+Heading: ### ⚔️ Adversarial Robustness Testing Details
+Code Snippet (First 15 lines):
+  import os
+  reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+  os.makedirs(reports_dir, exist_ok=True)
+  import torch
+  import torch.nn as nn
+  import numpy as np
+  import matplotlib.pyplot as plt
+  
+  # Validate that preceding neural network variables are defined in the interactive session
+  if 'bayesian_model' not in globals() or 'X_test' not in globals() or 'DEVICE' not in globals():
+      raise NameError("❌ Required variables (bayesian_model, X_test, DEVICE) are not defined in the active session.\n"
+                      "👉 Please run the preceding BayesianMLP cell first.")
+  
+  
+  def fgsm_attack(model, X, y, epsilon, device):
+  ...
+==================================================
+
+==================================================
+FIGURE 036 (Cell Index 167, Output Index 1)
+Heading: ### 📈 Model Calibration & Reliability Diagrams Details
+Code Snippet (First 15 lines):
+  # --- V5 METHODOLOGY 5: MODEL CALIBRATION & RELIABILITY CURVES ---
+  from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+  import numpy as np
+  import matplotlib.pyplot as plt
+  
+  print("📈 Standardizing Probabilities via Isotonic Calibration...")
+  
+  # Select the champion model
+  champion_name = best_name
+  
+  if champion_name:
+      print(f"👉 Champion model selected for calibration: {champion_name}")
+      r_entry = tuned_results.get(champion_name) or results.get(champion_name)
+      base_model = r_entry.get('model')
+      
+  ...
+==================================================
+
+==================================================
+FIGURE 037 (Cell Index 172, Output Index 1)
+Heading: ### 🎓 Knowledge Distillation — Complex → Simple Details
+Code Snippet (First 15 lines):
+  import os
+  reports_dir = '../assets/notebook_plots' if os.path.exists('../assets') or not os.path.exists('assets') else 'assets/notebook_plots'
+  os.makedirs(reports_dir, exist_ok=True)
+  import torch
+  import torch.nn as nn
+  import torch.nn.functional as F
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+  
+  # Dynamically locate the best ensemble model to act as the teacher
+  best_ensemble = None
+  if 'tuned_results' in globals() and best_name in tuned_results:
+      best_ensemble = tuned_results[best_name]['model']
+  if 'results' in globals() and results:
+  ...
+==================================================
+
+==================================================
+FIGURE 038 (Cell Index 176, Output Index 1)
+Heading: ### 🎯 Causal Uplift Modeling (T-Learner Meta-Classifier Details)
+Code Snippet (First 15 lines):
+  # --- V5.1 UPLIFT MODELING: T-LEARNER META-CLASSIFIER ---
+  import numpy as np
+  import pandas as pd
+  import matplotlib.pyplot as plt
+  import seaborn as sns
+  from sklearn.ensemble import RandomForestClassifier
+  import os, joblib
+  
+  print("🎯 Fitting Causal Uplift T-Learner Recommender...")
+  
+  os.makedirs('../models_v8', exist_ok=True)
+  cache_file = '../models_v8/causal_uplift.joblib'
+  
+  if os.path.exists(cache_file):
+      print("🚀 Loading pre-trained Causal Uplift models and scores from cache...")
+  ...
+==================================================
+

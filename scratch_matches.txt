@@ -1,0 +1,133 @@
+=== PARAGRAPHS ===
+Para 27 (model_count,fold_count):
+This report presents a SOTA end-to-end Machine Learning classification pipeline designed to predict meaningful relationship connections on a mobile dating application. Utilizing a 50,000-sample dataset, we binarize 10 multi-class relationship outcomes into a target connection variable and preprocess 25 variables through ordinal, one-hot, and multi-hot encodings. We establish an unsupervised Isolation Forest Out-of-Distribution (OOD) rejection guardrail to safeguard downstream models and select 67 features via a union of ANOVA F-scores, Mutual Information, and Boruta algorithms. Quantitative causal treatment effects are estimated using a custom two-stage residual Double Machine Learning (DML) causal engine. 14 custom architectures and 2 AutoML baselines (total 16 models)—spanning linear baselines, gradient boosting ensembles, multi-threaded SVM bagging, GAT Graph Neural Networks, SCARF self-supervised learners, Opacus differentially private networks, TabPFN Zero-Shot Transformers, and a custom PyTorch Attentive Tabular Network (TabNet-style)—are evaluated. All architectures are trained and tuned using cross-validated RandomizedSearchCV after balancing the training split via SMOTE. In V8, TabPFN Hybrid Evaluation Dilution was fixed: Zero-shot metrics are now strictly calculated on the 1,000-sample computational subset without fallback dilution. The DML implementation was upgraded to utilize K-Fold cross-fitting rather than in-sample residualization. By training the models on K-1 folds and predicting on the held-out fold, we eliminated regularization bias. The causal engine mathematically confirmed the Average Treatment Effect (ATE) is 0.0104. Methodological Disclosure: In our SCARF contrastive pre-training, we included test set features (excluding labels). While this might appear as a leakage vulnerability, it is a deliberate and mathematically sound practice in transductive learning, allowing the encoder to map the full feature space without target exposure.
+--------------------------------------------------------------------------------
+Para 28 (model_count):
+Among all evaluated architectures, we formally utilize a Dynamic Champion Model (dynamically inheriting the best weights based on ROC-AUC, e.g., LightGBM) as our final best-performing model. It successfully captures the complex, non-linear relationships via boosting, provides native compatibility with SHAP TreeExplainer for global feature attribution, and serves as the direct predictive engine for generating Microsoft DiCE algorithmic recourse paths. The 14 surgical fixes in the V8 pipeline, including Conformal isolation and DML residualization, guarantee its validity.
+--------------------------------------------------------------------------------
+Para 57 (fold_count):
+To resolve these architectural limitations, the V8 pipeline transitions from simple prediction (estimating correlation) to causal prescription (estimating interventions). By framing our modeling pipeline around both structural causal discovery (via PC DAGs) and quantitative causal estimation (via Double Machine Learning and T-Learner Uplift models), we construct a system that can answer counterfactual questions: 'How will a user's match probability change if they upload three more photos?' or 'Which users are highly responsive to premium boosts, and which users would have matched anyway?' This elevates our system to a production-grade, ethical matchmaking dashboard that guarantees user agency and platform safety. The DML implementation was upgraded to utilize K-Fold cross-fitting rather than in-sample residualization. By training the models on K-1 folds and predicting on the held-out fold, we eliminated regularization bias. The causal engine mathematically confirmed the Average Treatment Effect (ATE) is 0.0104.
+--------------------------------------------------------------------------------
+Para 67 (fold_count):
+By applying the causal backdoor adjustment, we mathematically shield our estimators from demographic bias. The adjustment formula integrates over the probability distribution of confounders P(W), weighting the conditional probabilities  to yield the true interventional probability . This interventional probability represents the causal match rate if we force a user's profile pics count to be T, removing selection bias. The PC Algorithm Directed Acyclic Graph (DAG) in Figure 10 qualitatively maps these structures, and our Double Machine Learning engine in Section 3.2.1 provides the final quantitative estimation of this Average Treatment Effect (ATE). In our V8.2 methodology, we upgraded the conditional independence test from the linear fisherz to the non-linear kci (Kernel-based Conditional Independence) test to accurately map the skewed behavioral data. The DML implementation was upgraded to utilize K-Fold cross-fitting rather than in-sample residualization. By training the models on K-1 folds and predicting on the held-out fold, we eliminated regularization bias. The causal engine mathematically confirmed the Average Treatment Effect (ATE) is 0.0104.
+--------------------------------------------------------------------------------
+Para 163 (model_count):
+We evaluated 16 diverse models to establish performance baselines. The theoretical basis and training settings for each model are described below:
+--------------------------------------------------------------------------------
+Para 164 (logistic_regression):
+Logistic Regression: A generalized linear model that fits a logistic function to model a binary target. It serves as a linear baseline, optimized using the L-BFGS solver with L2 regularization.
+--------------------------------------------------------------------------------
+Para 176 (logistic_regression):
+Champion Stacking Ensemble: A meta-ensemble combining LightGBM, XGBoost, and CatBoost predictions using a balanced Logistic Regression meta-learner.
+--------------------------------------------------------------------------------
+Para 183 (model_count):
+The models were trained on 80% of the dataset (40,000 samples), which was natively balanced using SMOTE to a perfect 50/50 split (24,120 positive / 24,120 negative), and evaluated on a stratified 20% test split (10,000 samples). Performance metrics across all 14 baseline and advanced models are tabulated below:
+--------------------------------------------------------------------------------
+Para 197 (model_count):
+The ROC curves in Figure 23 display the true positive rate vs. false positive rate across all classifiers. All curves lie directly on the 45-degree diagonal line, with ROC-AUC scores tightly clustered between 0.469 and 0.514. This is a critical finding, mathematically proving that the classifiers are performing no better than random guessing. Even the hyperparameter-tuned LightGBM (Tuned) (our selected best model) cannot extract a predictive signal, confirming that the dating dataset represents a purely random matchmaking process.
+--------------------------------------------------------------------------------
+Para 205 (logistic_regression):
+The Champion Stacking Ensemble — a two-level meta-learning architecture aggregating the predictions of LightGBM, XGBoost, and CatBoost through 3-fold cross-validated out-of-fold predictions into a Logistic Regression meta-learner — was also developed and evaluated as part of our pipeline. It was seriously considered for selection because it demonstrates advanced model aggregation and variance reduction across three architecturally distinct gradient boosting engines. However, the Stacking Ensemble was ultimately not selected as the final best model because:
+--------------------------------------------------------------------------------
+Para 211 (fold_count):
+Figure 24: 5-Fold Cross-Validation Scores Boxplot Comparison Across Models
+--------------------------------------------------------------------------------
+Para 212 (fold_count):
+The boxplot in Figure 24 presents the 5-fold cross-validation accuracies for all classifiers. The scores display extremely tight variances across all folds, confirming that the models are stable and that their convergence at the majority baseline is a robust generalization result rather than a partition artifact. The absence of outliers across folds proves that performance is uniform.
+--------------------------------------------------------------------------------
+Para 218 (logistic_regression):
+Platt Scaling: A parametric method that fits a logistic regression model on the raw prediction scores:
+--------------------------------------------------------------------------------
+Para 240 (fold_count):
+Following baseline training, we optimized hyperparameters on the top-performing models using a 5-fold CV RandomizedSearchCV. The tuning spaces, optimal configurations, and F1 performance score changes are tabulated below:
+--------------------------------------------------------------------------------
+Para 244 (logistic_regression):
+Logistic Regression:
+--------------------------------------------------------------------------------
+Para 274 (logistic_regression):
+Instead of grid search, the meta-ensemble was structurally optimized by aggregating the tuned base estimators (LightGBM, XGBoost, and CatBoost) via a Logistic Regression meta-learner acting on 3-fold cross-validated out-of-fold predictions.
+--------------------------------------------------------------------------------
+Para 281 (model_count,fold_count):
+A critical finding of our modeling pipeline is that no model substantially beats the majority class baseline of 60.30% accuracy, and all ROC-AUC metrics mathematically converge at ~0.50. This performance indicates that the features in this dataset carry no statistical signal related to the match outcome. The Double Machine Learning (DML) engine confirms the Average Treatment Effect (ATE) of profile photo investment (>3 photos) is 0.0104 (p = 0.0322). The 14 surgical V8 fixes guarantee that this random baseline is the true theoretical ceiling of the dataset, devoid of data leakage. The DML implementation was upgraded to utilize K-Fold cross-fitting rather than in-sample residualization. By training the models on K-1 folds and predicting on the held-out fold, we eliminated regularization bias. The causal engine mathematically confirmed the Average Treatment Effect (ATE) is 0.0104.
+--------------------------------------------------------------------------------
+Para 336 (fold_count):
+Optuna Multi-Objective Pareto Frontier Sandbox (Page 7: Hyperparameter Tuning): Visualizes 1,000 optimization trials on a dynamic Pareto frontier. Demonstrates the mathematical trade-off between predictive performance (F1-score) and demographic parity margins, allowing evaluators to choose a balanced operating threshold. We explicitly injected the TPESampler random seed into the 1,000-trial GPU Optuna search to guarantee absolute reproducibility. Strategic Decision: Custom deep architectures (NODE, SAINT, FT-Transformer) were deliberately excluded from these tuning grids. Given the mathematically proven lack of predictive signal, deep hyperparameter sweeps would consume massive computational resources (days of execution) without yielding any measurable performance gain, justifying our decision to lock their architectures. Crucially, for our XGBoost configuration, the scale_pos_weight was neutralized to 1 because the dataset was already SMOTE-balanced to a 50/50 ratio, removing any unjustified positive-class bias. Methodological Disclosure: Once Optuna identified the optimal hyperparameters, the best model was strictly refitted on the entire SMOTE-augmented training set, preventing the extraction of a partially-trained inner CV estimator.
+--------------------------------------------------------------------------------
+Para 337 (fold_count):
+Targeted Causal Uplift Marketing Simulator (Page 10: Causal Uplift): Bridges Double Machine Learning (DML) quantitative treatment effects with real-world business utility. Maps the T-Learner meta-classifier's Individual Treatment Effect (ITE) segments (identifying the Persuadables) directly to business ROI curves under customizable cost-per-impression sliders. The DML implementation was upgraded to utilize K-Fold cross-fitting rather than in-sample residualization. By training the models on K-1 folds and predicting on the held-out fold, we eliminated regularization bias. The causal engine mathematically confirmed the Average Treatment Effect (ATE) is 0.0104.
+--------------------------------------------------------------------------------
+Para 340 (model_count):
+To ensure structural integrity, facilitate rapid peer reviews, and support frictionless scaling, SwipeIQ V2 is engineered with a modular, decoupled software architecture. The codebase separates the main application gateway, the interactive dashboards (pages 1 to 14), and core loading utilities. The technical specifications and repository breakdown are outlined below:
+--------------------------------------------------------------------------------
+Para 341 (fold_count):
+Core Technology Stack: Built entirely in Python 3.11+, the application leverages Streamlit as the web framework. Interactive plotting is rendered via Plotly, while deep neural networks (FT-Transformer, custom TabNet selection nets, GNN neighbor topologies) are executed in PyTorch. Classical machine learning, preprocessing pipelines, and randomized/grid searches are powered by Scikit-Learn. Explanations are generated via SHAP and MAPIE conformal prediction, Treatment uplift is estimated using Double Machine Learning meta-learners, and real-time concept drift detection is implemented via the River streaming library. The DML implementation was upgraded to utilize K-Fold cross-fitting rather than in-sample residualization. By training the models on K-1 folds and predicting on the held-out fold, we eliminated regularization bias. The causal engine mathematically confirmed the Average Treatment Effect (ATE) is 0.0104. To prevent conformal calibration leakage, the MAPIE bounding sets were calibrated on an explicitly isolated 10% slice of the training data, guaranteeing that the final test set remained mathematically unseen.
+--------------------------------------------------------------------------------
+Para 362 (logistic_regression):
+Problem: A 60.3% majority negative target distribution causes baseline models (like Logistic Regression and SVM) to converge on a trivial majority predictor. This achieves a 60.3% test accuracy but a 0% recall and 0% F1-score on the positive connection class, rendering the model useless for active matching.
+--------------------------------------------------------------------------------
+Para 363 (logistic_regression):
+Applied Engineering Solution: Implemented cost-sensitive loss adjustments by specifying class_weight='balanced' in scikit-learn models (Logistic Regression, Decision Tree, Random Forest, SVM) and configuring scale_pos_weight=(30150/19850) ≈ 1.52 in the XGBoost classifier.
+--------------------------------------------------------------------------------
+Para 366 (fold_count):
+Problem: Performance differences between baseline models (e.g., K-Nearest Neighbors achieving 53.66% accuracy vs. Decision Tree achieving 51.12%) could potentially be attributed to random data partitioning or fold distribution anomalies rather than a true model superiority.
+--------------------------------------------------------------------------------
+Para 367 (fold_count):
+Applied Engineering Solution: Conducted a formal Relational Paired t-Test (scipy.stats.ttest_rel) on the cross-validation scores of the top-performing algorithms across 5 independent validation folds. We discarded the statistically weak 5-fold paired t-test in favor of a rigorous Friedman test across all models. This multi-model non-parametric test mathematically proves the significance of our baseline evaluations.
+--------------------------------------------------------------------------------
+Para 379 (fold_count):
+Applied Engineering Solution: Programmed a custom thread manager in the validation script. It dynamically overrides the estimator's internal thread count to n_jobs=1 during the cross-validation scoring loop, allowing the outer CV wrapper to distribute the 5 validation folds cleanly across the 16 CPU threads, and restores the original parallel settings afterward.
+--------------------------------------------------------------------------------
+Para 384 (model_count):
+Direct Analytical Impact: Captures intuitive behavioral archetypes and user engagement patterns that individual features obscure, increasing the feature space dimensions from 113 to 116. This provides the models with higher-level domain-specific context, which helps tree-based algorithms construct more meaningful decision splits.
+--------------------------------------------------------------------------------
+Para 395 (model_count,fold_count,logistic_regression):
+In this group project, we successfully implemented a robust, end-to-end Machine Learning pipeline to predict dating app connections using a 50,000-sample dataset. We preprocessed the raw inputs, expanding features from 25 to 116 features through ordinal, one-hot, and multi-hot encodings (including 3 engineered interaction features). We evaluated 16 baseline and advanced classifiers (Logistic Regression, KNN, DT, RF, XGBoost, custom multi-threaded Bagging SVM, LightGBM, CatBoost, MLP, Label Smoothing MLP, Cosine KNN CF, GAT Graph Neural Network, SCARF Contrastive Learner, Opacus DP-SGD, TabPFN Zero-Shot, and TabNet-style Attentive Net), alongside an advanced Champion Stacking Ensemble. All models were evaluated after natively balancing the training split via SMOTE, optimizing parameters via cross-validated RandomizedSearchCV, and running SHAP explainability and AutoML benchmarking. In V8, TabPFN Hybrid Evaluation Dilution was fixed: Zero-shot metrics are now strictly calculated on the 1,000-sample computational subset without fallback dilution. Methodological Disclosure: In our SCARF contrastive pre-training, we included test set features (excluding labels). While this might appear as a leakage vulnerability, it is a deliberate and mathematically sound practice in transductive learning, allowing the encoder to map the full feature space without target exposure.
+--------------------------------------------------------------------------------
+Para 410 (student/distill):
+Figure 38: Knowledge Distillation Student vs. Teacher Classifier Training Loss Curves
+--------------------------------------------------------------------------------
+Para 411 (student/distill,logistic_regression):
+Figure 38 compares the training loss profiles of the teacher ensemble model and the compressed student logistic regression model. The curves show that the student successfully learns the decision boundaries of the teacher, stabilizing at the same loss plateau. This compression reduces model size from 3.5GB to under 2KB, allowing low-latency edge deployment while retaining baseline accuracy.
+--------------------------------------------------------------------------------
+Para 427 (model_count,fold_count):
+1.  Akiba, T., Sano, S., Yanase, T., Ohta, T., & Koyama, M. (2019). Optuna: A next-generation hyperparameter optimization framework. In Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining (pp. 2623-2631). ACM. https://doi.org/10.1145/3292500.3330701 We explicitly injected the TPESampler random seed into the 1,000-trial GPU Optuna search to guarantee absolute reproducibility. Strategic Decision: Custom deep architectures (NODE, SAINT, FT-Transformer) were deliberately excluded from these tuning grids. Given the mathematically proven lack of predictive signal, deep hyperparameter sweeps would consume massive computational resources (days of execution) without yielding any measurable performance gain, justifying our decision to lock their architectures. Methodological Disclosure: Once Optuna identified the optimal hyperparameters, the best model was strictly refitted on the entire SMOTE-augmented training set, preventing the extraction of a partially-trained inner CV estimator.
+--------------------------------------------------------------------------------
+Para 442 (model_count):
+16.  Gal, Y., & Ghahramani, Z. (2016). Dropout as a bayesian approximation: Representing model uncertainty in deep learning. In International Conference on Machine Learning (pp. 1050-1059). PMLR.
+--------------------------------------------------------------------------------
+Para 446 (student/distill):
+20.  Hinton, G., Vinyals, O., & Dean, J. (2015). Distilling the knowledge in a neural network. arXiv preprint arXiv:1503.02531.
+--------------------------------------------------------------------------------
+
+=== TABLES ===
+Table 3, Row 4, Col 2 (fold_count,logistic_regression):
+• Configured and trained 6 baseline ML models: Logistic Regression, KNN, Decision Tree, Random Forest, XGBoost, and SVM.
+• Programmed cross-validation performance loops to evaluate accuracy, precision, recall, F1, and ROC-AUC.
+• Setup RandomizedSearchCV tuning grids and executed 150 fits per candidate estimator to identify optimal hyperparameters.
+--------------------------------------------------------------------------------
+Table 4, Row 5, Col 2 (logistic_regression):
+• Split data into 80/20 stratified train/test sets.
+• Trained 6 baseline classifiers (Logistic Regression, KNN, DT, RF, XGBoost, and Bagging SVM).
+--------------------------------------------------------------------------------
+Table 4, Row 6, Col 2 (fold_count):
+• Ran RandomizedSearchCV (30 iterations, 5-fold CV) on top models to optimize F1 scores.
+• Saved trained weights and results to joblib caches to prevent re-training latency.
+--------------------------------------------------------------------------------
+Table 6, Row 1, Col 0 (logistic_regression):
+Logistic Regression
+--------------------------------------------------------------------------------
+Table 8, Row 16, Col 2 (student/distill):
+Knowledge distillation teacher-student surrogate, Microsoft DiCE algorithmic recourse, and T-Learner Causal Uplift meta-classifier.
+--------------------------------------------------------------------------------
+Table 9, Row 2, Col 2 (fold_count):
+Execute paired t-tests on 5-fold cross-validation arrays to statistically verify model differences.
+--------------------------------------------------------------------------------
+Table 10, Row 2, Col 3 (fold_count):
+Conducted a Relational Paired t-test (scipy.stats.ttest_rel) on the 5-fold cross-validation scores.
+--------------------------------------------------------------------------------
+Table 10, Row 11, Col 3 (logistic_regression):
+Built a StackingClassifier combining XGBoost, LightGBM, and CatBoost with a balanced Logistic Regression meta-learner.
+--------------------------------------------------------------------------------
+Table 10, Row 15, Col 4 (model_count):
+Saves 30+ minutes of redundant training per run while allowing the rest of the 13 models to be retrained and validated from scratch.
+--------------------------------------------------------------------------------

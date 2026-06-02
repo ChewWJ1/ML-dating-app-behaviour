@@ -13,9 +13,7 @@ theme.render_sidebar()
 
 # ── Path Setup ──
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
-NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
-NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 
 
 def show_plot(directory, filename, caption=''):
@@ -53,13 +51,13 @@ st.markdown("""
     <h4>Teacher → Student Model Compression</h4>
     <p><strong>Knowledge Distillation</strong> (Hinton et al., 2015) trains a lightweight
     <strong>student model</strong> (logistic regression) to mimic the soft probability outputs
-    of a complex <strong>teacher model</strong> (XGBoost ensemble). The student learns from the
+    of a complex <strong>teacher model</strong> (LightGBM ensemble). The student learns from the
     teacher's "dark knowledge" — the full probability distribution over classes, not just the
     hard label — via a temperature-scaled softmax and KL-divergence loss.</p>
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(NOTEBOOK_PLOTS, 'knowledge_distillation.png',
+show_plot(V8_PLOTS, '37_knowledge_distillation_teacher_student_comparison.png',
           'Knowledge Distillation — Complex Teacher vs. Simple Student')
 
 col1, col2, col3 = st.columns(3)
@@ -67,11 +65,11 @@ with col1:
     st.markdown("""
     <div class="ml-callout">
     <strong>🎓 Teacher Model</strong><br>
-    • XGBoost ensemble (500 trees)<br>
+    • LightGBM (Tuned) (100 trees)<br>
     • Full hyperparameter tuning<br>
-    • ROC-AUC: ~0.50<br>
-    • Inference: ~15ms per batch<br>
-    • Size: ~4.2 MB
+    • ROC-AUC: ~0.5112<br>
+    • Inference: ~5ms per batch<br>
+    • Size: ~1.5 MB
     </div>
     """, unsafe_allow_html=True)
 with col2:
@@ -198,7 +196,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '11_flex_11_out_of_distribution_ood_rejection_guardrai.png',
+show_plot(V8_PLOTS, '11_ood_anomaly_score_distribution.png',
           'Isolation Forest OOD Rejection — Anomaly Score Distribution')
 
 col1, col2 = st.columns(2)

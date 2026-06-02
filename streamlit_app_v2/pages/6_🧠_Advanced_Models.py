@@ -12,9 +12,7 @@ theme.render_sidebar()
 
 # ── Path Setup ──
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
-NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
-NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
+V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 
 
 def show_plot(directory, filename, caption=''):
@@ -136,13 +134,15 @@ with tab_ft:
     
     # Feature selections
     default_features = [
-        "age", "likes_received", "swipe_right_ratio", "profile_pics_count", 
-        "bio_length", "education_level", "relationship_intent", "app_usage_time_min"
+        "age", "likes_received", "swipe_right_ratio", "engagement_score", 
+        "bio_length", "profile_completeness", "activity_intensity", "selectivity_ratio"
     ]
     all_features = [
-        "age", "likes_received", "swipe_right_ratio", "profile_pics_count", 
-        "bio_length", "education_level", "relationship_intent", "app_usage_time_min",
-        "msg_reply_time", "income_bracket", "zodiac_sign", "gender"
+        "age", "profile_pics_count", "bio_length", "app_usage_time_min", 
+        "swipe_right_ratio", "message_sent_count", "likes_received", 
+        "engagement_score", "profile_completeness", "activity_intensity",
+        "selectivity_ratio", "late_night_user", "log_age", "log_likes",
+        "log_bio_length", "log_app_usage", "log_messages", "is_weekend", "is_night"
     ]
     
     sel_features = st.multiselect(
@@ -620,10 +620,10 @@ used with a simple linear probe.</p>
 
 col1, col2 = st.columns(2)
 with col1:
-    show_plot(NOTEBOOK_PLOTS, 'scarf_embeddings.png',
+    show_plot(V8_PLOTS, '25_scarf_contrastive_learning_embeddings.png',
               'SCARF Pre-training — Contrastive Loss Convergence')
 with col2:
-    show_plot(NOTEBOOK_PLOTS, 'scarf_embeddings.png',
+    show_plot(V8_PLOTS, '25_scarf_contrastive_learning_embeddings.png',
               'SCARF Learned Embeddings (t-SNE Projection)')
 
 st.markdown("""
@@ -650,7 +650,7 @@ example can be reverse-engineered from the model weights.</p>
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(NOTEBOOK_PLOTS, 'differential_privacy.png',
+show_plot(V8_PLOTS, '23_differential_privacy_comparison.png',
           'DP-SGD Privacy vs. Utility Trade-off (Epsilon Budgets)')
 
 col1, col2 = st.columns(2)
@@ -690,7 +690,7 @@ encouraging the model to learn smoother decision boundaries.</p>
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '17_10_1_1_v5_1_label_smoothing_mixup_regularization_a.png',
+show_plot(V8_PLOTS, '17_label_smoothing_mixup_regularization.png',
       'Label Smoothing & Mixup Regularization — Training Curves & Calibration')
 
 st.markdown("""
@@ -719,7 +719,7 @@ used for <em>each individual prediction</em>.</p>
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '24_flex_17_instance_wise_feature_selection_attentive_.png',
+show_plot(V8_PLOTS, '24_attentive_tabular_network_feature_selection.png',
       'Instance-Wise Feature Attention Masks — Attentive Neural Network')
 
 col1, col2 = st.columns(2)
