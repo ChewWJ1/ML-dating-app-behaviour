@@ -95,7 +95,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '33_flex_1_conformal_prediction_guaranteed_uncertainty.png',
+show_plot(NOTEBOOK_PLOTS, 'conformal_prediction.png',
           'MAPIE Conformal Prediction — Prediction Set Sizes & Coverage')
 
 st.markdown("""
@@ -137,7 +137,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '34_flex_6_bayesian_uncertainty_quantification_mc_drop.png',
+show_plot(NOTEBOOK_PLOTS, 'bayesian_uncertainty.png',
           'MC Dropout — Uncertainty Distribution Across Test Set')
 
 col1, col2 = st.columns(2)
@@ -179,7 +179,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '35_flex_5_adversarial_robustness_testing.png',
+show_plot(NOTEBOOK_PLOTS, 'adversarial_robustness.png',
           'FGSM Attack — Accuracy vs. Perturbation Budget (ε)')
 
 st.markdown("""

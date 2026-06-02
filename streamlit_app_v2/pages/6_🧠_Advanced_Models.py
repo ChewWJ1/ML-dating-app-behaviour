@@ -14,6 +14,7 @@ theme.render_sidebar()
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
 NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
+NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
 
 
 def show_plot(directory, filename, caption=''):
@@ -619,8 +620,8 @@ used with a simple linear probe.</p>
 
 col1, col2 = st.columns(2)
 with col1:
-    show_plot(V5_PLOTS, '25_flex_3_self_supervised_contrastive_pre_training_sc.png',
-              'SCARF Contrastive Pre-Training — Training Dynamics')
+    show_plot(NOTEBOOK_PLOTS, 'scarf_embeddings.png',
+              'SCARF Pre-training — Contrastive Loss Convergence')
 with col2:
     show_plot(NOTEBOOK_PLOTS, 'scarf_embeddings.png',
               'SCARF Learned Embeddings (t-SNE Projection)')
@@ -649,8 +650,8 @@ example can be reverse-engineered from the model weights.</p>
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '23_flex_10_differential_privacy_training.png',
-      'Differential Privacy Training — Privacy Budget (ε) vs. Accuracy Trade-off')
+show_plot(NOTEBOOK_PLOTS, 'differential_privacy.png',
+          'DP-SGD Privacy vs. Utility Trade-off (Epsilon Budgets)')
 
 col1, col2 = st.columns(2)
 with col1:

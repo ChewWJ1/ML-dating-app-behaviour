@@ -1,0 +1,1098 @@
+
+--- Cell 2 Outputs ---
+
+[notice] A new release of pip is available: 26.1.1 -> 26.1.2
+[notice] To update, run: python.exe -m pip install --upgrade pip
+
+
+--- Cell 3 Outputs ---
+🚀 [Hardware Active]: NVIDIA GPU via CUDA
+
+
+--- Cell 4 Outputs ---
+Libraries loaded successfully
+
+
+--- Cell 6 Outputs ---
+Dataset loaded: 50,000 rows x 25 columns
+
+              gender sexual_orientation location_type income_bracket  \
+0  Prefer Not to Say                Gay         Urban           High   
+1               Male           Bisexual      Suburban   Upper-Middle   
+2         Non-binary          Pansexual      Suburban            Low   
+3        Genderfluid                Gay         Metro       Very Low   
+4               Male           Bisexual         Urban         Middle   
+
+       education_level                  interest_tags  app_usage_time_min  \
+0           Bachelor’s   Fitness, Politics, Traveling                  52   
+1  No Formal Education  Languages, Fashion, Parenting                 279   
+2             Master’s           Movies, Reading, DIY                  49   
+3              Postdoc      Coding, Podcasts, History                 185   
+4           Bachelor’s       Clubbing, Podcasts, Cars                  83   
+
+  app_usage_time_label  swipe_right_ratio swipe_right_label  ...  \
+0             Moderate               0.60        Optimistic  ...   
+1         Extreme User               0.56        Optimistic  ...   
+2             Moderate               0.41        Optimistic  ...   
+3         Extreme User               0.32          Balanced  ...   
+4                 High               0.32          Balanced  ...   
+
+   emoji_usage_rate  last_active_hour  swipe_time_of_day   match_outcome  age  \
+0              0.36                13      Early Morning    Mutual Match   56   
+1              0.42                 0            Morning    Chat Ignored   40   
+2              0.41                 1     After Midnight   Date Happened   30   
+3              0.07                21            Morning       No Action   57   
+4              0.11                22     After Midnight  One-sided Like   24   
+
+   height_cm  weight_kg  zodiac_sign  body_type   relationship_intent  
+0        149       40.6       Taurus      Curvy          Friends Only  
+1        155       69.7          Leo  Plus Size               Hookups  
+2        185       96.9  Sagittarius      Curvy  Serious Relationship  
+3        154       49.3       Taurus       Slim             Exploring  
+4        149       40.0        Libra       Slim         Casual Dating  
+
+[5 rows x 25 columns]
+
+--- Cell 7 Outputs ---
+Column names and dtypes:
+  gender                         dtype=object
+  sexual_orientation             dtype=object
+  location_type                  dtype=object
+  income_bracket                 dtype=object
+  education_level                dtype=object
+  interest_tags                  dtype=object
+  app_usage_time_min             dtype=int64
+  app_usage_time_label           dtype=object
+  swipe_right_ratio              dtype=float64
+  swipe_right_label              dtype=object
+  likes_received                 dtype=int64
+  mutual_matches                 dtype=int64
+  profile_pics_count             dtype=int64
+  bio_length                     dtype=int64
+  message_sent_count             dtype=int64
+  emoji_usage_rate               dtype=float64
+  last_active_hour               dtype=int64
+  swipe_time_of_day              dtype=object
+  match_outcome                  dtype=object
+  age                            dtype=int64
+  height_cm                      dtype=int64
+  weight_kg                      dtype=float64
+  zodiac_sign                    dtype=object
+  body_type                      dtype=object
+  relationship_intent            dtype=object
+
+
+--- Cell 10 Outputs ---
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 50000 entries, 0 to 49999
+Data columns (total 25 columns):
+ #   Column                Non-Null Count  Dtype  
+---  ------                --------------  -----  
+ 0   gender                50000 non-null  object 
+ 1   sexual_orientation    50000 non-null  object 
+ 2   location_type         50000 non-null  object 
+ 3   income_bracket        50000 non-null  object 
+ 4   education_level       50000 non-null  object 
+ 5   interest_tags         50000 non-null  object 
+ 6   app_usage_time_min    50000 non-null  int64  
+ 7   app_usage_time_label  50000 non-null  object 
+ 8   swipe_right_ratio     50000 non-null  float64
+ 9   swipe_right_label     50000 non-null  object 
+ 10  likes_received        50000 non-null  int64  
+ 11  mutual_matches        50000 non-null  int64  
+ 12  profile_pics_count    50000 non-null  int64  
+ 13  bio_length            50000 non-null  int64  
+ 14  message_sent_count    50000 non-null  int64  
+ 15  emoji_usage_rate      50000 non-null  float64
+ 16  last_active_hour      50000 non-null  int64  
+ 17  swipe_time_of_day     50000 non-null  object 
+ 18  match_outcome         50000 non-null  object 
+ 19  age                   50000 non-null  int64  
+ 20  height_cm             50000 non-null  int64  
+ 21  weight_kg             50000 non-null  float64
+ 22  zodiac_sign           50000 non-null  object 
+ 23  body_type             50000 non-null  object 
+ 24  relationship_intent   50000 non-null  object 
+dtypes: float64(3), int64(9), object(13)
+memory usage: 9.5+ MB
+
+
+--- Cell 11 Outputs ---
+                        count unique                   top   freq       mean  \
+gender                  50000      6                Female   8384        NaN   
+sexual_orientation      50000      8              Straight   6326        NaN   
+location_type           50000      6           Remote Area   8519        NaN   
+income_bracket          50000      7                  High   7309        NaN   
+education_level         50000      9            Bachelor’s   5646        NaN   
+interest_tags           50000  40206  Fitness, Anime, Yoga      6        NaN   
+app_usage_time_min    50000.0    NaN                   NaN    NaN   149.9124   
+app_usage_time_label    50000      7          Extreme User  20140        NaN   
+swipe_right_ratio     50000.0    NaN                   NaN    NaN   0.500655   
+swipe_right_label       50000      4            Optimistic  26873        NaN   
+likes_received        50000.0    NaN                   NaN    NaN   99.52604   
+mutual_matches        50000.0    NaN                   NaN    NaN   13.87028   
+profile_pics_count    50000.0    NaN                   NaN    NaN    2.98772   
+bio_length            50000.0    NaN                   NaN    NaN   250.1744   
+message_sent_count    50000.0    NaN                   NaN    NaN   50.07194   
+emoji_usage_rate      50000.0    NaN                   NaN    NaN   0.286205   
+last_active_hour      50000.0    NaN                   NaN    NaN    11.5218   
+swipe_time_of_day       50000      6        After Midnight   8524        NaN   
+match_outcome           50000     10        One-sided Like   5112        NaN   
+age                   50000.0    NaN                   NaN    NaN   38.47792   
+height_cm             50000.0    NaN                   NaN    NaN  172.58426   
+weight_kg             50000.0    NaN                   NaN    NaN  72.099052   
+zodiac_sign             50000     12                Gemini   4278        NaN   
+body_type               50000      6                  Slim   8465        NaN   
+relationship_intent     50000      6  Serious Relationship   8469        NaN   
+
+                             std    min    25%    50%    75%    max  
+gender                       NaN    NaN    NaN    NaN    NaN    NaN  
+sexual_orientation           NaN    NaN    NaN    NaN    NaN    NaN  
+location_type                NaN    NaN    NaN    NaN    NaN    NaN  
+income_bracket               NaN    NaN    NaN    NaN    NaN    NaN  
+education_level              NaN    NaN    NaN    NaN    NaN    NaN  
+interest_tags                NaN    NaN    NaN    NaN    NaN    NaN  
+app_usage_time_min     86.990521    0.0   74.0  150.0  225.0  300.0  
+app_usage_time_label         NaN    NaN    NaN    NaN    NaN    NaN  
+swipe_right_ratio       0.197468    0.0   0.37    0.5   0.64    1.0  
+swipe_right_label            NaN    NaN    NaN    NaN    NaN    NaN  
+likes_received         57.996799    0.0   49.0  100.0  150.0  200.0  
+mutual_matches          9.105615    0.0    6.0   13.0   22.0   30.0  
+profile_pics_count       1.99678    0.0    1.0    3.0    5.0    6.0  
+bio_length            144.800996    0.0  125.0  250.0  376.0  500.0  
+message_sent_count        29.168    0.0   25.0   50.0   75.0  100.0  
+emoji_usage_rate        0.160042    0.0   0.16   0.27   0.39   0.94  
+last_active_hour        6.920474    0.0    5.0   12.0   18.0   23.0  
+swipe_time_of_day            NaN    NaN    NaN    NaN    NaN    NaN  
+match_outcome                NaN    NaN    NaN    NaN    NaN    NaN  
+age                    12.128435   18.0   28.0   38.0   49.0   59.0  
+height_cm              16.134926  145.0  159.0  173.0  187.0  200.0  
+weight_kg              17.071441   37.8   59.2   70.3   83.8  120.0  
+zodiac_sign                  NaN    NaN    NaN    NaN    NaN    NaN  
+body_type                    NaN    NaN    NaN    NaN    NaN    NaN  
+relationship_intent          NaN    NaN    NaN    NaN    NaN    NaN  
+
+--- Cell 13 Outputs ---
+Missing values per column:
+No missing values found
+
+Duplicate rows: 0
+
+
+--- Cell 15 Outputs ---
+<Figure size 4200x1500 with 2 Axes>
+Positive (meaningful connection):    19,850 (39.7%)
+Negative (no meaningful connection): 30,150 (60.3%)
+
+
+--- Cell 17 Outputs ---
+<Figure size 5400x4200 with 9 Axes>
+
+--- Cell 19 Outputs ---
+<Figure size 6000x3600 with 12 Axes>
+
+--- Cell 21 Outputs ---
+<Figure size 6000x3600 with 12 Axes>
+
+--- Cell 23 Outputs ---
+<Figure size 6000x3600 with 12 Axes>
+
+--- Cell 25 Outputs ---
+<Figure size 5400x3000 with 6 Axes>
+
+--- Cell 27 Outputs ---
+<Figure size 3600x2700 with 2 Axes>
+
+--- Cell 29 Outputs ---
+<Figure size 3600x2100 with 1 Axes>
+Total unique interest tags: 49
+
+
+--- Cell 33 Outputs ---
+  0%|          | 0/9 [00:00<?, ?it/s]
+<Figure size 3000x3000 with 1 Axes>
+<Figure size 3000x2400 with 2 Axes>
+
+--- Cell 35 Outputs ---
+🔬 Estimating Causal Treatment Effects via Double Machine Learning...
+🚀 Loading pre-computed Causal Double Machine Learning results from cache...
+
+========================================================
+📊 CAUSAL DOUBLE MACHINE LEARNING RESULTS
+========================================================
+👉 Estimated Causal ATE (profile_pics > 3): 0.0104
+👉 95% Bootstrap Confidence Interval       : [0.0009, 0.0198]
+👉 Standard Error                           : 0.0048
+👉 Causal Effect p-value                     : 0.032227
+🌟 Conclusion: Profile photo investment has a SIGNIFICANT POSITIVE CAUSAL EFFECT on matches!
+========================================================
+
+
+--- Cell 38 Outputs ---
+Shape after dropping redundant columns: (50000, 23)
+Remaining columns: ['gender', 'sexual_orientation', 'location_type', 'income_bracket', 'education_level', 'interest_tags', 'app_usage_time_min', 'swipe_right_ratio', 'likes_received', 'mutual_matches', 'profile_pics_count', 'bio_length', 'message_sent_count', 'emoji_usage_rate', 'last_active_hour', 'swipe_time_of_day', 'match_outcome', 'age', 'height_cm', 'weight_kg', 'zodiac_sign', 'body_type', 'relationship_intent']
+
+
+--- Cell 40 Outputs ---
+<IPython.core.display.Markdown object>
+Binary target distribution:
+  0 - Negative (No Meaningful Connection): 30,150 (60.3%)
+  1 - Positive (Meaningful Connection): 19,850 (39.7%)
+
+
+--- Cell 42 Outputs ---
+income_bracket unique values: ['High' 'Upper-Middle' 'Low' 'Very Low' 'Middle' 'Lower-Middle'
+ 'Very High']
+After mapping: {'Middle': 21320, 'High': 14487, 'Low': 14193}
+income_enc values: [0.0, 1.0, 2.0]
+
+
+--- Cell 44 Outputs ---
+education_level unique values: ['Bachelor’s' 'No Formal Education' 'Master’s' 'Postdoc' 'Associate’s'
+ 'High School' 'Diploma' 'PhD' 'MBA']
+After mapping: {'High': 22207, 'Low': 16648, 'Middle': 11145}
+education_enc values: [0.0, 1.0, 2.0]
+
+
+--- Cell 46 Outputs ---
+Shape after one-hot encoding: (50000, 66)
+One-hot encoded columns added: 50
+
+
+--- Cell 48 Outputs ---
+Interest tags encoded: 49 unique tags
+Shape after interest encoding: (50000, 114)
+
+
+--- Cell 50 Outputs ---
+
+--- Cell 52 Outputs ---
+Scaling deferred to Section 5.1 to prevent data leakage.
+
+
+--- Cell 55 Outputs ---
+Final dataset shape: (50000, 123)
+Total features: 122  |  Target column: target
+
+Missing values after preprocessing: 0
+
+Data types:
+int32      100
+float64     12
+int64       11
+Name: count, dtype: int64
+
+   app_usage_time_min  swipe_right_ratio  likes_received  mutual_matches  \
+0                  52               0.60             173              23   
+1                 279               0.56             107               7   
+2                  49               0.41              91              27   
+
+   profile_pics_count  bio_length  message_sent_count  emoji_usage_rate  \
+0                   4          44                  75              0.36   
+1                   3         301                  35              0.42   
+2                   2         309                  33              0.41   
+
+   last_active_hour  age  ...  interest_Yoga  engagement_score  \
+0                13   56  ...              0           7785.00   
+1                 0   40  ...              0           2097.20   
+2                 1   30  ...              0           1231.23   
+
+   profile_completeness  activity_intensity  selectivity_ratio  \
+0                   176               18.72           0.431034   
+1                   903              117.18           0.324074   
+2                   618               20.09           0.358696   
+
+   late_night_user  likes_received_log  message_sent_count_log  \
+0                0            5.159055                4.330733   
+1                1            4.682131                3.583519   
+2                1            4.521789                3.526361   
+
+   bio_length_log  app_usage_time_min_log  
+0        3.806662                3.970292  
+1        5.710427                5.634790  
+2        5.736572                3.912023  
+
+[3 rows x 123 columns]
+
+--- Cell 58 Outputs ---
+Feature matrix X: (50000, 122)
+Target vector  y: (50000,)
+
+Class balance:
+target
+Negative    30150
+Positive    19850
+Name: count, dtype: int64
+
+✅ Split data into Train ((40000, 122)) and Test ((10000, 122))
+✅ Scaled numeric columns strictly after splitting
+
+
+--- Cell 59 Outputs ---
+🚨 Initializing Out-of-Distribution (OOD) Rejection Guardrail...
+✅ OOD Guardrail calibrated on training set.
+👉 Detected 2000 anomalies in Training set (5.0%)
+👉 Detected 488 anomalies in Test set (4.9%)
+👉 Calibrated Anomaly Threshold: -0.4525
+
+<Figure size 3600x1800 with 1 Axes>
+
+--- Cell 61 Outputs ---
+Top 25 features by ANOVA F-Score:
+                        feature  f_score  p_value
+                interest_Coding 6.226256 0.012591
+               interest_Cooking 6.214727 0.012673
+           zodiac_sign_Aquarius 5.305542 0.021263
+                  interest_Tech 4.863764 0.027432
+               interest_History 4.306684 0.037969
+             profile_pics_count 3.638179 0.056476
+         location_type_Suburban 3.629369 0.056775
+                late_night_user 3.562329 0.059112
+             message_sent_count 3.347044 0.067333
+              selectivity_ratio 3.260587 0.070971
+      swipe_time_of_day_Morning 3.184788 0.074334
+             likes_received_log 3.094594 0.078560
+                  interest_Cars 3.059038 0.080297
+             zodiac_sign_Pisces 2.908288 0.088133
+    sexual_orientation_Bisexual 2.653245 0.103347
+ relationship_intent_Networking 2.442148 0.118122
+         message_sent_count_log 2.421774 0.119667
+                 interest_Anime 2.329299 0.126967
+             zodiac_sign_Taurus 2.141861 0.143336
+      swipe_time_of_day_Evening 2.112588 0.146100
+             interest_Investing 2.108223 0.146517
+              zodiac_sign_Virgo 2.052658 0.151949
+                   interest_DIY 2.042030 0.153013
+             activity_intensity 1.883533 0.169941
+swipe_time_of_day_Early Morning 1.864765 0.172083
+
+
+--- Cell 62 Outputs ---
+<Figure size 3600x2400 with 1 Axes>
+
+--- Cell 64 Outputs ---
+⏭️  Loading cached Boruta feature selection...
+Boruta confirmed features: []
+
+
+--- Cell 66 Outputs ---
+Top 25 features by Mutual Information:
+                        feature  mi_score
+                zodiac_sign_Leo  0.006797
+                     income_enc  0.006148
+             interest_Gardening  0.005941
+             interest_Astrology  0.005486
+               interest_Dancing  0.004785
+                late_night_user  0.004213
+               last_active_hour  0.004116
+      swipe_time_of_day_Evening  0.004032
+                interest_Coding  0.003871
+      location_type_Remote Area  0.003731
+   sexual_orientation_Pansexual  0.003639
+             likes_received_log  0.003534
+  relationship_intent_Exploring  0.003334
+             zodiac_sign_Cancer  0.003316
+              interest_Crafting  0.003273
+    sexual_orientation_Straight  0.003052
+             zodiac_sign_Pisces  0.003035
+               interest_Writing  0.002889
+                   interest_Art  0.002574
+             profile_pics_count  0.002415
+                 interest_Memes  0.002241
+       location_type_Small Town  0.002235
+              body_type_Average  0.002231
+               engagement_score  0.002200
+swipe_time_of_day_Early Morning  0.002195
+
+
+--- Cell 67 Outputs ---
+<Figure size 3600x2400 with 1 Axes>
+
+--- Cell 69 Outputs ---
+Features selected (union of top-40 F & MI): 66
+['activity_intensity', 'app_usage_time_min', 'body_type_Average', 'body_type_Curvy', 'body_type_Muscular', 'engagement_score', 'gender_Genderfluid', 'income_enc', 'interest_Anime', 'interest_Art', 'interest_Astrology', 'interest_Board Games', 'interest_Cars', 'interest_Coding', 'interest_Cooking', 'interest_Crafting', 'interest_DIY', 'interest_Dancing', 'interest_Gaming', 'interest_Gardening', 'interest_History', 'interest_Investing', 'interest_Memes', 'interest_Motorcycling', 'interest_Music', 'interest_Politics', 'interest_Running', 'interest_Skating', 'interest_Spirituality', 'interest_Tattoos', 'interest_Tech', 'interest_Writing', 'last_active_hour', 'late_night_user', 'likes_received_log', 'location_type_Remote Area', 'location_type_Rural', 'location_type_Small Town', 'location_type_Suburban', 'location_type_Urban', 'message_sent_count', 'message_sent_count_log', 'profile_completeness', 'profile_pics_count', 'relationship_intent_Casual Dating', 'relationship_intent_Exploring', 'relationship_intent_Friends Only', 'relationship_intent_Networking', 'selectivity_ratio', 'sexual_orientation_Asexual', 'sexual_orientation_Bisexual', 'sexual_orientation_Demisexual', 'sexual_orientation_Pansexual', 'sexual_orientation_Queer', 'sexual_orientation_Straight', 'swipe_right_ratio', 'swipe_time_of_day_Early Morning', 'swipe_time_of_day_Evening', 'swipe_time_of_day_Morning', 'zodiac_sign_Aquarius', 'zodiac_sign_Cancer', 'zodiac_sign_Capricorn', 'zodiac_sign_Leo', 'zodiac_sign_Pisces', 'zodiac_sign_Taurus', 'zodiac_sign_Virgo']
+
+X_train_selected shape: (40000, 66)
+
+
+--- Cell 72 Outputs ---
+<Figure size 4200x1500 with 2 Axes>
+Components needed for 90% variance: 7
+Components needed for 95% variance: 24
+Total features before PCA:          66
+
+
+--- Cell 74 Outputs ---
+<IPython.core.display.Markdown object>
+X_train_selected shape (original features): (40000, 66)
+X_train_pca shape      (PCA-reduced):       (40000, 24)
+Variance retained: 95.12%
+⏳ Benchmarking PCA Features (Random Forest)...
+👉 PCA Benchmark Accuracy: 0.6029 (Underperforms champion models on raw features!)
+
+
+--- Cell 76 Outputs ---
+<Figure size 2700x1800 with 1 Axes>
+
+--- Cell 78 Outputs ---
+=== Train / Test Split Summary ===
+  X_train:     (40000, 66)   y_train: (40000,)
+  X_test:      (10000, 66)    y_test:  (10000,)
+
+  X_train_pca: (40000, 24)
+  X_test_pca:  (10000, 24)
+
+Class balance in y_train:
+target
+Negative    24120
+Positive    15880
+Name: count, dtype: int64
+
+Class balance in y_test:
+target
+Negative    6030
+Positive    3970
+Name: count, dtype: int64
+
+
+--- Cell 79 Outputs ---
+<Figure size 3000x1200 with 2 Axes>
+
+--- Cell 81 Outputs ---
+🔄 Applying SMOTE to balance class distribution in training set...
+Balanced Training Set: (40000, 66) (target match ratio: 39.70%)
+
+
+--- Cell 83 Outputs ---
+Model libraries loaded
+
+
+--- Cell 87 Outputs ---
+XGB_DEVICE: cuda
+
+
+--- Cell 88 Outputs ---
+Models defined: ['Logistic Regression', 'KNN', 'Decision Tree', 'Random Forest', 'XGBoost', 'LightGBM', 'CatBoost', 'FT-Transformer', 'SAINT', 'NODE', 'Balanced Random Forest', 'KNN (Cosine Metric)', 'SVM']
+
+
+--- Cell 90 Outputs ---
+⏳ Training SimpleMLP to generate real loss curves...
+
+<Figure size 3600x1500 with 2 Axes>
+
+--- Cell 91 Outputs ---
+<IPython.core.display.Markdown object>
+⚡ Loaded pre-trained models from ../models/baseline_results.joblib for SVM bypass
+🎉 Successfully loaded pre-trained baseline results from ../models_v8/baseline_results.joblib!
+   Models loaded: ['Logistic Regression', 'KNN', 'Decision Tree', 'Random Forest', 'XGBoost', 'LightGBM', 'CatBoost', 'FT-Transformer', 'SAINT', 'NODE', 'Balanced Random Forest', 'KNN (Cosine Metric)', 'SVM']
+
+
+--- Cell 93 Outputs ---
+Model Comparison (sorted by Test Accuracy):
+                        Train Accuracy  Test Accuracy  Precision  Recall  F1 Score  ROC-AUC  Train Time (s)  Overfit Gap
+SVM                             0.6048         0.6030     0.0000  0.0000    0.0000   0.5143       1983.4667       0.0018
+SAINT                           0.6181         0.5465     0.4059  0.3068    0.3494   0.5069       1458.6867       0.0716
+KNN                             0.5858         0.4328     0.3962  0.8179    0.5338   0.5055          0.0226       0.1530
+XGBoost                         0.9712         0.5418     0.4003  0.3093    0.3490   0.5052          2.3858       0.4294
+Logistic Regression             0.5345         0.5303     0.4005  0.3688    0.3840   0.5033          0.2701       0.0042
+NODE                            0.6050         0.5518     0.4056  0.2771    0.3292   0.5030        265.3757       0.0533
+FT-Transformer                  0.6018         0.5887     0.4185  0.0924    0.1514   0.5018        875.3790       0.0131
+LightGBM                        0.6382         0.5819     0.3881  0.0922    0.1490   0.5011          8.8938       0.0563
+CatBoost                        0.8362         0.5680     0.4018  0.1804    0.2490   0.5003         12.1172       0.2682
+Balanced Random Forest          0.5819         0.5223     0.3939  0.3773    0.3854   0.5000         15.9486       0.0596
+KNN (Cosine Metric)             0.6848         0.4722     0.3934  0.6081    0.4777   0.4994          0.0237       0.2126
+Decision Tree                   0.6057         0.6003     0.3884  0.0118    0.0230   0.4993          0.4520       0.0054
+Random Forest                   0.5799         0.5225     0.3934  0.3743    0.3836   0.4992          4.3776       0.0574
+
+
+--- Cell 94 Outputs ---
+<Figure size 6600x1500 with 5 Axes>
+
+--- Cell 96 Outputs ---
+<Figure size 6000x5400 with 26 Axes>
+
+--- Cell 98 Outputs ---
+<Figure size 3000x2100 with 1 Axes>
+
+--- Cell 100 Outputs ---
+
+============================================================
+Logistic Regression
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.61      0.64      0.62      6030
+    Positive       0.40      0.37      0.38      3970
+
+    accuracy                           0.53     10000
+   macro avg       0.50      0.50      0.50     10000
+weighted avg       0.52      0.53      0.53     10000
+
+
+============================================================
+KNN
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.60      0.18      0.28      6030
+    Positive       0.40      0.82      0.53      3970
+
+    accuracy                           0.43     10000
+   macro avg       0.50      0.50      0.40     10000
+weighted avg       0.52      0.43      0.38     10000
+
+
+============================================================
+Decision Tree
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.60      0.99      0.75      6030
+    Positive       0.39      0.01      0.02      3970
+
+    accuracy                           0.60     10000
+   macro avg       0.50      0.50      0.39     10000
+weighted avg       0.52      0.60      0.46     10000
+
+
+============================================================
+Random Forest
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.60      0.62      0.61      6030
+    Positive       0.39      0.37      0.38      3970
+
+    accuracy                           0.52     10000
+   macro avg       0.50      0.50      0.50     10000
+weighted avg       0.52      0.52      0.52     10000
+
+
+============================================================
+XGBoost
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.60      0.69      0.65      6030
+    Positive       0.40      0.31      0.35      3970
+
+    accuracy                           0.54     10000
+   macro avg       0.50      0.50      0.50     10000
+weighted avg       0.52      0.54      0.53     10000
+
+
+============================================================
+LightGBM
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.60      0.90      0.72      6030
+    Positive       0.39      0.09      0.15      3970
+
+    accuracy                           0.58     10000
+   macro avg       0.50      0.50      0.44     10000
+weighted avg       0.52      0.58      0.50     10000
+
+
+============================================================
+CatBoost
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.60      0.82      0.70      6030
+    Positive       0.40      0.18      0.25      3970
+
+    accuracy                           0.57     10000
+   macro avg       0.50      0.50      0.47     10000
+weighted avg       0.52      0.57      0.52     10000
+
+
+============================================================
+FT-Transformer
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.61      0.92      0.73      6030
+    Positive       0.42      0.09      0.15      3970
+
+    accuracy                           0.59     10000
+   macro avg       0.51      0.50      0.44     10000
+weighted avg       0.53      0.59      0.50     10000
+
+
+============================================================
+SAINT
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.61      0.70      0.65      6030
+    Positive       0.41      0.31      0.35      3970
+
+    accuracy                           0.55     10000
+   macro avg       0.51      0.51      0.50     10000
+weighted avg       0.53      0.55      0.53     10000
+
+
+============================================================
+NODE
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.61      0.73      0.66      6030
+    Positive       0.41      0.28      0.33      3970
+
+    accuracy                           0.55     10000
+   macro avg       0.51      0.50      0.50     10000
+weighted avg       0.53      0.55      0.53     10000
+
+
+============================================================
+Balanced Random Forest
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.60      0.62      0.61      6030
+    Positive       0.39      0.38      0.39      3970
+
+    accuracy                           0.52     10000
+   macro avg       0.50      0.50      0.50     10000
+weighted avg       0.52      0.52      0.52     10000
+
+
+============================================================
+KNN (Cosine Metric)
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.60      0.38      0.47      6030
+    Positive       0.39      0.61      0.48      3970
+
+    accuracy                           0.47     10000
+   macro avg       0.50      0.50      0.47     10000
+weighted avg       0.52      0.47      0.47     10000
+
+
+============================================================
+SVM
+============================================================
+              precision    recall  f1-score   support
+
+    Negative       0.60      1.00      0.75      6030
+    Positive       0.00      0.00      0.00      3970
+
+    accuracy                           0.60     10000
+   macro avg       0.30      0.50      0.38     10000
+weighted avg       0.36      0.60      0.45     10000
+
+
+
+--- Cell 102 Outputs ---
+5-Fold Cross-Validation on Training Set:
+                            Mean Acc      Std      Min      Max
+-----------------------------------------------------------------
+⚡ Loading pre-computed cross-validation scores from ../models_v8/cv_results.joblib instantly!...
+Logistic Regression           0.5039   0.0073   0.4928   0.5158
+KNN                           0.5037   0.0116   0.4868   0.5256
+Decision Tree                 0.5022   0.0088   0.4909   0.5153
+Random Forest                 0.5045   0.0091   0.4925   0.5238
+XGBoost                       0.5010   0.0063   0.4868   0.5085
+LightGBM                      0.5003   0.0039   0.4950   0.5059
+CatBoost                      0.4997   0.0065   0.4899   0.5115
+FT-Transformer                0.5008   0.0052   0.4913   0.5084
+SAINT                         0.5005   0.0073   0.4891   0.5104
+NODE                          0.5007   0.0100   0.4870   0.5138
+Balanced Random Forest        0.5037   0.0094   0.4917   0.5239
+KNN (Cosine Metric)           0.5006   0.0125   0.4865   0.5238
+SVM                           0.6030   0.0001   0.6029   0.6031
+
+
+--- Cell 103 Outputs ---
+
+--- Cell 104 Outputs ---
+------------------------------------------------------------
+Statistical Significance Test (Friedman test across all models):
+Friedman p-value = 0.0344
+Result: The performance differences are statistically significant (p < 0.05).
+scikit-posthocs not installed, skipping Nemenyi test.
+------------------------------------------------------------
+
+
+--- Cell 105 Outputs ---
+<Figure size 3600x1500 with 1 Axes>
+
+--- Cell 107 Outputs ---
+<IPython.core.display.Markdown object>
+Top 3 pipeline-compatible models (by ROC-AUC): ['XGBoost', 'LightGBM', 'CatBoost']
+⚡ Loading computed learning curve data from ../models_v8/learning_curve_data.joblib  instantly!...
+
+<Figure size 5400x1500 with 3 Axes>
+
+--- Cell 109 Outputs ---
+Hyperparameter tuning libraries loaded
+
+
+--- Cell 112 Outputs ---
+⏭️  Loading cached Differential Privacy model...
+Comparing against best baseline: XGBoost
+
+<Figure size 4200x1500 with 2 Axes>
+
+--- Cell 115 Outputs ---
+🕸️ Constructing Attentive Tabular Network (TabNet-style)...
+✅ Attentive Neural Network trained successfully.
+
+<Figure size 3600x1800 with 2 Axes>
+
+--- Cell 117 Outputs ---
+🚀 Loading pre-trained GNN (GAT) model and graph from cache...
+GAT Test Accuracy: 0.6030
+
+
+--- Cell 121 Outputs ---
+⏭️  Loading cached SCARF representations and t-SNE coordinates...
+👉 Training downstream Random Forest classifier on learned representations...
+
+=== Raw Features ===
+Comparing against best baseline: XGBoost
+              precision    recall  f1-score   support
+
+           0       0.60      0.69      0.65      6030
+           1       0.40      0.31      0.35      3970
+
+    accuracy                           0.54     10000
+   macro avg       0.50      0.50      0.50     10000
+weighted avg       0.52      0.54      0.53     10000
+
+
+=== SCARF Pre-trained Embeddings ===
+              precision    recall  f1-score   support
+
+           0       0.60      1.00      0.75      6030
+           1       0.00      0.00      0.00      3970
+
+    accuracy                           0.60     10000
+   macro avg       0.30      0.50      0.38     10000
+weighted avg       0.36      0.60      0.45     10000
+
+
+<Figure size 6000x1800 with 3 Axes>
+
+--- Cell 123 Outputs ---
+⚡ Initializing Zero-Shot Tabular Transformer (TabPFN)...
+⏭️  Loading cached TabPFN model and predictions...
+
+<IPython.core.display.Markdown object>
+
+📊 TabPFN Zero-Shot Performance:
+👉 Test Accuracy: 0.6090
+👉 Test ROC-AUC: 0.4616
+👉 Test F1-Score: 0.0000
+👉 Test ROC-AUC  : 0.4616
+
+
+--- Cell 127 Outputs ---
+Parameter search spaces defined for: ['Random Forest', 'LightGBM', 'CatBoost', 'Multi-Layer Perceptron', 'Balanced Random Forest', 'KNN (Cosine Metric)', 'TabNet Deep Learning', 'XGBoost', 'SVM', 'Logistic Regression', 'KNN', 'Decision Tree']
+
+
+--- Cell 129 Outputs ---
+⚡ Loaded pre-trained tuned models from ../models/tuned_results.joblib for SVM bypass
+🎉 Successfully loaded pre-tuned baseline results from ../models_v8/tuned_results.joblib!
+   Models loaded: ['XGBoost', 'LightGBM', 'CatBoost']
+
+
+--- Cell 131 Outputs ---
+Model                     Metric         Baseline      Tuned     Change
+----------------------------------------------------------------------
+XGBoost                   Accuracy         0.5418     0.5542 +   0.0124
+XGBoost                   F1 Score         0.3490     0.3135   -0.0354
+XGBoost                   ROC-AUC          0.5052     0.5057 +   0.0005
+
+LightGBM                  Accuracy         0.5819     0.5781   -0.0038
+LightGBM                  F1 Score         0.1490     0.1857 +   0.0367
+LightGBM                  ROC-AUC          0.5011     0.5112 +   0.0101
+
+CatBoost                  Accuracy         0.5680     0.5843 +   0.0163
+CatBoost                  F1 Score         0.2490     0.1576   -0.0913
+CatBoost                  ROC-AUC          0.5003     0.5025 +   0.0022
+
+
+
+--- Cell 132 Outputs ---
+<Figure size 4800x1500 with 3 Axes>
+
+--- Cell 134 Outputs ---
+Best Model (Tuned, by ROC-AUC, pipeline-compatible): LightGBM
+Best Parameters: {'clf__num_leaves': 50, 'clf__n_estimators': 100, 'clf__max_depth': 5, 'clf__learning_rate': 0.1}
+
+Test Accuracy: 0.5781
+Test F1 Score: 0.1857
+Test ROC-AUC:  0.5112
+
+Classification Report:
+              precision    recall  f1-score   support
+
+    Negative       0.60      0.88      0.72      6030
+    Positive       0.40      0.12      0.19      3970
+
+    accuracy                           0.58     10000
+   macro avg       0.50      0.50      0.45     10000
+weighted avg       0.52      0.58      0.51     10000
+
+
+
+--- Cell 135 Outputs ---
+<Figure size 4200x1500 with 3 Axes>
+
+--- Cell 137 Outputs ---
+Feature Importance from Random Forest (Baseline):
+                          feature  importance
+               profile_pics_count    0.147420
+                 last_active_hour    0.066605
+             profile_completeness    0.048333
+               activity_intensity    0.034158
+                 engagement_score    0.034029
+                selectivity_ratio    0.031635
+               likes_received_log    0.029747
+               app_usage_time_min    0.029671
+        swipe_time_of_day_Morning    0.028475
+             zodiac_sign_Aquarius    0.027912
+                swipe_right_ratio    0.027782
+                 interest_Cooking    0.027505
+           message_sent_count_log    0.026805
+               message_sent_count    0.025984
+               gender_Genderfluid    0.023605
+                zodiac_sign_Virgo    0.022866
+                  late_night_user    0.021631
+                    interest_Tech    0.018526
+relationship_intent_Casual Dating    0.017396
+                       income_enc    0.017140
+
+<Figure size 3600x2100 with 1 Axes>
+
+--- Cell 140 Outputs ---
+ROC-AUC Breakdown by Demographic Groups:
+----------------------------------------
+
+--- Fairness Audit for gender ---
+                        TPR       FPR   ROC-AUC
+gender                                         
+Female             0.120125  0.135490  0.499218
+Genderfluid        0.086364  0.059863  0.536961
+Male               0.142857  0.133263  0.507999
+Non-binary         0.114650  0.129344  0.494169
+Prefer Not to Say  0.137500  0.133333  0.517010
+Transgender        0.123919  0.136187  0.510172
+
+--- Fairness Audit for sexual_orientation ---
+                         TPR       FPR   ROC-AUC
+sexual_orientation                              
+Asexual             0.066946  0.088556  0.510332
+Bisexual            0.113131  0.149254  0.491400
+Demisexual          0.072464  0.077852  0.498723
+Gay                 0.238477  0.234186  0.505423
+Lesbian             0.241584  0.225333  0.497745
+Pansexual           0.086785  0.073781  0.548721
+Queer               0.079051  0.066216  0.526229
+Straight            0.066398  0.059611  0.509899
+
+
+--- Cell 142 Outputs ---
+================================================================================
+FINAL MODEL COMPARISON
+================================================================================
+                                                   Accuracy      F1  Precision  Recall  ROC-AUC  Train Time
+SVM (Baseline)                                       0.6030  0.0000     0.0000  0.0000   0.5143   1983.4667
+LightGBM (Tuned)                                     0.5781  0.1857     0.3972  0.1212   0.5112    367.5425
+SAINT (Baseline)                                     0.5465  0.3494     0.4059  0.3068   0.5069   1458.6867
+XGBoost (Tuned)                                      0.5542  0.3135     0.4033  0.2564   0.5057   1195.2055
+KNN (Baseline)                                       0.4328  0.5338     0.3962  0.8179   0.5055      0.0226
+XGBoost (Baseline)                                   0.5418  0.3490     0.4003  0.3093   0.5052      2.3858
+Logistic Regression (Baseline)                       0.5303  0.3840     0.4005  0.3688   0.5033      0.2701
+NODE (Baseline)                                      0.5518  0.3292     0.4056  0.2771   0.5030    265.3757
+CatBoost (Tuned)                                     0.5843  0.1576     0.4031  0.0980   0.5025   1050.9653
+FT-Transformer (Baseline)                            0.5887  0.1514     0.4185  0.0924   0.5018    875.3790
+LightGBM (Baseline)                                  0.5819  0.1490     0.3881  0.0922   0.5011      8.8938
+CatBoost (Baseline)                                  0.5680  0.2490     0.4018  0.1804   0.5003     12.1172
+Balanced Random Forest (Baseline)                    0.5223  0.3854     0.3939  0.3773   0.5000     15.9486
+KNN (Cosine Metric) (Baseline)                       0.4722  0.4777     0.3934  0.6081   0.4994      0.0237
+Decision Tree (Baseline)                             0.6003  0.0230     0.3884  0.0118   0.4993      0.4520
+Random Forest (Baseline)                             0.5225  0.3836     0.3934  0.3743   0.4992      4.3776
+TabPFN Transformer (LightGBM Fallback) (Baseline)    0.6090  0.0000     0.4074  0.0222   0.4616      0.0000
+
+Best overall model: SVM (Baseline)
+  F1 Score:  0.0000
+  ROC-AUC:   0.5143
+  Accuracy:  0.6030
+
+
+--- Cell 143 Outputs ---
+<Figure size 4200x2100 with 1 Axes>
+
+--- Cell 145 Outputs ---
+--- Starting FLAML ---
+Loading pre-trained FLAML model from ../models_v8/flaml_results.joblib...
+
+Best FLAML model found: extra_tree
+Best FLAML hyperparameters: {'n_estimators': 4, 'max_features': 0.1282675607355326, 'max_leaves': 291, 'criterion': 'gini'}
+
+FLAML Test Accuracy: 0.5988
+FLAML Test ROC-AUC:  0.5010
+FLAML Test F1:       0.0497
+FLAML Test ROC-AUC:  0.5010
+
+
+--- Cell 146 Outputs ---
+⏭️  Loading cached PyCaret results...
+
+Best PyCaret Model: GradientBoostingClassifier(random_state=123)
+
+PyCaret Leaderboard:
+
+                              Model  Accuracy     AUC  Recall   Prec.      F1  \
+gbc    Gradient Boosting Classifier    0.5989  0.5075  0.0252  0.4198  0.0471   
+lr              Logistic Regression    0.5066  0.5074  0.4960  0.4016  0.4438   
+ridge              Ridge Classifier    0.5065  0.5074  0.4960  0.4015  0.4437   
+lda    Linear Discriminant Analysis    0.5064  0.5074  0.4955  0.4013  0.4434   
+ada            Ada Boost Classifier    0.5431  0.5073  0.3319  0.3672  0.3432   
+
+        Kappa     MCC  TT (Sec)  
+gbc    0.0022  0.0063     1.766  
+lr     0.0091  0.0093     1.847  
+ridge  0.0090  0.0092     0.192  
+lda    0.0086  0.0088     0.276  
+ada    0.0142  0.0146     0.574  
+
+--- Cell 150 Outputs ---
+⏭️  Loading cached Friedman's H-statistic matrix...
+
+<Figure size 3000x2400 with 2 Axes>
+
+--- Cell 152 Outputs ---
+🌌 Computing SHAP Interaction Values for Tree-Based Champion...
+👉 Selected tree model for SHAP: LightGBM
+⏭️  Loading cached SHAP interaction values...
+👉 Primary Top Feature: profile_pics_count
+👉 Secondary Interacting Feature: profile_completeness
+
+<Figure size 3000x1800 with 0 Axes>
+<Figure size 2250x1500 with 2 Axes>
+<Figure size 3000x2400 with 2 Axes>
+
+--- Cell 157 Outputs ---
+👉 Dynamically resolved best_model from tuned_results: LightGBM
+👉 Dynamically isolating calibration set from X_train to prevent test-set leakage...
+⚠️ Cached MAPIE data shape mismatch (due to different test splits/features). Recomputing...
+⏳ Computing Conformal Prediction Bounding Sets (~1-2m)...
+👉 Using modern SplitConformalClassifier conformal prediction engine...
+💾 Conformal prediction sets cached successfully.
+SHAPES: y_test_conformal: (10000,), y_sets: (10000, 2)
+SHAPES: y_test_conformal: (10000,), y_sets: (10000, 2)
+SHAPES: y_test_conformal: (10000,), y_sets: (10000, 2)
+
+<Figure size 5400x1500 with 3 Axes>
+
+--- Cell 161 Outputs ---
+⏭️  Loading pre-trained BayesianMLP model from cache...
+
+<Figure size 6000x1800 with 3 Axes>
+
+📊 Uncertainty-Aware Prediction Report:
+  High-confidence predictions (σ < median): 5000
+  Low-confidence predictions  (σ ≥ median): 5000
+  High-confidence accuracy: 0.5622
+  Low-confidence accuracy:  0.5800
+
+
+--- Cell 165 Outputs ---
+<Figure size 4200x1500 with 2 Axes>
+
+--- Cell 167 Outputs ---
+📈 Standardizing Probabilities via Isotonic Calibration...
+👉 Champion model selected for calibration: LightGBM
+
+<Figure size 3000x1800 with 1 Axes>
+👉 Uncalibrated Brier Score: 0.2426
+👉 Calibrated Brier Score  : 0.2393 (1.4% error reduction)
+
+✅ Optimized Champion Threshold (PR Curve max F1): 0.3333
+
+✅ Updated results['LightGBM'] with calibrated predictions.
+   Calibrated Accuracy: 0.3970 | F1: 0.5684 | AUC: 0.5150
+
+
+--- Cell 172 Outputs ---
+Comparing against best baseline: XGBoost
+
+<Figure size 5400x1500 with 3 Axes>
+
+📊 Model Compression Report:
+  Teacher: 14-model ensemble (~3.5 GB)
+  Student: 2,177 parameters (8.5 KB)
+
+
+--- Cell 174 Outputs ---
+⚖️ Generating Counterfactual Explanations via DiCE...
+🚀 Loading pre-computed DiCE Counterfactual Explanations from cache...
+👉 Target user index 0 predicted to be 'Ghosted'. Loaded 3 diverse counterfactuals for recourse from cache...
+Query instance (original outcome : 0)
+
+   activity_intensity  app_usage_time_min  body_type_Average  body_type_Curvy  \
+0            0.839066            0.311258                  0                0   
+
+   body_type_Muscular  engagement_score  gender_Genderfluid  income_enc  \
+0                   1          2.410586                   0         1.0   
+
+   interest_Anime  interest_Art  ...  swipe_time_of_day_Evening  \
+0               0             0  ...                          0   
+
+   swipe_time_of_day_Morning  zodiac_sign_Aquarius  zodiac_sign_Cancer  \
+0                          0                     0                   0   
+
+   zodiac_sign_Capricorn  zodiac_sign_Leo  zodiac_sign_Pisces  \
+0                      0                0                   1   
+
+   zodiac_sign_Taurus  zodiac_sign_Virgo  target  
+0                   0                  0       0  
+
+[1 rows x 67 columns]
+
+Diverse Counterfactual set (new outcome: 1)
+
+  activity_intensity app_usage_time_min body_type_Average body_type_Curvy  \
+0                  -                  -                 -               -   
+1                  -                  -                 -               -   
+2                  -                  -                 -               -   
+
+  body_type_Muscular engagement_score gender_Genderfluid income_enc  \
+0                  -                -                  -          -   
+1                  -                -                  -          -   
+2                  -                -                  -          -   
+
+  interest_Anime interest_Art  ... swipe_time_of_day_Evening  \
+0              -            -  ...                         -   
+1              -            -  ...                         -   
+2              -            -  ...                         -   
+
+  swipe_time_of_day_Morning zodiac_sign_Aquarius zodiac_sign_Cancer  \
+0                         -                    -                  -   
+1                         -                    -                  -   
+2                         -                    -                  -   
+
+  zodiac_sign_Capricorn zodiac_sign_Leo zodiac_sign_Pisces zodiac_sign_Taurus  \
+0                     -               -                  -                  -   
+1                     -               -                  -                  -   
+2                     -               -                  -                  -   
+
+  zodiac_sign_Virgo target  
+0                 -    1.0  
+1                 -    1.0  
+2                 -    1.0  
+
+[3 rows x 67 columns]
+
+--- Cell 176 Outputs ---
+🎯 Fitting Causal Uplift T-Learner Recommender...
+🚀 Loading pre-trained Causal Uplift models and scores from cache...
+✅ Uplift estimation complete. Mean Uplift: 0.0024
+
+<Figure size 4200x1500 with 2 Axes>

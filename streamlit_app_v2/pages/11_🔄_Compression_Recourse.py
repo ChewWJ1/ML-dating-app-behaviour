@@ -15,6 +15,7 @@ theme.render_sidebar()
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
 NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
+NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
 
 
 def show_plot(directory, filename, caption=''):
@@ -58,8 +59,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, '37_flex_4_knowledge_distillation_complex_simple.png',
-          'Knowledge Distillation — Teacher vs. Student Performance')
+show_plot(NOTEBOOK_PLOTS, 'knowledge_distillation.png',
+          'Knowledge Distillation — Complex Teacher vs. Simple Student')
 
 col1, col2, col3 = st.columns(3)
 with col1:

@@ -13,6 +13,7 @@ theme.render_sidebar()
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 V5_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v5_plots')
+NOTEBOOK_PLOTS = os.path.join(ROOT_DIR, 'assets', 'notebook_plots')
 BASE_PLOTS = os.path.join(ROOT_DIR, 'assets', 'plots')
 
 def show_plot(directory, filename, caption=''):
@@ -173,8 +174,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-show_plot(V5_PLOTS, "30_flex_9_permutation_feature_interaction_detection.png",
-          caption="Permutation Feature Interaction Detection — H-Statistic Heatmap")
+show_plot(NOTEBOOK_PLOTS, "feature_interactions.png",
+          "Permutation Feature Interaction Detection — Top Interacting Pairs")
 
 # ── SHAP Interaction Values [V5] ───────────────────────────────────────────
 st.markdown('<div class="gradient-divider"></div>', unsafe_allow_html=True)

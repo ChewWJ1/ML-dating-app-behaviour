@@ -1,6 +1,6 @@
 ![Science of Digital Romance Infographic](assets/NotebookLM/overview/Science_of_Digital_Romance_Infographic.png)
 
-# 💘 Tying the Data Knot: Predicting Meaningful Connections
+# 💘 Tying the Data Knot: Predicting Meaningful Connections (V8 Pipeline)
 ### WIA1006 Machine Learning — Group Assignment Documentation
 **Sem 2, Session 2025/2026**
 **Faculty of Computer Science and Information Technology (FCSIT)** 
@@ -34,7 +34,7 @@
 **Dataset:** `dating_app_behavior_dataset_extended1.csv`
 - 50,000 records × 25 features
 - Zero missing values, zero duplicates
-- Balanced multi-class target (~5,000 per class), ~40/60 binary split
+- Binary target distribution: 60.3% Negative, 39.7% Positive
 
 ---
 
@@ -49,6 +49,9 @@
 | `notebooks/ML_dating_app_behaviour V3.ipynb` | **Advanced GPU-Accelerated Tabular notebook** — Injects dynamic hardware auto-detection (NVIDIA CUDA & AMD Radeon DirectML), custom PyTorch advanced architectures, and GPU-accelerated Optuna search grids. |
 | `notebooks/ML_dating_app_behaviour V4.ipynb` | **Advanced Robustness & Trustworthy AI notebook** — Injects 10 "Wow-Factor" flexes (GAT GNNs, SCARF self-supervision, Opacus differential privacy, Conformal predictions, MC Dropout, etc.). |
 | `notebooks/ML_dating_app_behaviour V5.ipynb` | **SOTA PhD-Level ML Pipeline notebook** — Injects advanced methodologies like OOD Rejection, TabPFN, Mixup, SHAP Interactions, and Microsoft DiCE. |
+| `notebooks/ML_dating_app_behaviour V6.ipynb` & `V7_Strict.ipynb` | Iterative pipeline reengineering, new training scripts, and result visualizations. |
+| `notebooks/ML_dating_app_behaviour V8.2.ipynb` | **Hardware-Accelerated V8.2 Pipeline** — Introduces hardware-accelerated training environment, updated CatBoost configurations, and new data processing utilities. |
+| `notebooks/ML_dating_app_behaviour V8_patched_v4.ipynb` | **V8 Patched (Phase 4) notebook** — The definitive, methodologically rigorous version of the pipeline. Contains 14 surgical fixes addressing data leakage, empirical benchmarking, and causal inference validity. |
 | `data/dating_app_behavior_dataset.csv` | Original dataset (50k × 19 features) |
 | `data/dating_app_behavior_dataset_extended1.csv` | **Extended dataset used** (50k × 25 features) |
 | `scripts/dual_gpu_trainer.py` | Standalone parallel training engine running PyTorch multi-threading across integrated AMD Radeon and dedicated NVIDIA GPUs. |
@@ -120,125 +123,114 @@ The extended dataset adds **6 new features** not present in the original:
 
 ## ⚙️ Pipeline — Step by Step
 
-### Step 1: Data Loading
-- Loaded from CSV (local) or Google Drive (Colab)
-- No preprocessing at this stage — `df_raw` is kept untouched for EDA
+### Section 1: Environment Setup & Library Installation
+- Configures the runtime environment, installs dependencies, and initiates the **Dynamic Hardware Auto-Detection Engine** (routing to CUDA or DirectML).
 
 ---
 
-### Step 2: Exploratory Data Analysis (EDA)
+### Section 2: Data Loading & Schema Verification
+- Loads the extended dataset (50,000 × 25 features) and verifies the schema.
 
+---
+
+### Section 3: Exploratory Data Analysis (EDA)
 ![Dataset Insights and Analysis](assets/NotebookLM/section%20overview/Dating_Dataset_Insights_and_Analysis.png)
-
-- Checked missing values and duplicates (zero found).
-- Analyzed target class distributions (~40/60 binary split).
-- Generated boxplots for outlier detection and correlation heatmaps.
-- **[V4] Data Quality Audit**: Performed Mutual Information analysis and Permutation Testing to quantify inherent dataset learnability.
-- **[V4] Causal Structure Discovery**: Applied the PC Algorithm to infer a Directed Acyclic Graph (DAG) distinguishing causal relationships from mere correlations.
-- **[V5.1] Double Machine Learning Causal Estimation**: Programmed a two-stage residual DML regression engine to isolate the true **Average Treatment Effect (ATE)** of user profile presentation quality on matchmaking outcomes, complete with bootstrap 95% confidence intervals and causal significance p-values.
+- Extensive 10-part EDA including distributions, boxplot outlier detection, correlation heatmaps, and target analysis.
 
 ---
 
-### Step 3: Data Preprocessing
-- **Drop Redundant Columns:** Dropped `app_usage_time_label` and `swipe_right_label`.
-- **Create Binary Target:** Mapped 10 match outcomes to `target` (0/1).
-- **[V4] Advanced Feature Engineering:** Engineered complex interaction features (`engagement_score`, `selectivity_ratio`), log-transformed highly skewed variables, and generated frequency encodings.
-- **Ordinal/One-Hot/Multi-Hot Encoding:** Processed income, education, demographics, and `interest_tags`.
-- **[V4] Robust Scaling:** Replaced `StandardScaler` with `RobustScaler` to better handle extreme outliers in dating behaviour metrics.
-- **[V5] OOD Rejection Guardrail:** Applied an unsupervised Isolation Forest fitted on clean training features to detect and reject anomalous/extreme input profiles (Out-of-Distribution profiles) at inference time.
+### Section 4: Data Preprocessing & Feature Engineering
+- **Causal Structure Discovery:** Applies the PC Algorithm (using `kci` conditional independence test) to map the causal Directed Acyclic Graph (DAG).
+- **Double Machine Learning (DML):** Calculates the Average Treatment Effect (ATE) of profile effort on matches, eliminating selection bias.
+- **Feature Engineering:** Creates interaction terms (e.g., selectivity ratios) and performs log transformations.
+- **Normalization:** Applies `RobustScaler` to numerical features *after* train-test splitting to prevent pre-split leakage.
+- **OOD Rejection Guardrail:** Implements an unsupervised Isolation Forest to detect and reject anomalous inputs at inference time.
 
 ---
 
-### Step 4: Feature Selection
-
+### Section 5: Feature Selection
 ![Feature Selection Infographic](assets/NotebookLM/section%20overview/Dating_Success_Feature_Selection_Infographic.png)
-
-- **ANOVA F-Score & Mutual Information:** Selected the top robust features.
-- **[V4] Boruta All-Relevant Selection:** Applied the Boruta algorithm (via a Random Forest backbone) to find all statistically relevant features rather than a subjective top-k threshold, resulting in a robust subset of 67 features.
-
----
-
-### Step 5: PCA (Dimensionality Reduction)
-Optional step. Retains 55 components explaining 95.2% of total variance.
+- **ANOVA F-Score & Mutual Information:** Selects the top robust features based on linear and non-linear dependencies.
+- **Boruta Selection:** Applies Boruta all-relevant feature selection via a Random Forest backbone to extract a robust feature subset.
 
 ---
 
-### Step 6: Train / Test Split
-Stratified 80/20 train/test split.
+### Section 6: Dimensionality Reduction — PCA
+- Retains 95% explained variance, strictly used for visualization and explicitly benchmarked to prove inferiority against raw feature trees.
 
 ---
 
-### Step 7: Class Balancing (SMOTE)
-Balanced the training split using Synthetic Minority Over-sampling Technique (SMOTE). **[V4]** Additionally benchmarked against BorderlineSMOTE and ADASYN.
+### Section 7: Train / Test Split & Class Resampling
+- Stratified 80/20 train/test split.
+- Training set balanced using Synthetic Minority Over-sampling Technique (SMOTE).
 
 ---
 
-### Step 8: Baseline Establishment via AutoML (Section 9 in notebook)
-Benchmarks our pipeline against FLAML and PyCaret AutoML libraries to establish an automated performance baseline before developing custom architectures.
+### Section 8: Pre-Training Checklist
+- Verifies shapes and variables before launching the training pipelines to guarantee mathematical stability.
 
 ---
 
-### Step 9: Advanced Model Training (Section 10 in notebook)
-
+### Section 9: Model Training & Baseline Benchmarking
 ![Model Training Pipeline Overview](assets/NotebookLM/section%20overview/Model_Training_Pipeline_Overview.png)
-
-We train 16 distinct baseline models, similarity recommenders, PyTorch deep learning architectures, and zero-shot transformers.
-- **[V4] Graph Neural Network (GNN):** Treats users as nodes in a similarity graph, applying a Graph Attention Network (GAT) for semi-supervised node classification.
-- **[V4] Self-Supervised Contrastive Pre-Training (SCARF):** Extracts latent structure without labels via random feature corruption.
-- **[V4] Differential Privacy Training:** Trained a PyTorch deep network with Opacus, achieving strict (ε=8.0, δ=1e-5)-differential privacy guarantees.
-- **[V5] Zero-Shot Tabular Transformers (TabPFN):** Deployed a zero-shot prior-data fitted network pre-trained on synthetic datasets, approximating the true Bayesian posterior in a single forward pass.
-- **[V5] Label Smoothing & Mixup Regularization:** Integrated label smoothing (0.1/0.9 mapping) and Mixup input interpolation into our PyTorch wrapper's training loop to regularize deep neural models against overconfidence and noisy labels.
-- **[V5.1] TabNet-style Attentive Neural Network**: Implemented a PyTorch Attentive Tabular Network that outputs dynamic, instance-wise feature selection masks, visualizing individual column targeting choices in an explainable selection heatmap.
+- Establishes FLAML and PyCaret AutoML baselines.
+- Trains 14 customs models with 2 AutoML baseline total 16, including Logistic Regression, KNN, Decision Tree, Random Forest, XGBoost, SVM (dynamic thread bagging), LightGBM, CatBoost, Balanced RF, and Cosine KNN CF.
+- Also integrates PyTorch architectures: MLP, FT-Transformer, SAINT, and NODE.
 
 ---
 
-### Step 10: Hyperparameter Optimization (Section 11 in notebook)
+### Section 10: Model Evaluation & Performance Comparisons
+- **Label Smoothing & Mixup Regularization:** Empirically proves regularization smoothing using real live PyTorch training loss curves.
+- **Cross-Validation & Significance:** Repeated cross-validation evaluated on strictly un-SMOTEd data, analyzing statistical stability using the Friedman Test.
 
+---
+
+### Section 11: Privacy, Representation & Advanced Architectures
+- **Opacus Differential Privacy:** Trains a PyTorch network with a privacy budget of (ε=8.0).
+- **Graph Neural Network (GNN):** Applies a Graph Attention Network (GAT) for semi-supervised transductive user matchmaking.
+- **Attentive Tabular Network:** Instance-wise feature selection using a custom soft-mask attention sequential head.
+- **Self-Supervised SCARF:** Contrastive pre-training embeddings.
+- **TabPFN:** Zero-shot prior-data fitted network evaluation, computed strictly without metric dilution.
+
+---
+
+### Section 12: Hyperparameter Optimization
 ![Efficient Hyperparameter Optimization Strategy](assets/NotebookLM/section%20overview/Efficient_Hyperparameter_Optimization_Strategy.png)
-
-1,000-trial GPU-accelerated Optuna search grids.
-- **[V4] Multi-Objective Pareto Optimization:** Simultaneously optimizes for both predictive performance (F1 Score) and demographic fairness.
+- GPU-accelerated Optuna tuning optimizing Matthews Correlation Coefficient (MCC), fully cached.
 
 ---
 
-### Step 11: Feature Importance & Interaction Analysis (Section 12 in notebook)
-Extracts global importance scores from the best ensemble.
-- **[V4] Permutation Feature Interaction (H-Statistic):** Computes Friedman's H-statistic to identify second-order interactions (e.g., how age and swipe ratio synergize).
-- **[V5] SHAP Interaction Values:** Extracted joint Shapley Feature Interaction values for our tree-based champion, mapping the 2D local synergy attributions and joint effects between the top interacting features.
+### Section 13: Feature Importance & Ethical Considerations
+- Evaluates Demographic Parity, Privacy Implications, and Homogeneity Risk.
 
 ---
 
-### Step 12: Advanced Model Robustness & Uncertainty (Section 13 in notebook)
+### Section 14: Feature Importance & Interaction Analysis
+- Extracts global attribution scores and computes **Friedman's H-Statistic** for pairwise interactions.
+- Computes **SHAP Interaction Values** to map local synergy attributions.
 
+---
+
+### Section 15: Advanced Model Robustness & Uncertainty
 ![Trustworthy AI Robustness Framework](assets/NotebookLM/section%20overview/Trustworthy_AI_Dating_Robustness_Framework.png)
-
-- **[V4] Conformal Prediction:** Generates statistically valid prediction sets with guaranteed finite-sample coverage instead of raw point predictions.
-- **[V4] Bayesian Uncertainty Quantification:** Uses Monte Carlo Dropout to establish epistemic uncertainty intervals (e.g. 73% ± 12% confidence).
-- **[V4] Adversarial Robustness Testing:** Evaluates model vulnerabilities against deliberate input perturbations using the Fast Gradient Sign Method (FGSM).
-- **[V5] Isotonic Model Calibration:** Calibrated raw classifier confidence scores into true empirical probabilities using Isotonic Regression, plotting reliability curves and calculating Brier Score reductions.
+- **Conformal Prediction:** Strict calibration without test-set leakage, establishing 95% coverage uncertainty sets.
+- **Bayesian Uncertainty:** Monte Carlo Dropout.
+- **Adversarial Robustness:** FGSM attacks structurally masked to mutate only logical, continuous features.
+- **Isotonic Calibration:** Calibrates confidence scores and plots Reliability Diagrams.
 
 ---
 
-### Step 13: Model Compression, Recourse & Deployment (Section 14 in notebook)
-
+### Section 16: Model Compression, Recourse & Deployment
 ![AI Efficiency and Agency](assets/NotebookLM/section%20overview/Dating_AI_Efficiency_and_Agency.png)
-
-- **[V4] Knowledge Distillation:** Compresses the learned decision boundaries of a massive ensemble "teacher" into a lightweight, highly interpretable logistic regression "student".
-- **[V5] Algorithmic Recourse (DiCE):** Generated diverse counterfactual explanations using Microsoft's DiCE framework, outlining the minimal actionable profile changes (e.g. increasing profile completeness by a specific amount) for a user predicted to be "Ghosted" to achieve a "Matched" prediction.
-
----
-
-### Step 14: Ethical Considerations, Demographic Parity & Uplift Modeling (Section 15 & 17 in notebook)
-
-![Maximizing Engagement with Causal Uplift](assets/NotebookLM/section%20overview/Maximizing_Engagement_with_Causal_Uplift.png)
-
-Analyzes model accuracy and bias across sensitive demographic attributes.
-- **[V5.1] Causal Uplift Modeling (T-Learner Meta-Classifier)**: Programmed Treatment ($M_1$) and Control ($M_0$) meta-learners to estimate the Individual Treatment Effect (ITE) of profile interventions, segmenting dating app users into *Persuadables*, *Sure Things*, *Lost Causes*, and *Sleeping Dogs* to enable targeted prescriptive premium feature recommendations.
+- **Knowledge Distillation:** Student training optimized using mini-batching.
+- **Algorithmic Recourse (DiCE):** Actionable counterfactuals constrained strictly to mutable user features.
+- **Causal Uplift Modeling (T-Learner):** Propensity score matching with Inverse Probability Weighting (IPW) applied to extract purely causal persuadable segments.
 
 ---
 
-### Step 15: Final Model Summary (Section 16 in notebook)
-Generates comprehensive ranking tables, confusion matrices, and ROC curves, designating the top model.
+### Section 17: Final Pipeline Summary & Hardware Optimisations
+- Consolidates the **Dynamic Champion Model** inheriting weights to all downstream components.
+- Outlines the `models_v8/` dynamic checkpoint caching layer.
 
 ## 📊 Full Pipeline Diagram (V5 PhD-Level)
 
@@ -266,10 +258,10 @@ dating_app_behavior_dataset_extended1.csv  (50,000 x 25)
   [V5 OOD Rejection Guardrail]  ->  Isolation Forest Anomaly Filter (5% Contamination)
         |
         v
-  Feature matrix X: (50,000 x 113)
+  Feature matrix X: (50,000 x 122)
         |
         |--[ANOVA F top 40]---+
-        |                     +--[Union]--> X_selected (50,000 x 67)
+        |                     +--[Union]--> X_selected (50,000 x 66)
         +--[MI top 40]--------+                  |
         |                     |                  |
         +--[Boruta Selection]-+                  |--[PCA 95%]--> X_pca
@@ -279,7 +271,7 @@ dating_app_behavior_dataset_extended1.csv  (50,000 x 25)
                                                  |
                                +-----------------+------------------+
                                v                                    v
-                        X_train (40k x 67)                  X_test (10k x 67)
+                        X_train (40k x 66)                  X_test (10k x 66)
                                |
                                v
                      [SMOTE Class Balancing]  --> Standard, Borderline, ADASYN
@@ -288,7 +280,7 @@ dating_app_behavior_dataset_extended1.csv  (50,000 x 25)
                      [AutoML Baseline Establishment]  --> FLAML, PyCaret
                                |
                                v
-                     [Train 16 Baseline & Advanced Models]
+                     [Train 14 customs models with 2 AutoML baseline total 16]
                      + Custom PyTorch (FT-Transformer, SAINT, Deep MLP)
                      + [V4] Graph Neural Network (GNN Node Classification)
                      + [V4] SCARF Contrastive Pre-Training
@@ -299,7 +291,7 @@ dating_app_behavior_dataset_extended1.csv  (50,000 x 25)
                                |
                                v
                      [Hyperparameter Optimization]
-                     + [V4] Optuna Multi-Objective Pareto Tuning (F1 vs Fairness)
+                     + [V4] GPU Optuna Tuning (MCC Optimization)
                                |
                                v
                      [Feature Importance & Interactions]
@@ -367,6 +359,12 @@ We created `scripts/dual_gpu_trainer.py` to showcase the ultimate dual-GPU train
    ```
    Open `notebooks/ML_dating_app_behaviour V3.ipynb` and press "Run All". It will dynamically route all workloads sequentially to your NVIDIA GTX 1650 Ti GPU.
 
+### ⚡ Hardware Acceleration & Speed Optimisations:
+
+* **Dynamic Thread SVM Bagging Ensemble:** Upgraded standard single-threaded SVM to a parallelized **Bagging Classifier with dynamic threads based on os.cpu_count()**. This leverages system RAM cache in parallel, slashing baseline training times.
+* **Dynamic GPU Auto-Detection:** Routes PyTorch to CUDA/DirectML/MPS automatically.
+* **Max-RAM Tree Scaling:** Baseline and grid search parameters for Random Forest and XGBoost scaled up to 1000 trees and depth 12.
+
 ### AMD Radeon GPU Setup (For Teammate's Laptop)
 If your teammate has an AMD CPU + Radeon GPU (like the Ryzen AI 9 HX 370), they simply activate the virtual environment and run the following command in their shell:
 ```bash
@@ -390,12 +388,12 @@ Open **Windows Task Manager** under the **Performance tab** to view both GPU 0 (
 ### Advanced Checkpoint Routing & High-Speed Joblib Caching (V3, V4 & V5)
 To drastically optimize iterative development and testing, the V3, V4, and V5 pipelines utilize sophisticated `joblib` caching architectures.
 
-#### V3 Baseline Caching (`models_advanced/`)
-* All baseline outputs (`.joblib` files) are routed and saved dynamically to `models_advanced/`.
-* A `RETRAIN_BASELINE` flag allows the notebook to bypass the 10+ minute 16-model training loop entirely, loading the pre-trained weights and evaluations instantly in 0.5 seconds.
+#### V3 Baseline Caching (`models_v8/`)
+* All baseline outputs (`.joblib` files) are routed and saved dynamically to `models_v8/`.
+* A `RETRAIN_BASELINE` flag allows the notebook to bypass the 10+ minute 14-model training loop entirely, loading the pre-trained weights and evaluations instantly in 0.5 seconds.
 
-#### V4 Deep Computation Caching (`models_v4_cache/`)
-Because the V4 "Wow-Factor" techniques (like Deep Learning, Optuna grids, and Conformal Prediction) are highly computationally expensive, we wrapped the 6 heaviest computational blocks in intelligent `os.path.exists()` caching barriers inside `models_v4_cache/`:
+#### V4 Deep Computation Caching (`models_v8/`)
+Because the V4 "Wow-Factor" techniques (like Deep Learning, Optuna grids, and Conformal Prediction) are highly computationally expensive, we wrapped the 6 heaviest computational blocks in intelligent `os.path.exists()` caching barriers inside `models_v8/`:
 1. **Boruta Feature Selection:** Caches the `feat_selector.support_` boolean mask (`boruta_support.joblib`).
 2. **SCARF Contrastive Pre-Training:** Caches the PyTorch embedded spaces (`scarf.joblib`).
 3. **Differential Privacy Training:** Caches the privacy-constrained model weights and loss curves (`opacus.joblib`).
@@ -403,8 +401,8 @@ Because the V4 "Wow-Factor" techniques (like Deep Learning, Optuna grids, and Co
 5. **Permutation Feature Interaction:** Caches the heavy pairwise Friedman's H-Statistic matrix (`h_stat.joblib`).
 6. **Conformal Prediction:** Caches the MAPIE bounding set arrays (`mapie.joblib`).
 
-#### V5 Caching and SCARF Flow Optimizations (`models_v5/`)
-* In the V5 SOTA pipeline, all cached outputs are routed cleanly into the `models_v5/` directory to prevent cache conflicts with V4.
+#### V8 Caching and Logic Flow Optimizations (`models_v8/`)
+* In the V5 SOTA pipeline, all cached outputs are routed cleanly into the `models_v8/` directory to prevent cache conflicts with V4.
 * **10 Intelligent Checkpoints:** The V5 pipeline integrates a comprehensive, automated joblib caching layer consisting of **10 checkpoints**:
   1. `boruta_support.joblib`: Boolean support mask for Boruta feature selection.
   2. `scarf.joblib`: Pre-trained contrastive embeddings (`X_train_embed`, `X_test_embed`) and epoch loss history (`pretrain_losses`).
@@ -416,7 +414,7 @@ Because the V4 "Wow-Factor" techniques (like Deep Learning, Optuna grids, and Co
   8. `dice_recourse.joblib`: Microsoft DiCE recourse pathways and query user indices.
   9. `causal_uplift.joblib`: Causal T-Learner estimators and Individual Treatment Effect segmentation matrices.
   10. `tuned_results.joblib` / `baseline_results.joblib` / `cv_results.joblib`: Metric dictionaries, cross-validation arrays, and hyperparameter-tuned model checkpoints (such as tuned LightGBM/CatBoost architectures) bypass-loaded instantly on reruns.
-* **SCARF Execution & Cache Logic Flow:** The SCARF contrastive pre-training and fine-tuning cell has been optimized so that representation extraction and caching are run cleanly within the `else` block of the cache verification check. If `models_v5/scarf.joblib` exists, the pipeline loads cached embeddings (`X_train_embed` and `X_test_embed`) and skips the fine-tuning/encoder code entirely, preventing `NameError: name 'encoder' is not defined` crashes.
+* **SCARF Execution & Cache Logic Flow:** The SCARF contrastive pre-training and fine-tuning cell has been optimized so that representation extraction and caching are run cleanly within the `else` block of the cache verification check. If `models_v8/scarf.joblib` exists, the pipeline loads cached embeddings (`X_train_embed` and `X_test_embed`) and skips the fine-tuning/encoder code entirely, preventing `NameError: name 'encoder' is not defined` crashes.
 * **Robust Plot Recovery:** The SCARF cache format has been extended to store `pretrain_losses`. If loading older cached runs without this history, the t-SNE plotter falls back gracefully to a descriptive text card on the first axis instead of throwing a `NameError`.
 * **0.2s Cached SCARF & t-SNE Optimization:** Resolved a 1-minute notebook hang on reruns caused by two heavy downstream tasks: (1) training a single-threaded scikit-learn GradientBoostingClassifier on the 50k learned representations, and (2) computing t-SNE projections on the fly. We solved this by:
   1. Upgrading the downstream model to a parallel **`RandomForestClassifier` with `n_jobs=-1`** (`n_estimators=100`, `max_depth=6`), reducing training time from ~40s to **under 0.2s**.
@@ -425,6 +423,40 @@ Because the V4 "Wow-Factor" techniques (like Deep Learning, Optuna grids, and Co
 * **Hyperparameter Tuning Cache Bypass:** Optimized the tuning cell to check for the presence of `tuned_results.joblib` before starting the random search tuning loop (`RandomizedSearchCV`). Rerunning the cell now bypasses the 2–5 minute parameter search and loads all pre-tuned models and metrics instantly in **0.00 seconds** (applied to both V4 and V5).
 
 **Result:** Rerunning the complete V4 or V5 notebook after the initial execution drops the wall-clock time from ~25 minutes down to **less than 1 minute**, dynamically skipping tens of millions of mathematical operations while preserving the interactive outputs!
+
+---
+
+## 🌌 V8 Methodological Rigor & Fixes (The "Patched" Edition)
+
+The **V8 Patched** series (culminating in `notebooks/ML_dating_app_behaviour V8_patched_v4.ipynb`) focuses on addressing critical methodological flaws, data leakage, and logical inconsistencies present in earlier iterations. Through four phases of surgical fixes, major improvements were integrated to ensure absolute mathematical and scientific rigor:
+
+### Phase 1: Core Leakage & Algorithmic Corrections
+1. **Fixed Calibration Threshold Leakage:** The optimal PR curve threshold is now computed exclusively using a dedicated calibration split (`X_calib`), preventing test-set (`X_eval`) peeking.
+2. **Constrained Tabular FGSM Adversarial Attacks:** Adversarial perturbations are dynamically masked to only affect continuous variables, preventing the generation of physically impossible user profiles (e.g., mutating categorical demographics).
+3. **Restricted DiCE Recourse to Mutable Features:** Algorithmic recourse counterfactuals are strictly constrained to actionable features (like `bio_length` and `swipe_right_ratio`), ensuring users receive realistic recommendations.
+4. **Mini-Batching for Knowledge Distillation:** The PyTorch Student network training was overhauled to use `DataLoader` mini-batches over 20 epochs, drastically reducing underfitting.
+5. **Applied IPW for T-Learner Selection Bias:** Propensity Scores and Inverse Probability Weights (IPW) were injected into the Causal Uplift meta-classifier to compute true causal estimates, eliminating observational selection bias.
+6. **Corrected Causal Independence Test (PC Algorithm):** Upgraded the conditional independence test from `fisherz` to `kci` (Kernel-based Conditional Independence) to support non-linear, skewed, and discrete dating app behavioral data.
+
+### Phase 2: Pre-Split Leakage & Empirical Validation
+7. **Fixed Causal Pre-Split Scaling Leakage:** `train_test_split` is now explicitly enforced *before* `RobustScaler`, ensuring the PC algorithm operates strictly on uncontaminated training data.
+8. **Generated Real Regularization Loss Curves:** Replaced simulated plots with live PyTorch training loops, empirically proving the smoothing effect of Mixup regularization directly on the dating app dataset.
+
+### Phase 3: Methodology Disclosures & Metric Dilution Fixes
+9. **TabPFN Hybrid Evaluation Dilution Fixed:** Zero-shot metrics are now strictly calculated on the 1,000-sample computational subset without LightGBM fallback dilution.
+10. **Causal Scaler Confusion Resolved:** Removed `RobustScaler` entirely from the Causal Discovery block to allow the `kci` test to run cleanly on raw data.
+11. **Methodology Markdown Disclaimers:** Injected rigorous visual `> [!NOTE]` and `> [!WARNING]` disclaimers defending SMOTE CV consistency, binary target justifications, feature selection limits, Deep Model HPO constraints, and MAPIE calibration overlaps.
+
+### Phase 4: Conformal Leakage & Hardware Fixes
+12. **Conformal Prediction Leakage Fix:** MAPIE is now calibrated on a dynamically isolated 10% slice of training data, leaving the full `X_test` mathematically unseen for valid conformal coverage guarantees.
+13. **PCA Benchmarking Empirically Proved:** Implemented rapid `RandomForestClassifier` benchmarking directly on `X_train_pca` to explicitly prove its predictive inferiority vs raw data.
+14. **GNN Transductive Impact Quantification:** Dynamically calculates and prints the exact percentage uplift achieved by the transductive similarity graph against the inductive MLP baseline.
+15. **DP Privacy Budget Maintained:** Utilized the Opacus DP-SGD `target_epsilon` of `8.0`.
+
+---
+
+## 🚀 V8.2 Hardware-Accelerated ML Pipeline
+Introduces a robust hardware-accelerated training environment, updated CatBoost training paradigms, and enhanced data processing utilities for maximum computational efficiency.
 
 ---
 
@@ -453,7 +485,7 @@ While V3 pushed hardware capabilities to the limit, the V4 notebook focuses on *
 2. **Graph Neural Networks (GAT):** Modelled users as a social network (k-NN graph) to predict outcomes based on neighbourhood similarities.
 3. **Self-Supervised Contrastive Learning (SCARF):** Leveraged ICML-2022 tabular pre-training frameworks to learn latent representations via feature corruption.
 4. **Permutation Feature Interactions:** Extracted Friedman's H-Statistic to quantify second-order feature synergies.
-5. **Multi-Objective Pareto Optimization:** Replaced standard single-metric tuning with Optuna multi-objective tuning, balancing F1 score and algorithmic fairness.
+5. **GPU-Accelerated Optuna Optimization:** Replaced standard grid search with massive GPU-accelerated Optuna tuning (1,000 trials) optimizing the Matthews Correlation Coefficient (MCC).
 6. **Conformal Prediction:** Established mathematically guaranteed prediction bounding sets (MAPIE).
 7. **Bayesian Uncertainty Quantification:** Implemented Monte Carlo Dropout for stochastic forward passes, generating epistemic uncertainty intervals.
 8. **Knowledge Distillation:** Compressed complex ensemble logic into lightweight, deployable surrogate students.
@@ -514,7 +546,7 @@ The dashboard contains **9 interactive workspaces** integrated directly into the
 
 | Requirement | Status |
 |---|---|
-| Min 5 ML models trained | ✅ Done (16 models) |
+| Min 5 ML models trained | ✅ Done (14 models) |
 | Hyperparameter tuning | ✅ Done (RandomizedSearchCV & 1000-trial Optuna grids) |
 | Model comparison table | ✅ Done |
 | Cross-validation | ✅ Done (5-fold) |
@@ -544,24 +576,23 @@ The dashboard contains **9 interactive workspaces** integrated directly into the
 | Section | Description |
 |---|---|
 | 1 — Install & Import | Libraries, plot style, DirectML setups, and dynamic hardware engine |
-| 2 — Data Loading | Load CSV, column overview |
-| 3 — EDA | 11 subsections of exploration and visualisation, concluding with Causal Discovery |
-| 4 — Preprocessing | Drop, encode, V4 features, robust scaling, **[V5] Isolation Forest OOD Rejection Guardrail** |
-| 4.1 — [V5.1] Causal Inference | **[V5.1] Double Machine Learning Causal Estimation & Causal significance bootstrapping** |
-| 5 — Feature Selection | F-Score, MI, Boruta selection |
-| 6 — PCA | Variance analysis, biplot |
-| 7 — Train/Test Split | 80/20 stratified |
-| 8 — Pre-Training Checklist & SMOTE | Status summary + Standard, Borderline, and ADASYN balancing |
-| 9 — Baseline Establishment (AutoML) | FLAML and PyCaret baselines |
-| 10 — Advanced Model Training | 16 baseline/PyTorch/zero-shot models, GNN node classification, SCARF contrastive learning, Differential Privacy, **[V5] Zero-Shot TabPFN**, **[V5] Mixup & Label Smoothing**, **[V5.1] Label Smoothing Loss Visualizer**, **[V5.1] TabNet-style Attentive Tabular Selection Network** |
-| 11 — Hyperparameter Tuning | GPU Optuna search and Multi-Objective Pareto tuning |
-| 12 — Feature Importance & Interactions | Top features, H-Statistic pairwise interactions, **[V5] SHAP Joint Interaction Curves** |
-| 13 — Advanced Robustness & Uncertainty | Conformal Prediction, MC Dropout, FGSM Adversarial attacks, **[V5] Isotonic Probability Calibration** |
-| 14 — Model Compression & Recourse | Knowledge Distillation, **[V5] Microsoft DiCE Actionable Recourse counterfactuals** |
-| 17 — [V5.1] Causal Uplift | **[V5.1] Causal Uplift Modeling (T-Learner Meta-Classifier) & Causal segmentation targeting** |
-| 15 — Ethical Considerations | Demographic Parity Check |
-| 16 — Final Model Summary | Comprehensive ranking, best model |
+| 2 — Data Loading | Load CSV, column overview, schema verification |
+| 3 — EDA | 10 subsections of exploration and visualisation |
+| 4 — Preprocessing & Engineering | Causal Discovery, DML, robust scaling (post-split), OOD Rejection Guardrail |
+| 5 — Feature Selection | ANOVA, Boruta, Mutual Information |
+| 6 — PCA | Variance analysis, biplot benchmarking |
+| 7 — Train/Test Split | 80/20 stratified, SMOTE |
+| 8 — Pre-Training Checklist | Shape verification & pipeline preparation |
+| 9 — Model Training | 14 baseline and advanced deep architectures |
+| 10 — Evaluation | Label Smoothing, Mixup, CV, Friedman stats |
+| 11 — Privacy & Advanced Architectures | Opacus DP, GNN, Attentive Tabular Network, SCARF, TabPFN |
+| 12 — Hyperparameter Optimization | GPU Optuna Multi-Objective Pareto search |
+| 13 — Ethics & AutoML | Demographic Parity Check, FLAML & PyCaret |
+| 14 — Feature Importance | H-Statistic pairwise interactions, SHAP Joint Interaction Curves |
+| 15 — Robustness & Uncertainty | Conformal Prediction, MC Dropout, FGSM, Isotonic Calibration |
+| 16 — Compression & Deployment | Knowledge Distillation, Microsoft DiCE, T-Learner Causal Uplift |
+| 17 — Summary & Hardware | Final Dynamic Champion selection & caching strategy |
 
 ---
 
-*Last updated: 29 May 2026*
+*Last updated: 02 June 2026*

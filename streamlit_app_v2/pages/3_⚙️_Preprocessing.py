@@ -69,44 +69,44 @@ with c1:
 with c2:
     st.error("**Negative Outcomes (0)**\n- No Match\n- Ghosted\n- Unmatched\n- Blocked\n- One-sided Like\n- Ignored")
 
-# ── Step 2.5: Advanced Feature Engineering [V4] ────────────────────────────
+# ── Step 2.5: Advanced Feature Engineering [V8] ────────────────────────────
 st.markdown("""
 <div class="pipeline-step">
-    <h4>Step 2.5: Advanced Feature Engineering <span style="color:#8b5cf6;">[V4]</span></h4>
-    <p>Beyond basic encoding, V4 introduces domain-driven <strong>engineered features</strong> that capture higher-order behavioral signals not present in the raw columns.</p>
+    <h4>Step 2.5: Advanced Feature Engineering <span style="color:#8b5cf6;">[V8]</span></h4>
+    <p>Beyond basic encoding, V8 introduces domain-driven <strong>engineered features</strong> that capture higher-order behavioral signals not present in the raw columns, along with crucial adjustments to prevent target leakage.</p>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("""
 <div style="background:rgba(139,92,246,0.06); border:1px dashed rgba(139,92,246,0.3); border-radius:8px; padding:16px; font-size:13px; color:#c4b5fd; line-height:1.5; margin-bottom: 24px;">
     <strong>🧪 Engineered Features Added:</strong><br>
-    • <code>engagement_score</code> — composite metric combining app usage time, messages sent, and profile completeness into a single engagement proxy.<br>
-    • <code>selectivity_ratio</code> — ratio of right-swipes to total swipes, capturing user pickiness as a continuous signal.<br>
-    • <strong>Log-transforms</strong> — applied to right-skewed distributions (e.g., <code>log1p(message_sent_count)</code>) to reduce the influence of extreme values and improve model convergence.<br>
-    • <strong>Frequency encodings</strong> — high-cardinality categorical columns (e.g., <code>location</code>) are replaced with their occurrence frequency, preserving signal without one-hot explosion.
+    • <code>engagement_score</code> — composite metric combining likes received, swipe right ratio, and messages sent into a single proxy.<br>
+    • <code>profile_completeness</code> — product of profile pics count and bio length.<br>
+    • <code>activity_intensity</code> — combination of app usage time and emoji usage rate.<br>
+    • <code>selectivity_ratio</code> — ratio of messages sent to likes received (adjusted to prevent target leakage from `mutual_matches`).<br>
+    • <code>late_night_user</code> — binary indicator for users active between 10 PM and 4 AM.<br>
+    • <strong>Log-transforms</strong> — applied to right-skewed distributions (e.g., <code>log1p(message_sent_count)</code>) to reduce the influence of extreme values.
 </div>
 """, unsafe_allow_html=True)
 
 with st.expander("Show Python Snippet: Feature Engineering"):
     st.code("""
 # Engagement score (composite)
-df['engagement_score'] = (
-    df['app_usage_time_min'] * 0.4 +
-    df['message_sent_count'] * 0.3 +
-    df['profile_completeness'] * 0.3
-)
+df['engagement_score'] = df['likes_received'] * df['swipe_right_ratio'] * df['message_sent_count']
+
+# Profile completeness & Activity Intensity
+df['profile_completeness'] = df['profile_pics_count'] * df['bio_length']
+df['activity_intensity'] = df['app_usage_time_min'] * df['emoji_usage_rate']
 
 # Selectivity ratio
-df['selectivity_ratio'] = df['swipe_right_count'] / (df['swipe_right_count'] + df['swipe_left_count'] + 1)
+df['selectivity_ratio'] = df['message_sent_count'] / (df['likes_received'] + 1)
+
+# Late night user flag
+df['late_night_user'] = ((df['last_active_hour'] >= 22) | (df['last_active_hour'] <= 4)).astype(int)
 
 # Log-transform skewed features
-for col in ['message_sent_count', 'app_usage_time_min']:
-    df[f'log_{col}'] = np.log1p(df[col])
-
-# Frequency encoding for high-cardinality categoricals
-for col in ['location']:
-    freq = df[col].value_counts(normalize=True)
-    df[f'{col}_freq'] = df[col].map(freq)
+for col in ['likes_received', 'message_sent_count', 'bio_length', 'app_usage_time_min']:
+    df[f'{col}_log'] = np.log1p(df[col])
     """, language="python")
 
 # ── Step 3: Ordinal Encoding ────────────────────────────────────────────────
@@ -156,11 +156,11 @@ with st.expander("Show Example Output (Interests)"):
         'interest_Cooking': [0, 0, 0]
     }), use_container_width=True)
 
-# ── Step 5.5: RobustScaler [V4] ────────────────────────────────────────────
+# ── Step 5.5: RobustScaler [V8] ────────────────────────────────────────────
 st.markdown("""
 <div class="pipeline-step">
-    <h4>Step 5.5: RobustScaler <span style="color:#8b5cf6;">[V4]</span></h4>
-    <p>V4 replaces the original <code>StandardScaler</code> with <code>RobustScaler</code> for all numerical features. Unlike StandardScaler (which uses mean/std), RobustScaler uses the <strong>median and interquartile range (IQR)</strong>, making it inherently resistant to outliers.</p>
+    <h4>Step 5.5: RobustScaler <span style="color:#8b5cf6;">[V8]</span></h4>
+    <p>V8 replaces the original <code>StandardScaler</code> with <code>RobustScaler</code> for all numerical features. Unlike StandardScaler (which uses mean/std), RobustScaler uses the <strong>median and interquartile range (IQR)</strong>, making it inherently resistant to outliers.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -242,15 +242,16 @@ if not df_raw.empty:
     
     numeric_features = [
         'likes_received', 'app_usage_time_min', 'message_sent_count',
-        'age', 'height_cm', 'weight_kg', 'swipe_right_ratio', 'mutual_matches',
-        'profile_pics_count', 'bio_length', 'emoji_usage_rate', 'last_active_hour'
+        'age', 'height_cm', 'weight_kg', 'swipe_right_ratio', 'activity_intensity',
+        'profile_pics_count', 'bio_length', 'emoji_usage_rate', 'last_active_hour',
+        'engagement_score', 'selectivity_ratio', 'profile_completeness'
     ]
     
     with col_ctrl1:
         selected_feature = st.selectbox("Numerical Feature", numeric_features, index=0) # Default likes_received
         
     with col_ctrl2:
-        selected_scaler_name = st.selectbox("Scaling Strategy", ["RobustScaler [V4]", "StandardScaler [Legacy]", "MinMaxScaler"], index=0)
+        selected_scaler_name = st.selectbox("Scaling Strategy", ["RobustScaler [V8]", "StandardScaler [Legacy]", "MinMaxScaler"], index=0)
         
     with col_ctrl3:
         inject_outliers = st.checkbox("Inject Extreme Outliers", value=False, help="Adds synthetic anomalous outliers to simulate real-world logging noise")
@@ -281,7 +282,7 @@ if not df_raw.empty:
     # Fit scaler
     raw_values = data_df["Original"].values.reshape(-1, 1)
     
-    if selected_scaler_name == "RobustScaler [V4]":
+    if selected_scaler_name == "RobustScaler [V8]":
         scaler_obj = RobustScaler()
         scaled_values = scaler_obj.fit_transform(raw_values).flatten()
     elif selected_scaler_name == "StandardScaler [Legacy]":

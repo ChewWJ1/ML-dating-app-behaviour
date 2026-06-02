@@ -60,10 +60,10 @@ st.markdown("""
 
 col1, col2 = st.columns(2)
 with col1:
-    show_plot(V5_PLOTS, '09_causal_discovery_going_beyond_correlation.png',
+    show_plot(NOTEBOOK_PLOTS, 'causal_dag.png',
               'PC Algorithm — Discovered Causal DAG Structure')
 with col2:
-    show_plot(V5_PLOTS, '10_causal_discovery_going_beyond_correlation.png',
+    show_plot(NOTEBOOK_PLOTS, 'causal_adjacency.png',
               'Causal Discovery — Edge Strengths & Orientations')
 
 # Displaying discovered causal structure and orientations using V5 plots

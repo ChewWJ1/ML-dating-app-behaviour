@@ -6,8 +6,9 @@ import os
 import json
 import joblib
 import pandas as pd
+import numpy as np
 import streamlit as st
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import RobustScaler
 
 # Define paths relative to the project root
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -167,14 +168,27 @@ def get_preprocessed_data():
             
         df.drop(columns=['interest_tags'], inplace=True)
         
-    # 6. StandardScaler
+    # 5.5 Feature Engineering [V8]
+    if 'likes_received' in df.columns:
+        df['engagement_score'] = df['likes_received'] * df['swipe_right_ratio'] * df['message_sent_count']
+        df['profile_completeness'] = df['profile_pics_count'] * df['bio_length']
+        df['activity_intensity'] = df['app_usage_time_min'] * df['emoji_usage_rate']
+        df['selectivity_ratio'] = df['message_sent_count'] / (df['likes_received'] + 1)
+        df['late_night_user'] = ((df['last_active_hour'] >= 22) | (df['last_active_hour'] <= 4)).astype(int)
+        
+        for col in ['likes_received', 'message_sent_count', 'bio_length', 'app_usage_time_min']:
+            if col in df.columns:
+                df[f'{col}_log'] = np.log1p(df[col])
+
+    # 6. RobustScaler
     numeric_cols = ['age', 'height_cm', 'weight_kg', 'app_usage_time_min',
-                    'swipe_right_ratio', 'likes_received', 'mutual_matches',
-                    'profile_pics_count', 'bio_length', 'message_sent_count',
-                    'emoji_usage_rate', 'last_active_hour']
+                    'swipe_right_ratio', 'likes_received', 'profile_pics_count', 
+                    'bio_length', 'message_sent_count', 'emoji_usage_rate', 'last_active_hour',
+                    'engagement_score', 'profile_completeness', 'activity_intensity', 'selectivity_ratio',
+                    'likes_received_log', 'message_sent_count_log', 'bio_length_log', 'app_usage_time_min_log']
     numeric_cols = [c for c in numeric_cols if c in df.columns]
     
-    scaler = StandardScaler()
+    scaler = RobustScaler()
     df[numeric_cols] = scaler.fit_transform(df[numeric_cols])
     
     return df, y, list(df.columns), scaler
