@@ -1,0 +1,285 @@
+
+==================================================
+FILE: Architecting_Digital_Connection.pdf
+==================================================
+Total Pages: 5
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+
+==================================================
+FILE: Causal_Romance_Engineering.pdf
+==================================================
+Total Pages: 6
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
+
+==================================================
+FILE: Engineering_Digital_Romance.pdf
+==================================================
+Total Pages: 6
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
+
+==================================================
+FILE: Engineering_Rigor_and_Predictive_Limits.pdf
+==================================================
+Total Pages: 10
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
+  --- Page 7 ---
+    (No text extracted)
+  --- Page 8 ---
+    (No text extracted)
+  --- Page 9 ---
+    (No text extracted)
+  --- Page 10 ---
+    (No text extracted)
+
+==================================================
+FILE: Engineering_the_Dating_Pipeline.pdf
+==================================================
+Total Pages: 10
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
+  --- Page 7 ---
+    (No text extracted)
+  --- Page 8 ---
+    (No text extracted)
+  --- Page 9 ---
+    (No text extracted)
+  --- Page 10 ---
+    (No text extracted)
+
+==================================================
+FILE: Engineering_the_Predictive_Limit.pdf
+==================================================
+Total Pages: 10
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
+  --- Page 7 ---
+    (No text extracted)
+  --- Page 8 ---
+    (No text extracted)
+  --- Page 9 ---
+    (No text extracted)
+  --- Page 10 ---
+    (No text extracted)
+
+==================================================
+FILE: Proving_the_Null_Hypothesis.pdf
+==================================================
+Total Pages: 10
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
+  --- Page 7 ---
+    (No text extracted)
+  --- Page 8 ---
+    (No text extracted)
+  --- Page 9 ---
+    (No text extracted)
+  --- Page 10 ---
+    (No text extracted)
+
+==================================================
+FILE: SwipeIQ_Strategic_ML_Framework.pdf
+==================================================
+Total Pages: 5
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+
+==================================================
+FILE: SwipeIQ_V2_Strategic_Audit.pdf
+==================================================
+Total Pages: 5
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+
+==================================================
+FILE: SwipeIQ_V2_Strategic_Evolution.pdf
+==================================================
+Total Pages: 5
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+
+==================================================
+FILE: SwipeIQ_V2_Strategic_Roadmap.pdf
+==================================================
+Total Pages: 5
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+
+==================================================
+FILE: The_Glass_Box_Protocol.pdf
+==================================================
+Total Pages: 10
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
+  --- Page 7 ---
+    (No text extracted)
+  --- Page 8 ---
+    (No text extracted)
+  --- Page 9 ---
+    (No text extracted)
+  --- Page 10 ---
+    (No text extracted)
+
+==================================================
+FILE: Tying_the_Data_Knot-1.pdf
+==================================================
+Total Pages: 6
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
+
+==================================================
+FILE: Tying_the_Data_Knot.pdf
+==================================================
+Total Pages: 6
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
+
+==================================================
+FILE: Untangling_Digital_Romance.pdf
+==================================================
+Total Pages: 6
+  --- Page 1 ---
+    (No text extracted)
+  --- Page 2 ---
+    (No text extracted)
+  --- Page 3 ---
+    (No text extracted)
+  --- Page 4 ---
+    (No text extracted)
+  --- Page 5 ---
+    (No text extracted)
+  --- Page 6 ---
+    (No text extracted)
