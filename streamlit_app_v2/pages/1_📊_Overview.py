@@ -320,7 +320,7 @@ with tab1:
         
     st.markdown("---")
     st.markdown("### 🗺️ Master Project Mind Map")
-    mind_map_path = os.path.join(ROOT_DIR, "reports", "NotebookLM Mind Map.png")
+    mind_map_path = os.path.join(ROOT_DIR, "assets", "New NotebookLM", "NotebookLM Mind Map.png")
     if os.path.exists(mind_map_path):
         st.image(mind_map_path, caption="NotebookLM Project Taxonomy & Methodology Mind Map", use_container_width=True)
 
