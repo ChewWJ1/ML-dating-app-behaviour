@@ -40,7 +40,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 st.markdown("---")
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Efficient_Hyperparameter_Optimization_Strategy.png"), use_container_width=True)
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Hyperparameter_Search_Space_Optimization.png"), use_container_width=True)
 
 # --- 1. METHODOLOGY ---
 st.markdown('<div class="section-label">METHODOLOGY</div>', unsafe_allow_html=True)

@@ -9,6 +9,7 @@ render_sidebar()
 
 st.title("💘 Love Forecaster")
 st.markdown("---")
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Matchmaking_Prediction_Inference_Stack.png"), use_container_width=True)
 
 st.markdown("""
 ### Real-Time Interaction Simulator

@@ -34,7 +34,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 st.markdown("---")
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_Success_Feature_Selection_Infographic.png"), use_container_width=True)
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Feature_Selection_and_Dimensionality_Reduction.png"), use_container_width=True)
 
 st.markdown('<div class="gradient-divider"></div>', unsafe_allow_html=True)
 

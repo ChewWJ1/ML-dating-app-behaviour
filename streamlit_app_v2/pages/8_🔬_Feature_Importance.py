@@ -24,6 +24,7 @@ def show_plot(directory, filename, caption=''):
 
 st.title("🔬 Feature Importance & Explainability")
 st.markdown("---")
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "SHAP_Explainability_Model_Analysis.png"), use_container_width=True)
 
 st.markdown("""
 <div style="background:rgba(239,68,68,0.06); border:1px dashed rgba(239,68,68,0.3); border-radius:8px; padding:16px; font-size:13px; color:#f87171; line-height:1.5; margin-bottom: 24px;">

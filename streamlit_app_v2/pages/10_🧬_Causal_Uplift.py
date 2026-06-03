@@ -40,7 +40,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 st.markdown("---")
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Maximizing_Engagement_with_Causal_Uplift.png"), use_container_width=True)
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Causal_Inference_and_Uplift_Modeling.png"), use_container_width=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SECTION 1 — Causal Discovery (PC Algorithm)

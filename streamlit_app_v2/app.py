@@ -359,13 +359,13 @@ st.markdown("""
 # ══════════════════════════════════════════════════════════════════════════════
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center; color: #f472b6; font-family: Outfit, sans-serif;'>🎯 Limits of Predictive Matchmaking Research</h4>", unsafe_allow_html=True)
-limits_pipeline_img = os.path.join(ROOT_DIR, "assets", "NotebookLM", "overview", "Science_of_Digital_Romance_Infographic.png")
+limits_pipeline_img = os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Decoding_Romantic_Success_Research.png")
 if os.path.exists(limits_pipeline_img):
     st.image(limits_pipeline_img, caption="Science of Digital Romance Infographic")
 else:
     st.warning("Science of Digital Romance Infographic not found in assets.")
 
-journey_img = os.path.join(ROOT_DIR, "assets", "NotebookLM", "overview", "Dating_Success_Machine_Learning_Journey.png")
+journey_img = os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Predicting_Modern_Romance_Data_Analysis.png")
 if os.path.exists(journey_img):
     st.image(journey_img, caption="Dating Success Machine Learning Journey")
 else:
@@ -942,7 +942,7 @@ with tab_diagrams:
     
     with col_diag1:
         st.markdown("#### 🧭 Modern Romance System Pipeline Flow")
-        romance_pipeline_img = os.path.join(ROOT_DIR, "assets", "NotebookLM", "Modern_Romance_Machine_Learning_Pipeline.png")
+        romance_pipeline_img = os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Predictive_Limits_of_Dating_Data.png")
         if os.path.exists(romance_pipeline_img):
             st.image(romance_pipeline_img, caption="Process Flow: Modern Romance Machine Learning Pipeline Map", use_container_width=True)
         else:

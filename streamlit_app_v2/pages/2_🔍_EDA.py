@@ -30,7 +30,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 st.markdown("---")
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_Dataset_Insights_and_Analysis.png"), use_container_width=True)
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "AI_Model_Explainability_Overview.png"), use_container_width=True)
 
 df = load_raw_data()
 eda_stats = load_eda_stats()

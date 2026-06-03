@@ -33,7 +33,7 @@ After preprocessing and feature selection, we evaluate **13 distinct machine lea
 gradient boosting frameworks, and custom PyTorch deep learning architectures — to establish comprehensive baselines and push performance boundaries.
 """)
 st.markdown("---")
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Model_Training_Pipeline_Overview.png"), use_container_width=True)
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Model_Training_and_Statistical_Evaluation.png"), use_container_width=True)
 
 st.markdown('<div class="gradient-divider"></div>', unsafe_allow_html=True)
 
