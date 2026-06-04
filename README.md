@@ -1,6 +1,6 @@
 ![NotebookLM Overview](assets/Screenshot%202026-06-04%20at%2021-19-58%20ML%20dating%20app%20-%20NotebookLM.png)
 
-![Science of Digital Romance Infographic](assets/NotebookLM/overview/Science_of_Digital_Romance_Infographic.png)
+![Science of Digital Romance Infographic](assets/New%20NotebookLM/Decoding_Romantic_Success_Research.png)
 
 # 💘 Tying the Data Knot: Predicting Meaningful Connections (V8 Pipeline)
 ### WIA1006 Machine Learning — Group Assignment Documentation
