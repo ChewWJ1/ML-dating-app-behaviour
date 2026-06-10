@@ -11246,7 +11246,7 @@ Balanced Training Set: (40000, 66) (target match ratio: 39.70%)
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="%F0%9F%A4%96-Section-9:-Model-Training-&amp;-Baseline-Benchmarking">🤖 Section 9: Model Training &amp; Baseline Benchmarking<a class="anchor-link" href="#%F0%9F%A4%96-Section-9:-Model-Training-&amp;-Baseline-Benchmarking">¶</a></h2><p>Training traditional baselines, deep learning models, and similarity-based classifiers to establish performance benchmarks.</p>
-<p>We train <strong>16 models (14 custom models and 2 AutoML models)</strong> on the balanced selected features, then compare performance.</p>
+<p>We train <strong>14 custom classifiers</strong> (listed below), plus <strong>2 AutoML benchmarks</strong> (FLAML and PyCaret), on the balanced selected features, then compare performance.</p>
 <table>
 <thead>
 <tr>
@@ -12005,7 +12005,7 @@ Balanced Training Set: (40000, 66) (target match ratio: 39.70%)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="10.3-Model-Comparison-Table">10.3 Model Comparison Table<a class="anchor-link" href="#10.3-Model-Comparison-Table">¶</a></h3><p><em>Comparing precision, recall, F1-score, and ROC AUC metrics across all 16 models.</em></p>
+<h3 id="10.3-Model-Comparison-Table">10.3 Model Comparison Table<a class="anchor-link" href="#10.3-Model-Comparison-Table">¶</a></h3><p><em>Comparing precision, recall, F1-score, and ROC AUC metrics across all evaluated models.</em></p>
 </div>
 </div>
 </div>
@@ -12452,7 +12452,7 @@ weighted avg       0.36      0.60      0.45     10000
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [52]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -12477,7 +12477,7 @@ weighted avg       0.36      0.60      0.45     10000
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'⚠️ Error loading original CV checkpoint: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">'5-Fold Cross-Validation on Training Set:'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'10-Fold Cross-Validation on Training Set:'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="s2">""</span><span class="w"> </span><span class="si">:</span><span class="s1">&lt;25</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="s2">"Mean Acc"</span><span class="si">:</span><span class="s1">&gt;10</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="s2">"Std"</span><span class="si">:</span><span class="s1">&gt;8</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="s2">"Min"</span><span class="si">:</span><span class="s1">&gt;8</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="s2">"Max"</span><span class="si">:</span><span class="s1">&gt;8</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'-'</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
 
@@ -12531,7 +12531,7 @@ weighted avg       0.36      0.60      0.45     10000
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>5-Fold Cross-Validation on Training Set:
+<pre>10-Fold Cross-Validation on Training Set:
                             Mean Acc      Std      Min      Max
 -----------------------------------------------------------------
 ⚡ Loading pre-computed cross-validation scores from ../models_v8/cv_results.joblib instantly!...
@@ -12549,20 +12549,6 @@ Balanced Random Forest        0.5037   0.0094   0.4917   0.5239
 KNN (Cosine Metric)           0.5006   0.0125   0.4865   0.5238
 SVM                           0.6030   0.0001   0.6029   0.6031
 </pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=87d52cfc">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span> 
-</pre></div>
 </div>
 </div>
 </div>
@@ -15639,10 +15625,6 @@ SHAPES: y_test_conformal: (10000,), y_sets: (10000, 2)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<blockquote>
-<p>[!TIP]
-<strong>Report flex:</strong> Include a table showing that your empirical coverage matches the theoretical guarantee (e.g., 95% target → 95.2% actual). This proves the method works even when accuracy is low.</p>
-</blockquote>
 <hr/>
 </div>
 </div>
@@ -16930,10 +16912,10 @@ $$\text{Uplift}(X) = M_1.\text{predict\_proba}(X)[:, 1] - M_0.\text{predict\_pro
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="%E2%9C%85-Section-17:-Final-Pipeline-Summary-&amp;-Hardware-Optimisations">✅ Section 17: Final Pipeline Summary &amp; Hardware Optimisations<a class="anchor-link" href="#%E2%9C%85-Section-17:-Final-Pipeline-Summary-&amp;-Hardware-Optimisations">¶</a></h2><p>Consolidated summary of findings, optimizations, and caching checkpoint systems.</p>
 <h3 id="%F0%9F%8F%86-Key-Findings-&amp;-Accomplishments:">🏆 Key Findings &amp; Accomplishments:<a class="anchor-link" href="#%F0%9F%8F%86-Key-Findings-&amp;-Accomplishments:">¶</a></h3><ol>
-<li><strong>All 16 models</strong> (14 custom models including Logistic Regression, KNN, Decision Tree, Random Forest, XGBoost, SVM, LightGBM, CatBoost, Multi-Layer Perceptron, Balanced Random Forest, Cosine KNN CF, FT-Transformer, SAINT, and NODE, along with 2 AutoML models) were trained, evaluated, and cross-validated on the balanced dating app behaviour dataset.</li>
+<li><strong>All models</strong> (14 custom classifiers including Logistic Regression, KNN, Decision Tree, Random Forest, XGBoost, SVM, LightGBM, CatBoost, Multi-Layer Perceptron, Balanced Random Forest, Cosine KNN CF, FT-Transformer, SAINT, and NODE, along with 2 AutoML models) were trained, evaluated, and cross-validated on the balanced dating app behaviour dataset.</li>
 <li>To prevent target leakage and ensure statistical rigor, SMOTE and probability calibration were rigorously isolated within CV and test splits. The <strong>Champion Model</strong> is now dynamically selected based on pipeline compatibility and highest ROC-AUC. Downstream components (Knowledge Distillation, Causal Uplift, SHAP, and DiCE) dynamically inherit this champion architecture rather than relying on hardcoded models.</li>
 <li><strong>Feature Importance</strong> analysis from our best tree-based ensemble reveals which user attributes and in-app behaviors most strongly predict meaningful connections.</li>
-<li><strong>Cross-Validation (5-Fold)</strong> confirms that model performance is highly stable across different data splits.</li>
+<li><strong>Cross-Validation (10-Fold)</strong> confirms that model performance is highly stable across different data splits.</li>
 <li><strong>Learning Curves</strong> were plotted to diagnose and ensure no models are suffering from overfitting or underfitting.</li>
 </ol>
 <hr/>
@@ -16949,7 +16931,7 @@ $$\text{Uplift}(X) = M_1.\text{predict\_proba}(X)[:, 1] - M_0.\text{predict\_pro
 <h3 id="%F0%9F%92%BE-Smart-Checkpointing-&amp;-Caching:">💾 Smart Checkpointing &amp; Caching:<a class="anchor-link" href="#%F0%9F%92%BE-Smart-Checkpointing-&amp;-Caching:">¶</a></h3><p>To ensure teammates don't have to wait or run the heavy training algorithms repeatedly, the notebook implements automatic <code>.joblib</code> checkpointing:</p>
 <ul>
 <li><strong><code>models_v8/baseline_results.joblib</code></strong>: Stores all trained baseline models and prediction variables.</li>
-<li><strong><code>models_v8/cv_results.joblib</code></strong>: Stores all 5-fold cross-validation scores.</li>
+<li><strong><code>models_v8/cv_results.joblib</code></strong>: Stores all 10-fold cross-validation scores.</li>
 <li><strong><code>models_v8/learning_curve_data.joblib</code></strong>: Stores pre-computed learning curve coordinates.</li>
 <li><strong><code>models_v8/tuned_results.joblib</code></strong>: Stores all tuned estimators and grid search parameters.</li>
 <li><strong><code>models_v8/flaml_results.joblib</code></strong>: Stores the trained FLAML AutoML estimator.</li>

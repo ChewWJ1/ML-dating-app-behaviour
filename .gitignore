@@ -3,3 +3,11 @@
 tuned_results.joblib
 models_v5.zip
 models_v5/
+
+# Virtual Environment
+.venv/
+
+# Large files and binaries
+*.mp4
+*.pyd
+*.dll

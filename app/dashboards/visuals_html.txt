@@ -1,0 +1,123 @@
+
+    <!-- ==================== TAB: VISUALS ==================== -->
+    <div id="visuals-tab" class="tab-content">
+      <div>
+        <div class="section-header">
+          <span class="section-title">Notebook Visualizations Gallery</span>
+        </div>
+        <p style="color:var(--text-secondary); margin-bottom:20px; font-size:14px;">High-resolution static plots extracted directly from the ML pipeline notebook.</p>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px;">
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 3 Target Variable Match Outcome</div>
+          <img src="assets/plots/01_3_3_target_variable_match_outcome.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 4 Categorical Feature Distributions</div>
+          <img src="assets/plots/02_3_4_categorical_feature_distributions.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 5 Numerical Feature Distributions</div>
+          <img src="assets/plots/03_3_5_numerical_feature_distributions.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 6 Numerical Features Outlier Detection Boxplots</div>
+          <img src="assets/plots/04_3_6_numerical_features_outlier_detection_boxplots.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 7 Feature Vs Target Numerical Features By Outcom</div>
+          <img src="assets/plots/05_3_7_feature_vs_target_numerical_features_by_outcom.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 8 Feature Vs Target Categorical Features By Outc</div>
+          <img src="assets/plots/06_3_8_feature_vs_target_categorical_features_by_outc.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 9 Correlation Heatmap Numerical Features</div>
+          <img src="assets/plots/07_3_9_correlation_heatmap_numerical_features.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">3 10 Interest Tags Analysis</div>
+          <img src="assets/plots/08_3_10_interest_tags_analysis.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">5 2 Anova F Score Feature Selection Selectkbest</div>
+          <img src="assets/plots/09_5_2_anova_f_score_feature_selection_selectkbest.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">5 3 Mutual Information Feature Selection</div>
+          <img src="assets/plots/10_5_3_mutual_information_feature_selection.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">6 1 Explained Variance Analysis</div>
+          <img src="assets/plots/11_6_1_explained_variance_analysis.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">6 3 Pca Biplot First Two Principal Components</div>
+          <img src="assets/plots/12_6_3_pca_biplot_first_two_principal_components.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Section 7 Train Test Split</div>
+          <img src="assets/plots/13_section_7_train_test_split.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">9 2 Model Comparison Table</div>
+          <img src="assets/plots/14_9_2_model_comparison_table.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Confusion Matrix 9 3 Confusion Matrices</div>
+          <img src="assets/plots/15_confusion_matrix_9_3_confusion_matrices.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">9 4 Roc Curves</div>
+          <img src="assets/plots/16_9_4_roc_curves.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">9 6 Cross Validation Scores 5 Fold</div>
+          <img src="assets/plots/17_9_6_cross_validation_scores_5_fold.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">9 7 Learning Curves Top 3 Models</div>
+          <img src="assets/plots/18_9_7_learning_curves_top_3_models.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">10 3 Before Vs After Tuning Comparison</div>
+          <img src="assets/plots/19_10_3_before_vs_after_tuning_comparison.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Confusion Matrix 10 4 Best Tuned Model Detailed Results</div>
+          <img src="assets/plots/20_confusion_matrix_10_4_best_tuned_model_detailed_results.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Section 11 Feature Importance Analysis</div>
+          <img src="assets/plots/21_section_11_feature_importance_analysis.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="card" style="padding:15px; display:flex; flex-direction:column; align-items:center;">
+          <div class="card-title" style="margin-bottom:15px; text-align:center;">Section 12 Final Model Summary</div>
+          <img src="assets/plots/22_section_12_final_model_summary.png" style="width:100%; max-width:800px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+
+      </div>
+    </div>
