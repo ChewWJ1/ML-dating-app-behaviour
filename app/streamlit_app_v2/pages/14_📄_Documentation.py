@@ -21,7 +21,7 @@ with tab1:
     st.markdown("### 📑 Official Group Assignment Report")
     st.markdown("Tying the (Data) Knot: Predicting Meaningful Connections")
     st.markdown("**Live Web Application:** [https://ml-tying-the-data-knot-swipeiq-app.streamlit.app/](https://ml-tying-the-data-knot-swipeiq-app.streamlit.app/)")
-    pdf_path = os.path.join(ROOT_DIR, 'reports', 'WIA1006 Machine Learning - Tying the Data Knot Assignment Report V8 (final).pdf')
+    pdf_path = os.path.join(ROOT_DIR, 'reports', 'WIA1006 Machine Learning - Tying the Data Knot Assignment Report V8 FINAL.pdf')
     if os.path.exists(pdf_path):
         with open(pdf_path, "rb") as f:
             base64_pdf = base64.b64encode(f.read()).decode('utf-8')
@@ -40,7 +40,7 @@ with tab1:
 with tab2:
     st.markdown("### 📓 Master Pipeline Notebook")
     st.markdown("Read-only rendering of the `ML_dating_app_behaviour V8_patched_v4.ipynb` source file.")
-    ipynb_path = os.path.join(ROOT_DIR, 'notebooks', 'ML_dating_app_behaviour V8_patched_v4.ipynb')
+    ipynb_path = os.path.join(ROOT_DIR, 'docs', 'ML_dating_app_behaviour V8_patched_v4.ipynb')
     
     if os.path.exists(ipynb_path):
         with st.container():
