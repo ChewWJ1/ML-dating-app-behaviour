@@ -1,0 +1,136 @@
+{
+    "match_outcome": {
+        "One-sided Like": 5112,
+        "Instant Match": 5078,
+        "Blocked": 5049,
+        "Catfished": 5025,
+        "Chat Ignored": 5019,
+        "Mutual Match": 4990,
+        "No Action": 4986,
+        "Ghosted": 4959,
+        "Date Happened": 4919,
+        "Relationship Formed": 4863
+    },
+    "gender": {
+        "Female": 8384,
+        "Non-binary": 8366,
+        "Transgender": 8353,
+        "Prefer Not to Say": 8335,
+        "Genderfluid": 8307,
+        "Male": 8255
+    },
+    "location_type": {
+        "Remote Area": 8519,
+        "Small Town": 8343,
+        "Rural": 8331,
+        "Suburban": 8296,
+        "Metro": 8293,
+        "Urban": 8218
+    },
+    "income_bracket": {
+        "High": 7309,
+        "Very High": 7178,
+        "Low": 7132,
+        "Middle": 7126,
+        "Lower-Middle": 7118,
+        "Upper-Middle": 7076,
+        "Very Low": 7061
+    },
+    "swipe_time_of_day": {
+        "After Midnight": 8524,
+        "Afternoon": 8344,
+        "Early Morning": 8320,
+        "Late Night": 8287,
+        "Evening": 8269,
+        "Morning": 8256
+    },
+    "sexual_orientation": {
+        "Straight": 6326,
+        "Lesbian": 6315,
+        "Demisexual": 6301,
+        "Queer": 6288,
+        "Asexual": 6254,
+        "Pansexual": 6237,
+        "Bisexual": 6158,
+        "Gay": 6121
+    },
+    "body_type": {
+        "Slim": 8465,
+        "Curvy": 8415,
+        "Average": 8358,
+        "Athletic": 8329,
+        "Muscular": 8239,
+        "Plus Size": 8194
+    },
+    "relationship_intent": {
+        "Serious Relationship": 8469,
+        "Exploring": 8396,
+        "Networking": 8351,
+        "Casual Dating": 8274,
+        "Friends Only": 8267,
+        "Hookups": 8243
+    },
+    "app_usage_time_min": {
+        "mean": 149.9124,
+        "min": 0.0,
+        "max": 300.0
+    },
+    "swipe_right_ratio": {
+        "mean": 0.5006554,
+        "min": 0.0,
+        "max": 1.0
+    },
+    "likes_received": {
+        "mean": 99.52604,
+        "min": 0.0,
+        "max": 200.0
+    },
+    "mutual_matches": {
+        "mean": 13.87028,
+        "min": 0.0,
+        "max": 30.0
+    },
+    "bio_length": {
+        "mean": 250.1744,
+        "min": 0.0,
+        "max": 500.0
+    },
+    "message_sent_count": {
+        "mean": 50.07194,
+        "min": 0.0,
+        "max": 100.0
+    },
+    "emoji_usage_rate": {
+        "mean": 0.2862054,
+        "min": 0.0,
+        "max": 0.94
+    },
+    "profile_pics_count": {
+        "mean": 2.98772,
+        "min": 0.0,
+        "max": 6.0
+    },
+    "age": {
+        "mean": 38.47792,
+        "min": 18.0,
+        "max": 59.0
+    },
+    "target_distribution": {
+        "0": 30150,
+        "1": 19850
+    },
+    "top_interest_tags": {
+        "Coding": 3147,
+        "Gaming": 3145,
+        "Motorcycling": 3140,
+        "Binge-Watching": 3131,
+        "Music": 3109,
+        "Yoga": 3108,
+        "Investing": 3108,
+        "Reading": 3106,
+        "Photography": 3106,
+        "Art": 3106
+    },
+    "total_rows": 50000,
+    "total_columns": 26
+}
