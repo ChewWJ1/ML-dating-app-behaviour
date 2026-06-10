@@ -15,7 +15,7 @@ st.set_page_config(
 inject_css()
 render_sidebar()
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Load and Base64-encode the UM FCSIT widescreen logo
 fcsit_logo_path = os.path.join(ROOT_DIR, "assets", "um_fcsit_logo.png")

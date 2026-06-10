@@ -119,7 +119,7 @@ def inject_classes():
                 setattr(mod, name, cls)
 
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # V8 models directory
 MODELS_V8_DIR = os.path.join(ROOT_DIR, 'models_v8')

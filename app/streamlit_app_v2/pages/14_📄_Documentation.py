@@ -13,7 +13,7 @@ st.markdown("Browse the core assignment files and research notebooks without lea
 
 st.markdown('<div class="gradient-divider"></div>', unsafe_allow_html=True)
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 tab1, tab2, tab3 = st.tabs(["📑 Assignment Report (PDF)", "📓 Jupyter Notebook", "📝 Project Notes (MD)"])
 

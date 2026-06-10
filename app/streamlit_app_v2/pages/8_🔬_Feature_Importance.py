@@ -11,7 +11,7 @@ st.set_page_config(page_title="Feature Importance | SwipeIQ", page_icon="🔬", 
 theme.inject_css()
 theme.render_sidebar()
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 BASE_PLOTS = os.path.join(ROOT_DIR, 'assets', 'plots')
 

@@ -505,7 +505,7 @@ def render_header(page_title=None):
     except Exception:
         calling_base = "app.py"
         
-    ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     crest_path = os.path.join(ROOT_DIR, "assets", "um_crest_logo.png")
     
     if os.path.exists(crest_path):

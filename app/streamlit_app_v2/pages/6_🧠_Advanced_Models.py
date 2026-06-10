@@ -11,7 +11,7 @@ theme.inject_css()
 theme.render_sidebar()
 
 # ── Path Setup ──
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 V8_PLOTS = os.path.join(ROOT_DIR, 'assets', 'v8 plots')
 
 

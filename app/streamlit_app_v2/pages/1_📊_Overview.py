@@ -6,7 +6,7 @@ from utils.data_loader import load_raw_data, load_eda_stats
 from utils.theme import inject_css, render_sidebar, get_plotly_layout, PLOTLY_COLORS
 import os
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 st.set_page_config(page_title="Overview | SwipeIQ V2", page_icon="📊", layout="wide")
 
@@ -613,7 +613,7 @@ with tab3:
 
     # Pipeline diagram
     st.markdown("### 🗺️ Full Pipeline Diagram")
-    ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     pipeline_img = os.path.join(ROOT_DIR, 'assets', 'pipeline_diagram.png')
     if os.path.exists(pipeline_img):
         st.image(pipeline_img, caption="V5 State-of-the-art ML Pipeline Architecture", use_container_width=True)

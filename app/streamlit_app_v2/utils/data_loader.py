@@ -11,7 +11,7 @@ import streamlit as st
 from sklearn.preprocessing import RobustScaler
 
 # Define paths relative to the project root
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Data path: check data/ subfolder first, then fallback to root
 _DATA_PATH_PRIMARY = os.path.join(ROOT_DIR, 'data', 'dating_app_behavior_dataset_extended1.csv')
