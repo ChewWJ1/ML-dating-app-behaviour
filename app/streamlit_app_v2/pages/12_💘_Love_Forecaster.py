@@ -1,9 +1,11 @@
 import streamlit as st
+import os
 import plotly.graph_objects as go
 import pandas as pd
 from utils.theme import inject_css, render_sidebar, get_plotly_layout, PURPLE, PINK, TEAL, AMBER, GREEN, RED, SKY, INDIGO, TEXT_PRIMARY, TEXT_SECONDARY
 
 st.set_page_config(page_title="Love Forecaster | SwipeIQ", page_icon="💘", layout="wide")
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 inject_css()
 render_sidebar()
 
