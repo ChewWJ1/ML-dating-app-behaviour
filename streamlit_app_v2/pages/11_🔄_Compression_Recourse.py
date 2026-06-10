@@ -39,7 +39,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 st.markdown("---")
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_AI_Efficiency_and_Agency.png"), use_container_width=True)
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Model_Compression_and_Algorithmic_Recourse.png"), use_container_width=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SECTION 1 — Knowledge Distillation

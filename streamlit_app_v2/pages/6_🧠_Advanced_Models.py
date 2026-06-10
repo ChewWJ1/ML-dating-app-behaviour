@@ -38,7 +38,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 st.markdown("---")
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Engineering_the_SOTA_Frontier_Diagram.png"), use_container_width=True)
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Advanced_Neural_Network_Architectures.png"), use_container_width=True)
 
 
 

@@ -24,6 +24,7 @@ def show_plot(directory, filename, caption=''):
         st.warning(f'Plot not found: {filename}')
 
 st.title("⚙️ Preprocessing Pipeline")
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Data_Preprocessing_and_Guardrail_Pipeline.png"), use_container_width=True)
 st.markdown("Transforming the raw dataset into a machine-readable format. Our goal is to handle categorical variables, normalize numerical features, and prepare a clean binary target for the model to predict.")
 
 # Load raw and preprocessed data to show shapes

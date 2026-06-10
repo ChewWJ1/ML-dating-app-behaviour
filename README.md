@@ -1,4 +1,6 @@
-![Science of Digital Romance Infographic](assets/NotebookLM/overview/Science_of_Digital_Romance_Infographic.png)
+![NotebookLM Overview](assets/Screenshot%202026-06-04%20at%2021-19-58%20ML%20dating%20app%20-%20NotebookLM.png)
+
+![Science of Digital Romance Infographic](assets/New%20NotebookLM/Decoding_Romantic_Success_Research.png)
 
 # 💘 Tying the Data Knot: Predicting Meaningful Connections (V8 Pipeline)
 ### WIA1006 Machine Learning — Group Assignment Documentation
@@ -135,12 +137,13 @@ The extended dataset adds **6 new features** not present in the original:
 ---
 
 ### Section 3: Exploratory Data Analysis (EDA)
-![Dataset Insights and Analysis](assets/NotebookLM/section%20overview/Dating_Dataset_Insights_and_Analysis.png)
+![Predictive Limits of Dating Data](assets/New%20NotebookLM/Section%20overview/Predictive_Limits_of_Dating_Data.png)
 - Extensive 10-part EDA including distributions, boxplot outlier detection, correlation heatmaps, and target analysis.
 
 ---
 
 ### Section 4: Data Preprocessing & Feature Engineering
+![Data Preprocessing and Guardrail Pipeline](assets/New%20NotebookLM/Section%20overview/Data_Preprocessing_and_Guardrail_Pipeline.png)
 - **Causal Structure Discovery:** Applies the PC Algorithm (using `kci` conditional independence test) to map the causal Directed Acyclic Graph (DAG).
 - **Double Machine Learning (DML):** Calculates the Average Treatment Effect (ATE) of profile effort on matches, eliminating selection bias.
 - **Feature Engineering:** Creates interaction terms (e.g., selectivity ratios) and performs log transformations.
@@ -150,7 +153,7 @@ The extended dataset adds **6 new features** not present in the original:
 ---
 
 ### Section 5: Feature Selection
-![Feature Selection Infographic](assets/NotebookLM/section%20overview/Dating_Success_Feature_Selection_Infographic.png)
+![Feature Selection and Dimensionality Reduction](assets/New%20NotebookLM/Section%20overview/Feature_Selection_and_Dimensionality_Reduction.png)
 - **ANOVA F-Score & Mutual Information:** Selects the top robust features based on linear and non-linear dependencies.
 - **Boruta Selection:** Applies Boruta all-relevant feature selection via a Random Forest backbone to extract a robust feature subset.
 
@@ -173,7 +176,7 @@ The extended dataset adds **6 new features** not present in the original:
 ---
 
 ### Section 9: Model Training & Baseline Benchmarking
-![Model Training Pipeline Overview](assets/NotebookLM/section%20overview/Model_Training_Pipeline_Overview.png)
+![Model Training and Statistical Evaluation](assets/New%20NotebookLM/Section%20overview/Model_Training_and_Statistical_Evaluation.png)
 - Establishes FLAML and PyCaret AutoML baselines.
 - Trains 14 customs models with 2 AutoML baseline total 16, including Logistic Regression, KNN, Decision Tree, Random Forest, XGBoost, SVM (dynamic thread bagging), LightGBM, CatBoost, Balanced RF, and Cosine KNN CF.
 - Also integrates PyTorch architectures: MLP, FT-Transformer, SAINT, and NODE.
@@ -187,6 +190,7 @@ The extended dataset adds **6 new features** not present in the original:
 ---
 
 ### Section 11: Privacy, Representation & Advanced Architectures
+![Advanced Neural Network Architectures](assets/New%20NotebookLM/Section%20overview/Advanced_Neural_Network_Architectures.png)
 - **Opacus Differential Privacy:** Trains a PyTorch network with a privacy budget of (ε=8.0).
 - **Graph Neural Network (GNN):** Applies a Graph Attention Network (GAT) for semi-supervised transductive user matchmaking.
 - **Attentive Tabular Network:** Instance-wise feature selection using a custom soft-mask attention sequential head.
@@ -196,24 +200,26 @@ The extended dataset adds **6 new features** not present in the original:
 ---
 
 ### Section 12: Hyperparameter Optimization
-![Efficient Hyperparameter Optimization Strategy](assets/NotebookLM/section%20overview/Efficient_Hyperparameter_Optimization_Strategy.png)
+![Hyperparameter Search Space Optimization](assets/New%20NotebookLM/Section%20overview/Hyperparameter_Search_Space_Optimization.png)
 - GPU-accelerated Optuna tuning optimizing Matthews Correlation Coefficient (MCC), fully cached.
 
 ---
 
 ### Section 13: Feature Importance & Ethical Considerations
+![AI Model Explainability Overview](assets/New%20NotebookLM/Section%20overview/AI_Model_Explainability_Overview.png)
 - Evaluates Demographic Parity, Privacy Implications, and Homogeneity Risk.
 
 ---
 
 ### Section 14: Feature Importance & Interaction Analysis
+![SHAP Explainability Model Analysis](assets/New%20NotebookLM/Section%20overview/SHAP_Explainability_Model_Analysis.png)
 - Extracts global attribution scores and computes **Friedman's H-Statistic** for pairwise interactions.
 - Computes **SHAP Interaction Values** to map local synergy attributions.
 
 ---
 
 ### Section 15: Advanced Model Robustness & Uncertainty
-![Trustworthy AI Robustness Framework](assets/NotebookLM/section%20overview/Trustworthy_AI_Dating_Robustness_Framework.png)
+![Trustworthy AI Audit Framework](assets/New%20NotebookLM/Section%20overview/Trustworthy_AI_Audit_Framework.png)
 - **Conformal Prediction:** Strict calibration without test-set leakage, establishing 95% coverage uncertainty sets.
 - **Bayesian Uncertainty:** Monte Carlo Dropout.
 - **Adversarial Robustness:** FGSM attacks structurally masked to mutate only logical, continuous features.
@@ -222,7 +228,8 @@ The extended dataset adds **6 new features** not present in the original:
 ---
 
 ### Section 16: Model Compression, Recourse & Deployment
-![AI Efficiency and Agency](assets/NotebookLM/section%20overview/Dating_AI_Efficiency_and_Agency.png)
+![Model Compression and Algorithmic Recourse](assets/New%20NotebookLM/Section%20overview/Model_Compression_and_Algorithmic_Recourse.png)
+![Causal Inference and Uplift Modeling](assets/New%20NotebookLM/Section%20overview/Causal_Inference_and_Uplift_Modeling.png)
 - **Knowledge Distillation:** Student training optimized using mini-batching.
 - **Algorithmic Recourse (DiCE):** Actionable counterfactuals constrained strictly to mutable user features.
 - **Causal Uplift Modeling (T-Learner):** Propensity score matching with Inverse Probability Weighting (IPW) applied to extract purely causal persuadable segments.
@@ -230,6 +237,7 @@ The extended dataset adds **6 new features** not present in the original:
 ---
 
 ### Section 17: Final Pipeline Summary & Hardware Optimisations
+![Matchmaking Prediction Inference Stack](assets/New%20NotebookLM/Section%20overview/Matchmaking_Prediction_Inference_Stack.png)
 - Consolidates the **Dynamic Champion Model** inheriting weights to all downstream components.
 - Outlines the `models_v8/` dynamic checkpoint caching layer.
 

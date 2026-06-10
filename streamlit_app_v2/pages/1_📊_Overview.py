@@ -22,7 +22,7 @@ render_sidebar()
 st.title("📊 Dataset Overview")
 st.markdown("This section provides a high-level view of the dataset, including basic statistics, feature types, and the target variable distribution. The dataset represents synthetic dating app user behaviour, with 50,000 records and 25 features.")
 st.markdown("---")
-st.image(os.path.join(ROOT_DIR, "assets", "NotebookLM", "section overview", "Dating_App_Dataset_Overview.png"), use_container_width=True)
+st.image(os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Section overview", "Predictive_Limits_of_Dating_Data.png"), use_container_width=True)
 st.markdown("---")
 
 df = load_raw_data()
@@ -38,7 +38,7 @@ with tab1:
     </div>
     """, unsafe_allow_html=True)
     
-    limits_img = os.path.join(ROOT_DIR, "assets", "NotebookLM", "Limits_of_Predictive_Matchmaking_Research.png")
+    limits_img = os.path.join(ROOT_DIR, "assets", "New NotebookLM", "Decoding_Digital_Chemistry_With_ML.png")
     if os.path.exists(limits_img):
         st.image(limits_img, caption="Theoretical Framework: Limits of Predictive Matchmaking Research", use_container_width=True)
     
@@ -320,7 +320,7 @@ with tab1:
         
     st.markdown("---")
     st.markdown("### 🗺️ Master Project Mind Map")
-    mind_map_path = os.path.join(ROOT_DIR, "reports", "NotebookLM Mind Map.png")
+    mind_map_path = os.path.join(ROOT_DIR, "assets", "New NotebookLM", "NotebookLM Mind Map.png")
     if os.path.exists(mind_map_path):
         st.image(mind_map_path, caption="NotebookLM Project Taxonomy & Methodology Mind Map", use_container_width=True)
 

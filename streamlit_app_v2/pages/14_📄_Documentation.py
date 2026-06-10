@@ -21,7 +21,7 @@ with tab1:
     st.markdown("### 📑 Official Group Assignment Report")
     st.markdown("Tying the (Data) Knot: Predicting Meaningful Connections")
     st.markdown("**Live Web Application:** [https://ml-tying-the-data-knot-swipeiq-app.streamlit.app/](https://ml-tying-the-data-knot-swipeiq-app.streamlit.app/)")
-    pdf_path = os.path.join(ROOT_DIR, 'reports', 'WIA1006 Machine Learning - Tying the Data Knot Assignment Report V5.2 (final).pdf')
+    pdf_path = os.path.join(ROOT_DIR, 'reports', 'WIA1006 Machine Learning - Tying the Data Knot Assignment Report V8 (final).pdf')
     if os.path.exists(pdf_path):
         with open(pdf_path, "rb") as f:
             base64_pdf = base64.b64encode(f.read()).decode('utf-8')
@@ -33,14 +33,14 @@ with tab1:
         
     st.markdown("---")
     st.markdown("### 🗺️ Project Architecture Mind Map")
-    mind_map_path = os.path.join(ROOT_DIR, "reports", "NotebookLM Mind Map.png")
+    mind_map_path = os.path.join(ROOT_DIR, "assets", "New NotebookLM", "NotebookLM Mind Map.png")
     if os.path.exists(mind_map_path):
         st.image(mind_map_path, caption="NotebookLM Project Taxonomy & Methodology Mind Map", use_container_width=True)
 
 with tab2:
     st.markdown("### 📓 Master Pipeline Notebook")
-    st.markdown("Read-only rendering of the `ML_dating_app_behaviour V5.ipynb` source file.")
-    ipynb_path = os.path.join(ROOT_DIR, 'notebooks', 'ML_dating_app_behaviour V5.ipynb')
+    st.markdown("Read-only rendering of the `ML_dating_app_behaviour V8_patched_v4.ipynb` source file.")
+    ipynb_path = os.path.join(ROOT_DIR, 'notebooks', 'ML_dating_app_behaviour V8_patched_v4.ipynb')
     
     if os.path.exists(ipynb_path):
         with st.container():
